@@ -1,0 +1,80 @@
+#!/bin/bash
+
+### DO NOT CHANGE THIS
+SCRIPTNAME="${0##*/}"
+
+#######################################################################################################################################
+
+##### EDIT VARIABLES IN 'jor_config' #####
+##### EDIT VARIABLES IN 'jor_config' #####
+##### EDIT VARIABLES IN 'jor_config' #####
+
+## SOURCE THE CUSTOM VARIABLES
+. ./jor_config
+
+#######################################################################################################################################
+
+## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
+## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
+## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
+## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
+
+## SOURCE ALL FUNCTIONS FILES
+for func in ./jor_funcs/*.bash ; do . "$func" ; done
+
+#### MAIN SCRIPT EXECUTION ###
+## make sure the pool directory exist
+if [ ! -d "$JORMUNGANDR_STORAGE_DIR" ]; then
+    mkdir -p $JORMUNGANDR_STORAGE_DIR
+    chown -R $JORMUNGANDR_USERNAME:$JORMUNGANDR_USERNAME $JORMUNGANDR_STORAGE_DIR
+fi
+
+## parse command line options and commands:
+while true; do
+    case "$1" in
+        '') echo -e "\n$SCRIPTNAME: no arguments supplied"; usage; exit 0;;
+        -h|--help) usage; exit 0;;
+        --settings) settings; exit 0;;
+        --set-vars) setVariables; exit 0;;
+        --live-logs) liveLogs; exit 0;;
+        --last-logs) shift; lastLogs "$1"; exit 0;;
+        --problems) shift; problemsInLogs "$1"; exit 0;;
+        --issues) shift; issuesInLogs "$1"; exit 0;;
+        --bstrap-time) bootstrapTime; exit 0;;
+        --node-stats) nodeStats; exit 0;;
+        --pool-stats) poolStats; exit 0;;
+        --date-stats) shift; lastDates "$1" "$2"; exit 0;;
+        --net-stats) netStats; exit 0;;
+        --sys-stats) resourcesStat; exit 0;;
+        --snapshot) currentStatus; exit 0;;
+        --current-tip) getCurrentTip; exit 0;;
+        --public-ip) getIpAddress; exit 0;;
+        --next-epoch) nextEpoch; exit 0;;
+        --block-now) currentBlockDate; exit 0;;
+        --block-valid) shift; isBlockValid "$1"; exit 0;;
+        --block-delta) blocksDelta; exit 0;;
+        --acct-balance) accountBalance; exit 0;;
+        --connected-estab) showEstab; exit 0;;
+        --connected-ips) shift; connectedIps "$1"; exit 0;;
+        --blocked-ips) blockedIps; exit 0;;
+        --blocked-count) nOfblockedIps; exit 0;;
+        --check-peers) checkPeers; exit 0;;
+        --open-files) lsofOpenFiles; exit 0;;
+        --open-blocks) lsofBlocksOpen; exit 0;;
+        --is-visible) isPoolVisible; exit 0;;
+        --is-quarantined) isPoolQuarantined; exit 0;;
+        --quarantined-ips) quarantinedIps; exit 0;;
+        --quarantined-ips-count) nOfQuarantinedIps; exit 0;;
+        --is-scheduled) isPoolScheduled; exit 0;;
+        --scheduled-slots) howManySlots; exit 0;;
+        --scheduled-dates) scheduleDates; exit 0;;
+        --scheduled-time) scheduleTime; exit 0;;
+        --scheduled-next) nextScheduledBlock; exit 0;;
+        --frags-count) fragmentIdCount; exit 0;;
+        *) echo; echo "$SCRIPTNAME: unknown command '$1'"; echo; exit 127;;
+    esac
+done
+
+### THIS SHOULD NEVER BE REACHED ###
+exit 999
+

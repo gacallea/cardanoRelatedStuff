@@ -1,0 +1,30 @@
+#!/bin/bash
+
+### DO NOT CHANGE THIS
+SCRIPTNAME="${0##*/}"
+
+### DON'T CHANGE VARIABLES IN HERE!!!!
+### this sets the variables in .bashrc
+function setVariables() {
+    cat <<VARS >>~/.bashrc
+
+########################################
+##### CUSTOM JORMUNGANDR VARIABLES #####
+########################################
+
+# pool variables
+export GENESIS_BLOCK_HASH="$GENESIS_BLOCK_HASH"
+export RECEIVER_ACCOUNT="$RECEIVER_ACCOUNT"
+export POOL_TICKER="$POOL_TICKER"
+
+# jormungandr variables
+export JORMUNGANDR_USERNAME="$JORMUNGANDR_USERNAME"
+export JORMUNGANDR_FILES="$JORMUNGANDR_FILES"
+export JORMUNGANDR_STORAGE_DIR="$JORMUNGANDR_STORAGE_DIR"
+export JORMUNGANDR_STORAGE_FILE="$JORMUNGANDR_STORAGE_FILE"
+export JORMUNGANDR_PUBLIC_IP_ADDR="$JORMUNGANDR_PUBLIC_IP_ADDR"
+export JORMUNGANDR_RESTAPI_PORT="$JORMUNGANDR_RESTAPI_PORT"
+export JORMUNGANDR_RESTAPI_URL="$JORMUNGANDR_RESTAPI_URL"
+
+VARS
+}

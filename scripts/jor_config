@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#######################################################################################################################################
+
+## IF NEEDED UPDATE THIS FROM https://hydra.iohk.io/job/Cardano/iohk-nix/jormungandr-deployment/latest-finished/download/1/index.html
+GENESIS_BLOCK_HASH="8e4d2a343f3dcf9330ad9035b3e8d168e6728904262f2c434a4f8f934ec7b676"
+
+## CHANGE THIS TO YOUR PLEDGE ADDRESS ###################
+RECEIVER_ACCOUNT="addr1_"
+
+## CHANGE THIS TO YOUR POOL TICKER  #####################
+POOL_TICKER="XXXX"
+
+## CHANGE THESE TO SUIT YOUR SYSTEM #####################
+JORMUNGANDR_USERNAME="<YOUR_POOL_USER>"
+JORMUNGANDR_FILES="/home/${JORMUNGANDR_USERNAME}"
+JORMUNGANDR_STORAGE_DIR="${JORMUNGANDR_FILES}/storage"
+JORMUNGANDR_STORAGE_FILE="${JORMUNGANDR_STORAGE_DIR}/blocks.sqlite"
+JORMUNGANDR_PUBLIC_IP_ADDR="<YOUR_SERVER_PUBLIC_IP>"
+JORMUNGANDR_RESTAPI_PORT="<REST_API_PORT>"
+JORMUNGANDR_RESTAPI_URL="http://127.0.0.1:${JORMUNGANDR_RESTAPI_PORT}/api"
+
+#######################################################################################################################################
+
+### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
+### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
+
+JCLI="$(which jcli)"
+[ -z "${JCLI}" ] && [ -f jcli ] && JCLI="./jcli"
+
+JORM="$(which jormungandr)"
+[ -z "${JORM}" ] && [ -f jormungandr ] && JORM="./jormungandr"

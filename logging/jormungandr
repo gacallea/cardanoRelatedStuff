@@ -1,0 +1,9 @@
+/var/log/jormungandr.log {
+    daily
+    rotate 30
+    copytruncate
+    compress
+    delaycompress
+    notifempty
+    missingok
+}
