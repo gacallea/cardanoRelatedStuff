@@ -6,6 +6,8 @@
 - besides giving back to the community with the scripts, I'm also pondering if I should create another guide from a more advanced (sysadmin) perspective and link/refer to the ones that helped/inspired me (or when reinventing the wheel would be an ass move).
 - apologies for the *short notes* style, this is preliminary and I would rather chat about the nitty gritty details, and take it from there.
 - in case you are wondering "*where this notes come from*", this is me: [https://linkedin.com/in/gacallea/](https://linkedin.com/in/gacallea/)
+- please don’t share just yet and ask away if you need to clarify something
+- cheers and thank you for your availability.
 
 ### ADDENDUM NOTES ###
 
@@ -102,6 +104,14 @@ chmod +x /usr/local/bin/tcpping
 git clone -- this is where my scripts and files would go
 ```
 
+### place the scripts in ```/root/``` (not the 'scripts' folder, the scripts only) ###
+
+```mv /path/to/cardanoRelaedStuff/scritps/* /root/```
+
+#### manage system/pool with root and systemd since the pool user is a "service user" ####
+
+### files notes ###
+
 - ```sysctl -p``` is enough.
 - no need to add anything to ```/etc/rc.local```
 - ILAP:
@@ -115,9 +125,10 @@ git clone -- this is where my scripts and files would go
   - ```/etc/systemd/system/jormungandr.service```
   - ```/etc/rsyslog.d/90-jormungandr.conf```
   - ```/etc/logrotate.d/jormungandr```
-- no need for directories creation. my scripts takes care of the directories it needs (same for jormungandr)
-- ```get_pid``` is redundant. it is not in my scripts. I'd teach the user to use ```pidof jormungandr```
-- start, stop, restart, and proper logging, are provided by systemd
+- no need for directories creation. my scripts takes care of the directories it needs.
+- ```get_pid``` is redundant. it is not in my scripts. I'd teach the user to use ```pidof jormungandr``` instead.
+- start, stop, and restart, are provided by systemd, hence have been removed from the script.
+- logging is managed at a system level with usual tools. script has wrappers for less linux prone users.
 
 ### END OF ADDENDUM NOTES ###
 
