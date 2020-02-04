@@ -5,8 +5,8 @@ log:
     format: "plain"
     level: "info"
 p2p:
-  listen_address: "/ip4/0.0.0.0/tcp/<LISTEN_ADDRESS>"
-  public_address: "/ip4/xxx.xxx.xxx.xxx/tcp/<LISTEN_ADDRESS>"
+  listen_address: "/ip4/0.0.0.0/tcp/<LISTEN_PORT>"
+  public_address: "/ip4/<YOUR_SERVER_PUBLIC_IP>/tcp/<LISTEN_PORT>"
   topics_of_interest:
     blocks: high
     messages: high
