@@ -1,3 +1,4 @@
 ansible
 guides
-**/nodehelperscripts/
+sendmytippooltool.sh
+syncdumpcache.sh

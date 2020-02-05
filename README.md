@@ -114,7 +114,8 @@ git clone -- this is where my scripts and files would go
 - manage system/pool and run the scripts, with root since the pool user is a "service user" ####
 
 ```bash
-mv /path/to/cardanoRelaedStuff/scritps/* /root/
+mv scripts/jor_wrapper scripts/jor_config scripts/jor_funcs /root/
+mv /path/to/cardanoRelaedStuff/nodehelperscripts/blocks_backup.sh /root/
 ```
 
 ### files notes ###
