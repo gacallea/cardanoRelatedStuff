@@ -113,7 +113,7 @@ git clone -- this is where my scripts and files would go
 
 ### place the scripts in ```/root/``` (not the 'scripts' folder, the scripts only) ###
 
-- manage system/pool and run the scripts, with root since the pool user is a "service user" ####
+- manage system/pool and run the scripts, with root since the pool user is a "service user"
 
 ```bash
 mv scripts/jor_wrapper scripts/jor_config scripts/jor_funcs /root/
