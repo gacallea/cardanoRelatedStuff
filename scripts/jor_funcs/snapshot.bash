@@ -18,7 +18,7 @@ function currentStatus() {
     #    scheduleDates
     #    scheduleTime
     echo -e "\n%CPU %MEM CACHE LOAD AVERAGE"
-    echo -e "$(top -b -n 2 -d 0.1 -p $(pidof jormungandr) | tail -1 | awk '{print $9,$10}') $(free --mega -w | awk '/Mem:/ {print $7}')M $(cat /proc/loadavg | awk '{print $1,$2,$3}')\n"
+    echo -e "$(top -b -n 2 -d 0.1 -p $(pidof jormungandr) | tail -1 | awk '{print $9,$10}') $(free --mega -w | awk '/Mem:/ {print $7}')M  $(cat /proc/loadavg | awk '{print $1,$2,$3}')\n"
     nodeStats
     echo
     echo "---"
