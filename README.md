@@ -84,6 +84,8 @@ curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8
 tar xzvf jormungandr-v0.8.9-x86_64-unknown-linux-gnu.tar.gz
 mv jcli /usr/local/bin/
 mv jormungandr /usr/local/bin/
+chmod +x /usr/local/bin/jcli
+chmod +x /usr/local/bin/jormungandr
 ```
 
 ### install tcpping ###
@@ -100,13 +102,18 @@ chmod +x /usr/local/bin/tcpping
 
 ### download scripts + some config files ###
 
+- a link to repo + a nice note to describe the scripts maybe?
+- honestly, I need to generate buzz for INSL. I have no delegations.
+
 ```bash
 git clone -- this is where my scripts and files would go
 ```
 
 ### place the scripts in ```/root/``` (not the 'scripts' folder, the scripts only) ###
 
-```mv /path/to/cardanoRelaedStuff/scritps/* /root/```
+```bash
+mv /path/to/cardanoRelaedStuff/scritps/* /root/
+```
 
 #### manage system/pool with root and systemd since the pool user is a "service user" ####
 
@@ -128,6 +135,7 @@ git clone -- this is where my scripts and files would go
 - no need for directories creation. my scripts takes care of the directories it needs.
 - ```get_pid``` is redundant. it is not in my scripts. I'd teach the user to use ```pidof jormungandr``` instead.
 - start, stop, and restart, are provided by systemd, hence have been removed from the script.
+- systemd config it' only valid for a leader. May need to add a "start as passive node" perhaps?
 - logging is managed at a system level with usual tools. script has wrappers for less linux prone users.
 
 ### END OF ADDENDUM NOTES ###
@@ -138,4 +146,4 @@ In the (near?) future I will implement (and add to a guide?)
 2) "stuck sentinel" restart script for when the node is stuck or has serious sync issues.
 3) IDS/IPS with [Suricata IDS](https://suricata-ids.org/).
 4) proper [nftables](https://netfilter.org/projects/nftables/) firewall (which allows for more).
-5) perhaps one day, if my pool goes well, I will implement Ansible and Docker to expand.
+5) perhaps one day, if my pool goes well, I will implement [Ansible](https://www.ansible.com/) and [Docker](https://www.docker.com/) to expand.
