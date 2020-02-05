@@ -138,7 +138,7 @@ mv scripts/nodehelperscripts/blocks_backup.sh /root/
 - no need for directories creation. my scripts takes care of the directories it needs.
 - ```get_pid``` is redundant. it is not in my scripts. I'd teach the user to use ```pidof jormungandr``` instead.
 - start, stop, and restart, are provided by systemd, hence have been removed from the script.
-- systemd config it' only valid for a leader. May need to add a "start as passive node" perhaps?
+- ```/etc/systemd/system/jormungandr.service``` it's only valid for a leader node. May need to add a "start as passive node" perhaps?
 - logging is managed at a system level with usual tools. script has wrappers for less linux prone users.
 
 ### END OF ADDENDUM NOTES ###
