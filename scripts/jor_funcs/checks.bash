@@ -31,7 +31,7 @@ function isPoolQuarantined() {
     this_node=$(quarantinedIps | rg "${JORMUNGANDR_PUBLIC_IP_ADDR}")
     if [[ -n ${this_node} ]]; then
         echo "ERROR! You were quarantined at some point in the recent past!"
-        echo "Execute '--connected-estab' to confirm that you are connecting to other nodes."
+        echo "Execute '$SCRIPTNAME --connected-estab' to confirm that you are connecting to other nodes."
     else
         echo "You are clean as a whistle."
     fi

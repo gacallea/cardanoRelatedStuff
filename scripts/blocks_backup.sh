@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ### https://github.com/gacallea/cardanoRelatedStuff
-## this script backups 'blocks.sqlite' every 4h to offer a safety net in case its needed
+## this script backups 'blocks.sqlite' every 4h to offer a safety net in case it's needed
+## put the script in '/root/blocks_backup.sh'
 ## put this in root's crontab (crontab -e):
 ## 0 */4 * * * /root/blocks_backup.sh
 

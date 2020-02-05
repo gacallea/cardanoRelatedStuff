@@ -25,7 +25,7 @@ function blockedIps() {
 ## how many blocked IPs in UFW logs
 function nOfblockedIps() {
     echo "How many IP addresses were blocked by UFW recently?"
-    grep "UFW BLOCK" /var/log/syslog  | awk '{print $12}' | sed -r '/\n/!s/[0-9.]+/\n&\n/;/^([0-9]{1,3}\.){3}[0-9]{1,3}\n/P;D' | sort -u | wc -l
+    blockedIps | wc -l
 }
 
 ## how many other nodes is my pool connected to?
@@ -44,7 +44,7 @@ function connectedIps() {
             exit 1
         fi
     else
-        echo "you must provide one paramenter, it must be a valid integer for number of minum connections to check against"
+        echo "you must provide one paramenter, it must be a valid integer for a minum number of connections to check against"
         echo "e.g: $SCRIPTNAME --connected-ips 10 -- this will show IPs that are connect 10 or more times"
         exit 1
     fi
