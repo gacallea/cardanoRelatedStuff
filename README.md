@@ -116,8 +116,8 @@ git clone -- this is where my scripts and files would go
 - manage system/pool and run the scripts with root since the pool user is a "service user"
 
 ```bash
-mv files/scripts/jor_script/* /root/
-mv files/scripts/nodehelperscripts/* /root/
+mv scripts/jor_script/* /root/
+mv scripts/nodehelperscripts/* /root/
 ```
 
 ### files notes ###
