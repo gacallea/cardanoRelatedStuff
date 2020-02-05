@@ -5,9 +5,9 @@
 - some changes would be easily integrated into your guide, some others may require one too many changes, it's up to you what you want to integrate :)
 - besides giving back to the community with the scripts, I'm also pondering if I should create another guide from a more advanced (sysadmin) perspective and link/refer to the ones that helped/inspired me (or when reinventing the wheel would be an ass move).
 - apologies for the *short notes* style, this is preliminary and I would rather chat about the nitty gritty details, and take it from there.
-- in case you are wondering "*where this notes come from*", this is me: [https://linkedin.com/in/gacallea/](https://linkedin.com/in/gacallea/)
-- please don’t share just yet and ask away if you need to clarify something
-- I’d love to hear your thoughts and understand what you will integrate in your guide and how
+- in case you are wondering "*where this notes come from*", this is me: [https://linkedin.com/in/gacallea/](https://linkedin.com/in/gacallea/).
+- please don’t share just yet and ask away if you need to clarify something.
+- I’d love to hear your thoughts and understand what you will integrate in your guide and how.
 - cheers and thank you for your availability.
 
 ### ADDENDUM NOTES ###
@@ -116,8 +116,8 @@ git clone -- this is where my scripts and files would go
 - manage system/pool and run the scripts, with root since the pool user is a "service user"
 
 ```bash
-mv scripts/jor_wrapper scripts/jor_config scripts/jor_funcs /root/
-mv scripts/nodehelperscripts/blocks_backup.sh /root/
+mv scripts/jor_script/* /root/
+mv scripts/nodehelperscripts/* /root/
 ```
 
 ### files notes ###
