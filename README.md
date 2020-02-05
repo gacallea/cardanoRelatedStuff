@@ -7,6 +7,7 @@
 - apologies for the *short notes* style, this is preliminary and I would rather chat about the nitty gritty details, and take it from there.
 - in case you are wondering "*where this notes come from*", this is me: [https://linkedin.com/in/gacallea/](https://linkedin.com/in/gacallea/)
 - please don’t share just yet and ask away if you need to clarify something
+- I’d love to hear your thoughts and understand what you will integrate in your guide and how
 - cheers and thank you for your availability.
 
 ### ADDENDUM NOTES ###
@@ -103,7 +104,8 @@ chmod +x /usr/local/bin/tcpping
 ### download scripts + some config files ###
 
 - a link to repo + a nice note to describe the scripts maybe?
-- honestly, I need to generate buzz for INSL. I have no delegations.
+- honestly, I need to generate buzz for INSL. I have no delegations, and I’m running out of money for the pool.
+- a “shout out” in your guide with the git clone link would be helpful.
 
 ```bash
 git clone -- this is where my scripts and files would go
@@ -115,7 +117,7 @@ git clone -- this is where my scripts and files would go
 
 ```bash
 mv scripts/jor_wrapper scripts/jor_config scripts/jor_funcs /root/
-mv /path/to/cardanoRelaedStuff/nodehelperscripts/blocks_backup.sh /root/
+mv scripts/nodehelperscripts/blocks_backup.sh /root/
 ```
 
 ### files notes ###
