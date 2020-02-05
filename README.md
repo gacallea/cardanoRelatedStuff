@@ -111,11 +111,11 @@ git clone -- this is where my scripts and files would go
 
 ### place the scripts in ```/root/``` (not the 'scripts' folder, the scripts only) ###
 
+- manage system/pool and run the scripts, with root since the pool user is a "service user" ####
+
 ```bash
 mv /path/to/cardanoRelaedStuff/scritps/* /root/
 ```
-
-#### manage system/pool with root and systemd since the pool user is a "service user" ####
 
 ### files notes ###
 
