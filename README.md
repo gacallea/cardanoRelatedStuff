@@ -3,7 +3,7 @@
 ## Notes ##
 
 - some changes would be easily integrated into your guide, some others may require one too many changes, it's up to you what you want to integrate :)
-- besides giving back to the community with the scripts, I'm also pondering if I should create another guide from a more advanced (sysadmin) perspective and link/refer to the ones that helped/inspired me (or when reinventing the wheel would be an ass move).
+- besides giving back to the community with the scripts, I'm also writing a guide from a more advanced (sysadmin) perspective and link/refer to the ones that helped/inspired me (or when reinventing the wheel would be an ass move). The notes I'm sharing here with you, borrow from that guide.
 - apologies for the *short notes* style, this is preliminary and I would rather chat about the nitty gritty details, and take it from there.
 - in case you are wondering "*where this notes come from*", this is me: [https://linkedin.com/in/gacallea/](https://linkedin.com/in/gacallea/).
 - please don’t share just yet and ask away if you need to clarify something.
@@ -18,7 +18,7 @@
 - check out '*AllowedGroups*' SSH option
 - regarding the ```sshd_config``` file, [read why](https://www.ssh.com/ssh/tunneling#ssh-tunneling-in-the-corporate-risk-portfolio) it is bad to leave SSH tunneling on (e.g: like lovelypool suggests for remote monitoring)
 
-```bash
+```text
 groupadd ssh-users
 ```
 
@@ -27,19 +27,19 @@ groupadd ssh-users
 - there's no need to edit visudo
 - single command is enough
 
-```bash
-useradd -c "user to ssh and sudo" -m -d /home/<YOUR_SYSTEM_USER> -s /bin/bash -G sudo,ssh-users <YOUR_SYSTEM_USER>
+```text
+useradd -c "user to ssh and sudo" -m -d /home/<YOUR_SYSTEM_USER> -s /bin/text -G sudo,ssh-users <YOUR_SYSTEM_USER>
 ```
 
 #### double-check that your new user is in both the sudo and ssh-users groups ####
 
-```bash
+```text
 groups <YOUR_SYSTEM_USER>
 ```
 
 #### it should show ####
 
-```bash
+```text
 <YOUR_SYSTEM_USER> : <YOUR_SYSTEM_USER> sudo ssh-users
 ```
 
@@ -49,7 +49,7 @@ groups <YOUR_SYSTEM_USER>
 - this reduces surface attack by not exposing a user with a shell on top of alpha quality software
 - see ```jormungandr.service``` file for how the pool is run as this user
 
-```bash
+```text
 useradd -c "user to run the pool" -m -d /home/<YOUR_POOL_USER> -s /sbin/nologin <YOUR_POOL_USER>
 passwd -d <YOUR_POOL_USER>
 ```
@@ -68,7 +68,7 @@ passwd -d <YOUR_POOL_USER>
   - ```ripgrep``` is available with ```apt``` :)
   - ```speedtest-cli``` in case you need a speed test for your server
 
-```bash
+```text
 apt update
 apt upgrade
 apt install bc cbm ccze chrony curl dateutils fail2ban git htop jq net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
@@ -80,7 +80,7 @@ apt install bc cbm ccze chrony curl dateutils fail2ban git htop jq net-tools rip
 - handle the updates the same way (```apt``` or ```curl``` for new jormungandr releases)
 - ```/usr/local/bin/``` is there for this specific purpose (user installed binary files)
 
-```bash
+```text
 curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.9/jormungandr-v0.8.9-x86_64-unknown-linux-gnu.tar.gz
 tar xzvf jormungandr-v0.8.9-x86_64-unknown-linux-gnu.tar.gz
 mv jcli /usr/local/bin/
@@ -91,7 +91,7 @@ chmod +x /usr/local/bin/jormungandr
 
 ### install tcpping ###
 
-```bash
+```text
 curl http://www.vdberg.org/~richard/tcpping -o /usr/local/bin/tcpping
 chmod +x /usr/local/bin/tcpping
 ```
@@ -107,7 +107,7 @@ chmod +x /usr/local/bin/tcpping
 - honestly, I need to generate buzz for INSL. I have no delegations, and I’m running out of money for the pool.
 - a “shout out” in your guide with the git clone link would be helpful.
 
-```bash
+```text
 git clone -- this is where my scripts and files would go
 ```
 
@@ -115,7 +115,7 @@ git clone -- this is where my scripts and files would go
 
 - manage system/pool and run the scripts with root since the pool user is a "service user"
 
-```bash
+```text
 mv scripts/jor_script/* /root/
 mv scripts/nodehelperscripts/* /root/
 ```
@@ -143,7 +143,7 @@ mv scripts/nodehelperscripts/* /root/
 
 ### END OF ADDENDUM NOTES ###
 
-In the (near?) future I will implement (and add to a guide?)
+In the future I will implement and add to a guide I'm writing.
 
 1) proper remote monitoring with [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/) (will ponder security as priority).
 2) "stuck sentinel" restart script for when the node is stuck or has serious sync issues.
