@@ -124,11 +124,6 @@ mv scripts/nodehelperscripts/* /root/
 
 - ```sysctl -p``` is enough.
 - no need to add anything to ```/etc/rc.local```
-- ILAP:
-  - ```/etc/security/limits.conf```
-  - ```/etc/sysctl.conf```
-- LovelyPool:
-  - ```/etc/chrony/chrony.conf```
 - my own files:
   - ```/home/<YOUR_POOL_USER>/node-config.yaml```
   - ```/etc/ssh/sshd_config```
