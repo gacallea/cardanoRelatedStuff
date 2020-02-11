@@ -43,11 +43,11 @@ The only note worth adding, before you venture into configuring a server and cre
 
 ### License ###
 
-This guide is licensed under the terms of a Creative Commons [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). If you are not familiar with Creative Commons licenses, here's a bit [I wrote about them](https://gacallea.info/posts/a-primer-on-linux-open-source-and-copyleft-hackers-included/#creative-commons) that clarify what Creative Commons licenses are about.
+This guide is licensed under the terms of a Creative Commons [**CC BY-NC-SA 4.0**](https://creativecommons.org/licenses/by-nc-sa/4.0/). If you are not familiar with Creative Commons licenses, here's a bit [I wrote about them](https://gacallea.info/posts/a-primer-on-linux-open-source-and-copyleft-hackers-included/#creative-commons) that clarify what Creative Commons licenses are about.
 
 ### System ###
 
-This guide will be focusing on the latest Debian stable, and assumes you already have your server installed with a vanilla Debian 10 (Buster), that you can ```ssh``` into on port ```22```. This guide will stick to official repositories, with the exception for ```jormungandr```, ```jcli```, and ```tcpping```. This guide will stick with best practices for stability (e.g: [backports](https://backports.debian.org/) vs [unstable](https://wiki.debian.org/DontBreakDebian)).
+This guide will be focusing on the latest **Debian stable**, and assumes you already have your server installed with a vanilla Debian 10 (Buster), that you can ```ssh``` into on port ```22```. This guide will stick to official repositories, with the exception for ```jormungandr```, ```jcli```, and ```tcpping```. This guide will stick with best practices for stability (e.g: [backports](https://backports.debian.org/) vs [unstable](https://wiki.debian.org/DontBreakDebian)).
 
 Lastly, this guide assumes that you are familiar with Linux, its shell, its commands and have some experience in managing a server. This guide will promote system administration over shortcuts and aliases. For example, it will favor and configure ```systemd``` over aliases to manage the node. It will favor using ```pidof jormungandr``` instead of configuring an alias. In this guide you'll be also configuring system wide logging, and using ```journalctl``` over typing "*logs*". You get the idea.
 
@@ -57,11 +57,11 @@ This guide will help you setup your server to accomodate a pool, but you won't f
 
 ### Contributions ###
 
-If you have comments, changes, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github. Any insight is valuable and will be considered for integration and improvements. If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZGcgwWYE3wKGcpn9cfPmADjwegQqBnTrcBfsexUkbxnT4sciw).
+**If you have comments, changes, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github**. Any insight is valuable and will be considered for integration and improvements. If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZGcgwWYE3wKGcpn9cfPmADjwegQqBnTrcBfsexUkbxnT4sciw).
 
 ## Prepare Your System ##
 
-The guides assumes that the system will be managed with ```root```. Don't worry, to ```ssh``` and ```sudo```, there will be a dedicated **non-root user**. To run the pool, yet another *service user*, with neither a shell nor privileges. So, if you are wondering if the pool will run as ```root```, the answer is **no way!!!** Systemd will take care of running the pool as the *service user*. And a *service user* without a shell or a password, means less surface attack for an hacker trying to exploit *testing quality* software.
+The guides assumes that the system will be managed with ```root```. Don't worry, to ```ssh``` and ```sudo```, there will be a dedicated **non-root user**. To run the pool, yet another *service user*, with neither a shell nor privileges. So, if you are wondering if the pool will run as ```root```, the answer is **no way.** Systemd will take care of running the pool as the *service user*. A *service user* without a shell or a password, means less surface attack for an hacker trying to exploit *testing quality* software.
 
 **Let's get started.**
 
@@ -87,13 +87,21 @@ ssh-users:x:998
 
 ### non-root login user ###
 
-This is the regular user - **your main user** - that you will be using to ```ssh``` into the server and to ```sudo``` to ```root```, to manage your system. Make sure to replace ```<YOUR_SYSTEM_USER>``` with your user name of choice.
+This is the regular user - **your main user** - that you will be using to ```ssh``` into the server and to ```sudo``` to ```root```, to manage your system. Make sure to replace ```<YOUR_SYSTEM_USER>``` with your user name of choice. If you already have such user that you actively ```ssh``` and ```sudo``` with, you can skip creating one, but make sure you add it to ```sudo``` and ```ssh-users``` groups.
+
+For a new user run:
 
 ```text
 useradd -c "user to ssh and sudo" -m -d /home/<YOUR_SYSTEM_USER> -s /bin/bash -G sudo,ssh-users <YOUR_SYSTEM_USER>
 ```
 
-Double-check that your new ```<YOUR_SYSTEM_USER>``` is in both the ```sudo``` and ```ssh-users``` groups. This step is important, don't skip it. Later will be setting up ```sshd``` to only allow ```ssh``` from this group **only**. You risk of locking yourself out.
+For an existing user run:
+
+```text
+usermod -aG sudo,ssh-users <YOUR_EXISTING_USER>
+```
+
+Double-check that your new user (either ```<YOUR_SYSTEM_USER>``` or ```<YOUR_EXISTING_USER>```) is in both the ```sudo``` and ```ssh-users``` groups. This step is important, don't skip it. Later will be setting up ```sshd``` to only allow ```ssh``` from this group only. **You risk of locking yourself out**.
 
 ```text
 groups <YOUR_SYSTEM_USER>
@@ -122,7 +130,7 @@ passwd -d <YOUR_POOL_USER>
 
 ### install extra packages ###
 
-This guide assumes that you are familiar with compilation, and that you know why and when compilation is necessary or useful, and that you are capable of compiling. Therefore, during this guide you **won't** be compiling ```jormungandr``` or ```jcli```. If you reckon that compiling will give you more, knock yourself out. If you do compile, do it on a dedicated environment, or cross-compile, and transfer the binaries to the pool server.
+This guide assumes that you are familiar with compilation, and that you know why and when compilation is necessary or useful, and that you are capable of compiling. Therefore, during this guide you **won't** be compiling ```jormungandr``` or ```jcli```. If you reckon that compiling will give you more, knock yourself out. If you compile, is preferable to do it on a dedicated environment, or cross-compile, and transfer the binaries to the pool server.
 
 #### install from apt ####
 
@@ -296,7 +304,7 @@ nft list ruleset
 
 You'll be enabling some additional restrictions, and disabling some features that are enabled by default. Like tunneling and forwarding. [Read why](https://www.ssh.com/ssh/tunneling#ssh-tunneling-in-the-corporate-risk-portfolio) it is bad to leave SSH tunneling on. Some guides suggest to tunnel into your remote server for monitoring purposes. This is bad practice, and a security risk. Make sure you have the following configured in ```/etc/ssh/sshd_config```; everything else can be commented out.
 
-**IMPORTANT:** your new ```sshd``` port ```<YOUR_SSH_PORT>``` must match whatever service you have picked up in ```firewalld``` , in this guide we used ```5269```.
+**IMPORTANT:** your new ```sshd``` port ```<YOUR_SSH_PORT>``` must match whatever service you have picked up in ```firewalld``` , in this guide we used ```5269``` for ```xmpp-server```.
 
 ```text
 Port <YOUR_SSH_PORT>
@@ -333,13 +341,13 @@ AcceptEnv LANG LC_*
 Subsystem       sftp    /usr/lib/openssh/sftp-server
 ```
 
-Restart the ```sshd``` server, and ```ssh``` back in if you need to.
+Restart the ```sshd``` server, and ```ssh``` into the server from another terminal to test the new configuration..
 
 ```text
 systemctl restart sshd.service
 ```
 
-Make **absolutely sure** you can ```ssh``` into your server with the newly configured port, disable ```ssh``` (port ```22```!!!), and restart the ```firewalld``` service:
+Make **absolutely sure** you can ```ssh``` into your server with the newly configured port, disable ```ssh``` (**port ```22```**), and restart the ```firewalld``` service:
 
 ```text
 firewall-cmd --permanent --zone=public --remove-service=ssh
@@ -388,7 +396,7 @@ Status
 
 This is the first of three files configurations that are borrowed from other great guides. There's no need to reinvent the wheel here, so I'm pointing you to [LovelyPool](https://github.com/lovelypool/)'s [chronysettings](https://github.com/lovelypool/cardano_stuff/blob/master/chronysettings.md) guide instead, but still provide the configuration for your convenience.
 
-I strongly suggest you **read** Ilap's and Lovelypool's guides, to understand it fully, and to know why we use ```chrony```.
+Make sure to **read** Lovelypool's **Chrony Settings** guide, to understand it fully, and to know why we use ```chrony```.
 
 Place this in ```/etc/chrony/chrony.conf```:
 
@@ -435,7 +443,7 @@ systemctl restart chronyd.service
 
 ### configure limits ###
 
-These are the other two, and last, files that I borrowed from other great guides. This time I borrowed from [Ilap](https://github.com/ilap/)'s [guide](https://gist.github.com/ilap/54027fe9af0513c2701dc556221198b2). For convenience, I do provide the configuration for these too. Again, **read** his reasoning and check often for his updates.
+These are the other two, and last, files that I borrowed from other great guides. This time I borrowed from [Ilap](https://github.com/ilap/)'s [guide](https://gist.github.com/ilap/54027fe9af0513c2701dc556221198b2). For convenience, I do provide the configuration for these too. Again, **read** his reasoning [here](https://gist.github.com/ilap/54027fe9af0513c2701dc556221198b2), and check often for his updates.
 
 Place these at the bottom of your ```/etc/security/limits.conf```:
 
@@ -662,19 +670,19 @@ Congratulations!!! If you made it this far, you are running a leader candidate n
 
 At the time of this writing, my pool *hasn't done much*, so I'm not the right guy to advise you on all of this, for the time being. One thing I can help you with, though, is to provide you with tools that will help you manage your server and your node.
 
-```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
+```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features and scripts.
 
-Head over to the [scripts page](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources. Follow [insaladaPool](https://twitter.com/insaladaPool)  on Twitter for future updates.
+Head over to the [**scripts page**](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources. Follow [**insaladaPool**](https://twitter.com/insaladaPool)  on Twitter for future updates.
 
 ### Pool Operator Tools ###
 
-There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [PoolTool](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool. Here's [mine](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
+There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool. Here's [mine](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
 
 Other great community created tools are:
 
-- [Adapools](https://adapools.org/)
-- [Pegasus Pool](https://pegasuspool.info/)
-- [AdaTainement](https://www.adatainment.com/)
+- [**Adapools**](https://adapools.org/)
+- [**Pegasus Pool**](https://pegasuspool.info/)
+- [**AdaTainement**](https://www.adatainment.com/)
 
 Be sure to check them out!
 

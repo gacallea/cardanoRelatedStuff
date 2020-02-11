@@ -6,23 +6,25 @@ Hereby you find my humble contributions to the [Cardano](https://www.cardano.org
 
 ```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
 
-Head over to the [scripts page](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources.
+**If you have followed guides other than ```NACG``` to set up your pool, all you need to add, to fully take advantange of these scripts, are the ```systemd``` and logging (```rsyslogd``` and ```logrotate```) integrations.**
+
+Head over to the [**scripts page**](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources.
 
 Last but not least, should you need help at any stage of your pool operator journey, join the '[Cardano Shelley Testnet & StakePool Best Practice Workgroup](https://t.me/CardanoStakePoolWorkgroup)' group on Telegram; it is packed with knowledge, and great and helpful people.
 
 ## Not Another Cardano Guide ##
 
-```Not Another Cardano Guide``` is a guide that will help you setup a pool with Debian 10. You can [find it here](NACG.md).
+```Not Another Cardano Guide``` is a guide that will help you setup a pool with Debian 10. You can [**find it here**](NACG.md).
 
-With so many great resources to set up a [Cardano Stake Pool](https://staking.cardano.org/en/staking/) out there, like [Chris G guide for beginners](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md), [Lovepool's](https://github.com/lovelypool/cardano_stuff/blob/master/chrony.conf) and [ILAP's setup files and notes](https://gist.github.com/ilap/54027fe9af0513c2701dc556221198b2),  you may wonder - *"why write the umpteenth guide?"*
+With so many great resources to set up a [Cardano Stake Pool](https://staking.cardano.org/en/staking/) out there, like [Chris G guide for beginners](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md), [Lovepool's](https://github.com/lovelypool/cardano_stuff/blob/master/chrony.conf) and [ILAP's setup files and notes](https://gist.github.com/ilap/54027fe9af0513c2701dc556221198b2),  you may wonder - *"**why write the umpteenth guide?**"*
 
-- Firstly, it's convenience. This guide recapitulates everything that helped me setup [INSL](https://shelleyexplorer.cardano.org/en/stake-pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c/), into a single resource.
+- **Firstly, it's convenience**. This guide recapitulates everything that helped me setup [INSL](https://shelleyexplorer.cardano.org/en/stake-pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c/), into a single resource.
 
-- Secondly, it adds content. This guide introduces my scripts, some server administration suggestions, and integrates ```jormungandr``` with ```systemd``` on Debian. I wouldn't write *yet another cardano guide*, if it was going to be *noise*.
+- **Secondly, it adds content**. This guide introduces my scripts, some server administration suggestions, and integrates ```jormungandr``` with ```systemd``` on Debian. I wouldn't write *yet another cardano guide*, if it was going to be *noise*.
 
 - Thirdly, before even writing a guide, I have shared my scripts, and [an addendum to his guide](CHRISG.md),  with Chris G. Whether he decides to integrate them, it's out of my control. I owed to his work, and it was fair to share with him first.
 
-- Last but not least, it is about sharing. It is a way to give back to the community that helped me with my many questions on Telegram. Hopefully, this is going to be useful to newcomers looking for help to set up a server and a pool.
+- **Last but not least, it is about sharing**. It is a way to give back to the community that helped me with my many questions on Telegram. Hopefully, this is going to be useful to newcomers looking for help to set up a server and a pool.
 
 ### The Guide ###
 
@@ -40,7 +42,7 @@ This guide won't reinvent the wheel either. Its focus are the system and the nod
 
 Should you be wondering about my technical background, [I've been a Linux professional](https://linkedin.com/in/gacallea/) for a long time. I love Open Source, and I've taught people about it. I strongly believe in Cardano. And it was a long time since I last contributed to a project.
 
-I also run the [Insalada Stake Pool](https://insalada.io/), and this is what got me into this adventure. Follow [insaladaPool](https://twitter.com/insaladaPool)  on Twitter for future updates.
+I also run the [**Insalada Stake Pool**](https://insalada.io/), and this is what got me into this adventure. Follow [**insaladaPool**](https://twitter.com/insaladaPool)  on Twitter for future updates.
 
 ## Contributions ##
 
