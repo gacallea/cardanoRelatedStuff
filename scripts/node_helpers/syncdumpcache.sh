@@ -2,8 +2,9 @@
 
 ## EXPERIMENTAL, USE AT YOUR OWN RISK!!!
 ## I noticed that keeping some kind of control on the cache, helps the node.
+## place this script in /root/syncdumpcache.sh
 ## run this in a root crontab (crontab -e)
-## */15 * * * * /root/nodehelperscripts/syncdumpcache.sh
+## */15 * * * * /root/syncdumpcache.sh
 
 howMuchCache=$(/usr/bin/free --mega -w | /usr/bin/awk '/Mem:/ {print $7}')
 maxCacheLimit=4096
