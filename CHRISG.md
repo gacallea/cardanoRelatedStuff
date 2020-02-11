@@ -117,7 +117,7 @@ git clone -- this is where my scripts and files would go
 
 ```text
 mv scripts/jor_script/* /root/
-mv scripts/nodehelperscripts/* /root/
+mv scripts/node_helpers/* /root/
 ```
 
 ### files notes ###

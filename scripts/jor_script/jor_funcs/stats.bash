@@ -72,7 +72,6 @@ function nextEpoch() {
 ## }
 
 ## what is the pool date delta?
-## will be used in a restart script in the future
 function blocksDelta() {
     intDateFunc
     lastBlockDate="$($JCLI rest v0 node stats get -h $JORMUNGANDR_RESTAPI_URL | awk '/lastBlockDate/ {print $2}' | sed 's/\"//g')"
