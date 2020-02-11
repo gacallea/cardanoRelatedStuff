@@ -9,6 +9,7 @@
   - [Prepare Your System](#prepare-your-system)
     - [ssh-users group](#ssh-users-group)
     - [non-root login user](#non-root-login-user)
+      - [set password and keys](#set-password-and-keys)
     - [non-root service user](#non-root-service-user)
     - [install extra packages](#install-extra-packages)
       - [install from apt](#install-from-apt)
@@ -25,7 +26,10 @@
     - [configure systemd](#configure-systemd)
     - [configure logging](#configure-logging)
     - [configure node](#configure-node)
-  - [Helping Hands](#helping-hands)
+  - [What's Next](#whats-next)
+    - [Helping Hands](#helping-hands)
+    - [Pool Operator Tools](#pool-operator-tools)
+    - [Telegram](#telegram)
 
 ## The Guide ##
 
@@ -34,6 +38,8 @@ This guide is written with experienced users in mind. Things like creating a Git
 This guide won't reinvent the wheel either. Its focus are the system and the node itself, and it will point you to [IOHK](https://iohk.io/)'s, when it's time to create, fund, and register your pool. IOHK [**guide**](https://github.com/input-output-hk/shelley-testnet/blob/master/docs/stake_pool_operator_how_to.md) and [**scripts**](https://github.com/input-output-hk/jormungandr-qa/tree/master/scripts) are all you need, and they are **official**.
 
 The only note worth adding, before you venture into configuring a server and creating a pool, is that **you need to have enough tADA** - meaning ADA coins that were **in your wallet before the November 2019** snapshot - to register your pool. Otherwise, you won't be able to proceed with the pool registration.
+
+**IMPORTANT**: this guide helps you configure and run a single pool with a single leader candidate node. If you are planning to run passive nodes, this guide assumes that you know what you are doing (and it won't be explained here).
 
 ### License ###
 
@@ -99,6 +105,10 @@ It should show the following:
 <YOUR_SYSTEM_USER> : <YOUR_SYSTEM_USER> sudo ssh-users
 ```
 
+#### set password and keys ####
+
+**Set a password for your login user, and enable your public ssh keys in the users' "```~/.ssh/authorized_keys```" file, or you will lock yourself out.**
+
 ### non-root service user ###
 
 Running a service exposed to the Internet, with a user who has a shell it is not a wise choice, to use an euphemism. This is why we are creating a dedicated user to run the service. This is also standard practice for services in Linux. Think of ```nginx```, for example. It has both a user and a group, directories, configurations, and some permissions; but it doesn't need neither a shell nor password. Because exposing a shell to the outside world is a security risk. This reduces the attack surface on the server.
@@ -136,7 +146,7 @@ apt-get upgrade
 apt-get install bc cbm ccze chrony curl dateutils fail2ban htop jq net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
 ```
 
-Make sure that the ```backports``` repository is enabled, and install ```firewalld``` and ```nftbales```:
+Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```, and install ```firewalld``` and ```nftbales```:
 
 ```text
 apt-get -t buster-backports install firewalld nftables
@@ -227,21 +237,66 @@ Double check that they are enabled with:
 firewall-cmd --list-services
 ```
 
-Restart ```firewalld``` to enable the ```nftables``` backed, and to enable the firewall rules you have just set:
+To enable the ```nftables``` backend, and to enable the firewall rules you have just set, you need to ```reboot``` the server. This is to ditch ```iptables``` and switch to ```nftables``` completely. If ```sshd``` is still running on port ```22``` as this guide assumes, you'll be fine.
 
 ```text
-systemctl restart firewalld.service
+reboot
 ```
 
-Make sure everything is fine for your ```public``` zone, before you continue with ```ssh``` configuration.
+Once you log back in, Make sure everything is fine for your ```public``` zone, before you continue with ```ssh``` configuration.
 
 ```text
 firewall-cmd --list-all
 ```
 
+It should show the folowing:
+
+```text
+public
+  target: default
+  icmp-block-inversion: no
+  interfaces:
+  sources:
+  services: dhcpv6-client ssh svn xmpp-server
+  ports:
+  protocols:
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+```
+
+To confirm that you have switched from ```iptables``` to ```nftables``` completely, run the following commands:
+
+```text
+iptables -nL
+```
+
+The above should return and empty iptables:
+
+```text
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+```
+
+The following should return your new ```nftables``` rules:
+
+```text
+nft list ruleset
+```
+
 ### configure sshd ###
 
 You'll be enabling some additional restrictions, and disabling some features that are enabled by default. Like tunneling and forwarding. [Read why](https://www.ssh.com/ssh/tunneling#ssh-tunneling-in-the-corporate-risk-portfolio) it is bad to leave SSH tunneling on. Some guides suggest to tunnel into your remote server for monitoring purposes. This is bad practice, and a security risk. Make sure you have the following configured in ```/etc/ssh/sshd_config```; everything else can be commented out.
+
+**IMPORTANT:** your new ```sshd``` port ```<YOUR_SSH_PORT>``` must match whatever service you have picked up in ```firewalld``` , in this guide we used ```5269```.
 
 ```text
 Port <YOUR_SSH_PORT>
@@ -486,8 +541,6 @@ systemctl stop jormungandr.service
 systemctl restart jormungandr.service
 ```
 
-**IMPORTANT**: this guide assumes a single pool with a single leader candidate node. If you are planning to run multiple nodes, this guide assumes that you know what you are doing to do so.
-
 ### configure logging ###
 
 Now ```jormungandr``` is a system managed service, it's time to configure system level logging with ```rsyslog``` and ```logrotate```.
@@ -585,7 +638,7 @@ p2p:
       id: df02383863ae5e14fea5d51a092585da34e689a73f704613
 rest:
   listen: 127.0.0.1:<REST_API_PORT>
-storage: "/home/<YOUR_POOL_USER>/storage/"
+storage: "/home/<YOUR_POOL_USER>/"
 mempool:
   fragment_ttl: 5m
   log_ttl: 1h
@@ -601,16 +654,34 @@ Restart ```jormungandr``` to use the new configuration:
 systemctl restart jormungandr.service
 ```
 
-## Helping Hands ##
+## What's Next ##
 
-Congratulations!!! If you made it this far, you are running a leader candidate node for your pool. This is only the beginning, though. Running a successful pool takes more than having a good uptime. The pool needs to crunch blocks. To do so, it needs delegations, **a lot of them**, and to be scheduled to participate into the blocks generation, and win them too.
+Congratulations!!! If you made it this far, you are running a leader candidate node for your pool. This is only the beginning, though. Running a successful pool takes more than having a good uptime. The pool needs to participate in the network, and crunch blocks. To do so, it needs delegations, **a lot of them**, and to be scheduled to participate into the blocks generation, and win them too.
+
+### Helping Hands ###
 
 At the time of this writing, my pool *hasn't done much*, so I'm not the right guy to advise you on all of this, for the time being. One thing I can help you with, though, is to provide you with tools that will help you manage your server and your node.
-
-**Meet ```jor_wrapper```**.
 
 ```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
 
 Head over to the [scripts page](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources. Follow [insaladaPool](https://twitter.com/insaladaPool)  on Twitter for future updates.
 
+### Pool Operator Tools ###
+
+There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [PoolTool](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool. Here's [mine](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
+
+Other great community created tools are:
+
+- [Adapools](https://adapools.org/)
+- [Pegasus Pool](https://pegasuspool.info/)
+- [AdaTainement](https://www.adatainment.com/)
+
+Be sure to check them out!
+
+If you are aware of more useful pool operators tools, please be kind and suggest them to me for inclusion.
+
+### Telegram ###
+
 Last but not least, should you need help at any stage of your pool operator journey, join the '[Cardano Shelley Testnet & StakePool Best Practice Workgroup](https://t.me/CardanoStakePoolWorkgroup)' group on Telegram; it is packed with knowledge, and great and helpful people.
+
+Insalada Stake Pool also has a [Telegram chat](https://t.me/insaladaPool), should you want to follow us and ask anything about INSL :)
