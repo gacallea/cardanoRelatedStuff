@@ -1,147 +1,49 @@
-# Chris G Guide Addendum #
+# Cardano Related Stuff #
 
-## Notes ##
+Hereby you find my humble contributions to the [Cardano](https://www.cardano.org/en/home/) ecosystem. I hope that they can be helpful to you. Enjoy :)
 
-- some changes would be easily integrated into your guide, some others may require one too many changes, it's up to you what you want to integrate :)
-- besides giving back to the community with the scripts, I'm also writing a guide from a more advanced (sysadmin) perspective and link/refer to the ones that helped/inspired me (or when reinventing the wheel would be an ass move). The notes I'm sharing here with you, borrow from that guide.
-- apologies for the *short notes* style, this is preliminary and I would rather chat about the nitty gritty details, and take it from there.
-- in case you are wondering "*where this notes come from*", this is me: [https://linkedin.com/in/gacallea/](https://linkedin.com/in/gacallea/).
-- please don’t share just yet and ask away if you need to clarify something.
-- I’d love to hear your thoughts and understand what you will integrate in your guide and how.
-- cheers and thank you for your availability.
+## Pool Operator Helper Scripts ##
 
-### ADDENDUM NOTES ###
+```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
 
-### create the 'ssh-users' group ###
+Head over to the [scripts page](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources.
 
-- finer ssh login control and more security
-- check out '*AllowedGroups*' SSH option
-- regarding the ```sshd_config``` file, [read why](https://www.ssh.com/ssh/tunneling#ssh-tunneling-in-the-corporate-risk-portfolio) it is bad to leave SSH tunneling on (e.g: like lovelypool suggests for remote monitoring)
+Last but not least, should you need help at any stage of your pool operator journey, join the '[Cardano Shelley Testnet & StakePool Best Practice Workgroup](https://t.me/CardanoStakePoolWorkgroup)' group on Telegram; it is packed with knowledge, and great and helpful people.
 
-```text
-groupadd ssh-users
-```
+## Not Another Cardano Guide ##
 
-### create non-root login user to ssh and sudo ###
+```Not Another Cardano Guide``` is a guide that will help you setup a pool with Debian 10. You can [find it here](NACG.md).
 
-- there's no need to edit visudo
-- single command is enough
+With so many great resources to set up a [Cardano Stake Pool](https://staking.cardano.org/en/staking/) out there, like [Chris G guide for beginners](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md), [Lovepool's](https://github.com/lovelypool/cardano_stuff/blob/master/chrony.conf) and [ILAP's setup files and notes](https://gist.github.com/ilap/54027fe9af0513c2701dc556221198b2),  you may wonder - *"why write the umpteenth guide?"*
 
-```text
-useradd -c "user to ssh and sudo" -m -d /home/<YOUR_SYSTEM_USER> -s /bin/text -G sudo,ssh-users <YOUR_SYSTEM_USER>
-```
+- Firstly, it's convenience. This guide recapitulates everything that helped me setup [INSL](https://shelleyexplorer.cardano.org/en/stake-pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c/), into a single resource.
 
-#### double-check that your new user is in both the sudo and ssh-users groups ####
+- Secondly, it adds content. This guide introduces my scripts, some server administration suggestions, and integrates ```jormungandr``` with ```systemd``` on Debian. I wouldn't write *yet another cardano guide*, if it was going to be *noise*.
 
-```text
-groups <YOUR_SYSTEM_USER>
-```
+- Thirdly, before even writing a guide, I have shared my scripts, and [an addendum to his guide](CHRISG.md),  with Chris G. Whether he decides to integrate them, it's out of my control. I owed to his work, and it was fair to share with him first.
 
-#### it should show ####
+- Last but not least, it is about sharing. It is a way to give back to the community that helped me with my many questions on Telegram. Hopefully, this is going to be useful to newcomers looking for help to set up a server and a pool.
 
-```text
-<YOUR_SYSTEM_USER> : <YOUR_SYSTEM_USER> sudo ssh-users
-```
+### The Guide ###
 
-### create non-root user to run the pool. ###
+```NACG``` is written with experienced users in mind. Things like creating a GitHub account, creating and using a pair of ssh keys, are a given. If you think you need help with those - there's nothing wrong with it - you should refer to Chris's [guide for newbs](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md).
 
-- this user neither needs a login shell nor a password
-- this reduces surface attack by not exposing a user with a shell on top of alpha quality software
-- see ```jormungandr.service``` file for how the pool is run as this user
+This guide won't reinvent the wheel either. Its focus are the system and the node itself, and it will point you to [IOHK](https://iohk.io/)'s, when it's time to create, fund, and register your pool. IOHK [**guide**](https://github.com/input-output-hk/shelley-testnet/blob/master/docs/stake_pool_operator_how_to.md) and [**scripts**](https://github.com/input-output-hk/jormungandr-qa/tree/master/scripts) are all you need, and they are **official**.
 
-```text
-useradd -c "user to run the pool" -m -d /home/<YOUR_POOL_USER> -s /sbin/nologin <YOUR_POOL_USER>
-passwd -d <YOUR_POOL_USER>
-```
+## License ##
 
-### install extra packages ###
+```Not Another Cardano Guide``` is licensed under the terms of the Creative Commons [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
 
-- no need for compiling tools (no build-essentials, no rust either)
-- this also reduces risks
-- some of the installed tools are used in my scripts, some others you know already
-  - ```bc``` is used for calculations
-  - ```cbm``` is a nice real-time bandwidth monitor for the terminal
-  - ```ccze``` for coloring, no need to reinvent that
-  - ```dateutils``` is used for date related calculations
-  - ```fail2ban``` to keep script kiddies at bay
-  - ```htop``` is a must have ```top``` on steroids
-  - ```ripgrep``` is available with ```apt``` :)
-  - ```speedtest-cli``` in case you need a speed test for your server
+```jor_wrapper``` and the ```node_helpers``` scripts are licensed under the terms of the [GPLv3](scripts/LICENSE) license.
 
-```text
-apt update
-apt upgrade
-apt install bc cbm ccze chrony curl dateutils fail2ban git htop jq net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
-```
+## About Me ###
 
-### no need to compile ###
+Should you be wondering about my technical background, [I've been a Linux professional](https://linkedin.com/in/gacallea/) for a long time. I love Open Source, and I've taught people about it. I strongly believe in Cardano. And it was a long time since I last contributed to a project.
 
-- if you omit compilations steps, average joe won't even notice, super users will compile anyway...
-- handle the updates the same way (```apt``` or ```curl``` for new jormungandr releases)
-- ```/usr/local/bin/``` is there for this specific purpose (user installed binary files)
+I also run the [Insalada Stake Pool](https://insalada.io/), and this is what got me into this adventure. Follow [insaladaPool](https://twitter.com/insaladaPool)  on Twitter for future updates.
 
-```text
-curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.9/jormungandr-v0.8.9-x86_64-unknown-linux-gnu.tar.gz
-tar xzvf jormungandr-v0.8.9-x86_64-unknown-linux-gnu.tar.gz
-mv jcli /usr/local/bin/
-mv jormungandr /usr/local/bin/
-chmod +x /usr/local/bin/jcli
-chmod +x /usr/local/bin/jormungandr
-```
+## Contributions ##
 
-### install tcpping ###
+If you have comments, changes, suggestions for the guide and/or the scripts, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github. Any insight is valuable and will be considered for integration and improvements.
 
-```text
-curl http://www.vdberg.org/~richard/tcpping -o /usr/local/bin/tcpping
-chmod +x /usr/local/bin/tcpping
-```
-
-### see sshd_config for more secure config ###
-
-- main reason to use such a config is better security
-- use fail2ban as well (installed with the above ```apt```), default config is great
-
-### download scripts + some config files ###
-
-- a link to repo + a nice note to describe the scripts maybe?
-- honestly, I need to generate buzz for INSL. I have no delegations, and I’m running out of money for the pool.
-- a “shout out” in your guide with the git clone link would be helpful.
-
-```text
-git clone -- this is where my scripts and files would go
-```
-
-### place the scripts in ```/root/``` (not the 'scripts' folder, the scripts only) ###
-
-- manage system/pool and run the scripts with root since the pool user is a "service user"
-
-```text
-mv scripts/jor_script/* /root/
-mv scripts/nodehelperscripts/* /root/
-```
-
-### files notes ###
-
-- ```sysctl -p``` is enough.
-- no need to add anything to ```/etc/rc.local```
-- my own files:
-  - ```/home/<YOUR_POOL_USER>/node-config.yaml```
-  - ```/etc/ssh/sshd_config```
-  - ```/etc/systemd/system/jormungandr.service```
-  - ```/etc/rsyslog.d/90-jormungandr.conf```
-  - ```/etc/logrotate.d/jormungandr```
-- no need for directories creation. my scripts takes care of the directories it needs.
-- ```get_pid``` is redundant. it is not in my scripts. I'd teach the user to use ```pidof jormungandr``` instead.
-- start, stop, and restart, are provided by systemd, hence have been removed from the script.
-- ```/etc/systemd/system/jormungandr.service``` it's only valid for a leader node. May need to add a "start as passive node" perhaps?
-- logging is managed at a system level with usual tools. script has wrappers for less linux prone users.
-
-### END OF ADDENDUM NOTES ###
-
-In the future I will implement and add to a guide I'm writing.
-
-1) proper remote monitoring with [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/) (will ponder security as priority).
-2) "stuck sentinel" restart script for when the node is stuck or has serious sync issues.
-3) IDS/IPS with [Suricata IDS](https://suricata-ids.org/).
-4) proper [nftables](https://netfilter.org/projects/nftables/) firewall (which allows for more).
-5) perhaps one day, if my pool goes well, I will implement [Ansible](https://www.ansible.com/) and [Docker](https://www.docker.com/) to expand.
+If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZGcgwWYE3wKGcpn9cfPmADjwegQqBnTrcBfsexUkbxnT4sciw). Delegating [to my pool](https://insalada.io/) would also be nice. It'd be awesome if [INSL](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) started crunching numbers besides server bills.

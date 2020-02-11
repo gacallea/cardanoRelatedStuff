@@ -5,7 +5,7 @@ SCRIPTNAME="${0##*/}"
 
 # the --help command -- show the usage text
 function usage() {
-cat <<USAGE
+        cat <<USAGE
 
 Usage: '$SCRIPTNAME command [options]'
 

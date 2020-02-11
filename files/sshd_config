@@ -1,3 +1,4 @@
+### source
 ### https://github.com/gacallea/cardanoRelatedStuff
 #	$OpenBSD: sshd_config,v 1.103 2018/04/09 20:41:22 tj Exp $
 
@@ -12,7 +13,7 @@
 # default value.
 
 ## change ssh port
-Port 22
+Port <YOUR_SSH_PORT>
 #AddressFamily any
 ListenAddress 0.0.0.0
 #ListenAddress ::
@@ -109,6 +110,8 @@ AllowTcpForwarding no
 AllowStreamLocalForwarding no
 GatewayPorts no
 PermitTunnel no
+
+### https://github.com/gacallea/cardanoRelatedStuff
 AllowGroups ssh-users
 
 # no default banner path

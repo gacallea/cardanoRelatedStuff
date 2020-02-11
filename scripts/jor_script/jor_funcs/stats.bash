@@ -9,11 +9,11 @@ function intDateFunc() {
     #chainstartdate=$($JCLI rest v0 settings get --host ${JORMUNGANDR_RESTAPI_URL} | awk '/block0Time/ {print $2}' | tr -d '"' | xargs -I{} date "+%s" -d {})
     ## .... better to just shove it in a variables if it changes..
     chainstartdate=1576264417
-    elapsed=$((($(date +%s)-$chainstartdate)))
-    epoch=$((($elapsed/86400)))
-    slot=$((($elapsed%86400)/2))
+    elapsed=$((($(date +%s) - $chainstartdate)))
+    epoch=$((($elapsed / 86400)))
+    slot=$((($elapsed % 86400) / 2))
     nowBlockDate="$epoch.$slot"
-    nextepoch="$((($(date +%s)+(86400-(elapsed%86400)))))"
+    nextepoch="$((($(date +%s) + (86400 - (elapsed % 86400)))))"
     nextepochToDate="$(date --iso-8601=s -d@+$nextepoch)"
     dateNow="$(date --iso-8601=s)"
     ### currently not possible to calculate nowBlockHeight=""
@@ -82,29 +82,29 @@ function blocksDelta() {
     echo "$POOL_TICKER     DATE: $lastBlockDate"
     echo "DATE    DELTA: $deltaBlockCount"
 
-#### DO NOT ENABLE THIS, NOT IMPLEMENTED YET
-## UNDERSTAND THIS
-#    nextScheduledBlock
-#
-#    now=$(date +"%r")
-#
-#    isNumberRegex='^[0-9]+$'
-#    if [[ -z $lastBlockDate || ! $lastBlockDate =~ $isNumberRegex ]]; then
-#        echo -e "$now: Your node appears to be starting or not running at all. Execute 'stats' to get more info."
-#        return
-#    fi
-#    if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
-#        echo -e "$now: WARNING: Your node is starting to drift. It could end up on an invalid fork soon."
-#        return
-#    fi
-#    if [[ $deltaBlockCount -gt $deltaMax ]]; then
-#        echo -e "$now: WARNING: Your node might be forked."
-#        return
-#    fi
-#    if [[ $deltaBlockCount -le 0 ]]; then
-#        echo -e "$now: Your node is running well."
-#        return
-#    fi
+    #### DO NOT ENABLE THIS, NOT IMPLEMENTED YET
+    ## UNDERSTAND THIS
+    #    nextScheduledBlock
+    #
+    #    now=$(date +"%r")
+    #
+    #    isNumberRegex='^[0-9]+$'
+    #    if [[ -z $lastBlockDate || ! $lastBlockDate =~ $isNumberRegex ]]; then
+    #        echo -e "$now: Your node appears to be starting or not running at all. Execute 'stats' to get more info."
+    #        return
+    #    fi
+    #    if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
+    #        echo -e "$now: WARNING: Your node is starting to drift. It could end up on an invalid fork soon."
+    #        return
+    #    fi
+    #    if [[ $deltaBlockCount -gt $deltaMax ]]; then
+    #        echo -e "$now: WARNING: Your node might be forked."
+    #        return
+    #    fi
+    #    if [[ $deltaBlockCount -le 0 ]]; then
+    #        echo -e "$now: Your node is running well."
+    #        return
+    #    fi
 }
 
 ## check the count for last received dates in logs
@@ -133,4 +133,3 @@ function lastDates() {
 
     journalctl --no-pager -n $howManyLogLines -u jormungandr.service | awk '/date:/ {print $18}' | sort | uniq -c | sort -Vr -k2 | sed 's/,//g' | head -$howManyDateResults
 }
-

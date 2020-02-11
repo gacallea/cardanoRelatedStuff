@@ -58,4 +58,3 @@ function issuesInLogs() {
 
     journalctl --no-pager -n $howManyLines -u jormungandr.service | egrep "WARN|ERRO"
 }
-

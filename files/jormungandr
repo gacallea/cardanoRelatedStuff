@@ -1,3 +1,5 @@
+### source
+# github.com/gacallea/cardanoRelatedStuff
 /var/log/jormungandr.log {
     daily
     rotate 30

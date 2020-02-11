@@ -7,4 +7,3 @@ SCRIPTNAME="${0##*/}"
 function settings() {
 	$JCLI rest v0 settings get --host ${JORMUNGANDR_RESTAPI_URL}
 }
-

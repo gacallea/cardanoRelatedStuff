@@ -51,4 +51,3 @@ function nextScheduledBlock() {
         fi
     done
 }
-

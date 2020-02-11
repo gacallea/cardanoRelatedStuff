@@ -53,5 +53,3 @@ function connectedIps() {
     netstat -tn 2>/dev/null | tail -n +3 | awk '{print $5}' | egrep -v "127.0.0.1|$JORMUNGANDR_PUBLIC_IP_ADDR" | cut -d: -f1 | sort | uniq -c | sort -nr | awk "{if (\$1 >="$howManyConnections") print \$1,\$2}"
     echo
 }
-
-

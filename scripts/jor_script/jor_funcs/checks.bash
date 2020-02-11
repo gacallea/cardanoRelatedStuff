@@ -29,7 +29,7 @@ function nOfQuarantinedIps() {
 ## check if your pool was recently quarantined
 function isPoolQuarantined() {
     this_node=$(quarantinedIps | rg "${JORMUNGANDR_PUBLIC_IP_ADDR}")
-    if [[ -n ${this_node} ]]; then
+    if [ -n ${this_node} ]; then
         echo "ERROR! You were quarantined at some point in the recent past!"
         echo "Execute '$SCRIPTNAME --connected-estab' to confirm that you are connecting to other nodes."
     else
@@ -43,6 +43,7 @@ function isBlockValid() {
         blockId="$1"
     else
         echo "you must provide one paramenter, it must be a valid block id"
+        echo "e.g: $SCRIPTNAME --block-valid #blockId"
         exit 1
     fi
 
@@ -73,7 +74,7 @@ function fragmentIdCount() {
 ## top snapshot of jourmungandr
 function resourcesStat() {
     echo "Here's some quick system resources stats for Jormungandr: "
-    top -b -n 2 -d 0.2 -p $(pidof jormungandr) | tail -2
+    top -b -n 4 -d 0.2 -p $(pidof jormungandr) | tail -2
 }
 
 ### PROPER SYSTEM ADMINISTRATION IS BETTER THAN USING THE FOLLOWING COMMANDS:
@@ -92,4 +93,3 @@ function lsofOpenFiles() {
 function lsofBlocksOpen() {
     lsof -f -- $JORMUNGANDR_STORAGE_FILE
 }
-
