@@ -22,7 +22,7 @@ With so many great resources to set up a [Cardano Stake Pool](https://staking.ca
 
 - **Secondly, it adds content**. This guide introduces my scripts, some server administration suggestions, and integrates ```jormungandr``` with ```systemd``` on Debian. I wouldn't write *yet another cardano guide*, if it was going to be *noise*.
 
-- Thirdly, before even writing a guide, I have shared my scripts, and [an addendum to his guide](CHRISG.md),  with Chris G. Whether he decides to integrate them, it's out of my control. I owed to his work, and it was fair to share with him first.
+- Thirdly, before even writing a guide, I have shared my scripts, and an addendum to his guide, with Chris G. Whether he decides to integrate them, it's out of my control. I owed to his work, and it was fair to share with him first.
 
 - **Last but not least, it is about sharing**. It is a way to give back to the community that helped me with my many questions on Telegram. Hopefully, this is going to be useful to newcomers looking for help to set up a server and a pool.
 
