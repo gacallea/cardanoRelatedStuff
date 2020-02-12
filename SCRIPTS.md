@@ -63,7 +63,7 @@ To take advantage of ```stuckrestart.sh```, all you need to do is to place it in
 
 ```*/15 * * * * /root/node_helpers/stuckrestart.sh```
 
-## some useful commands ##
+## Useful Commands ##
 
 It's not a secret that my ```jor_wrapper``` scripts spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). However, some of his *aliases* have been removed in my version. Things such as ```get_pid``` are considered redundant in ```jor_wrapper``` and in [my guide](NACG.md). This is because I favor and promote system administration over them, and I'd rather teach users *to fish*. For example, if you need to get ```jormungandr```'s ```pid```, there's no need for a convoluted ```grep```; just run ```pidof jormungandr```. Hence, I hereby list a number of one-liners and commands, to help you with your server administration.
 
@@ -83,11 +83,25 @@ If you want to keep an eye on when storage is being written and updated, you cou
 
 ``` watch 'ls -l /home/poolrun/storage'```
 
-### monitor node connections ###
+### node connections ###
+
+The following will show live statistics (thanks to ```watch```) of the system network connections.
 
 ```watch 'netstat -tn | tail -n +3 | awk "{ print \$6 }" | sort | uniq -c | sort -nr'```
 
-## more tools ##
+As an example you will see something like this:
+
+```text
+    240 ESTABLISHED
+    191 TIME_WAIT
+    139 SYN_SENT
+```
+
+### more commands soon ###
+
+The current list is quite short, because most features are implemented into ```jor_wrapper```. Having said that, I will expand this list in the future. If you have more useful commands, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github.
+
+## More Tools ##
 
 ### tmux ###
 
@@ -111,4 +125,12 @@ Learn more about ```tmux``` on its [official GitHub](https://github.com/tmux/tmu
 
 With my repo, you also get a number of [dotfiles](dotfiles/) that are useful if you do use the tools I suggest above. Feel free to use them to make the most of them. Or come up with your own. It's up to you.
 
-## send your tip to pooltool ##
+## Send Your Tip ##
+
+There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool. Here's [INSL](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
+
+## Telegram ##
+
+Last but not least, should you need help at any stage of your pool operator journey, join the '[Cardano Shelley Testnet & StakePool Best Practice Workgroup](https://t.me/CardanoStakePoolWorkgroup)' group on Telegram; it is packed with knowledge, and great and helpful people.
+
+Insalada Stake Pool also has a [Telegram chat](https://t.me/insaladaPool), should you want to follow us and ask anything about INSL :)
