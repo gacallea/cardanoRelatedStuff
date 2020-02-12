@@ -1,6 +1,6 @@
 #!/bin/bash
 
-### THIS SCRIPT IS EXPERIMENTAL, USE AT YOUR OWN RISK.
+### THIS SCRIPT IS EXPERIMENTAL AND NEEDS FINE TUNING AND TESTING, USE AT YOUR OWN RISK.
 
 ### https://github.com/gacallea/cardanoRelatedStuff
 ### this script checks against date delta and last received block time delta

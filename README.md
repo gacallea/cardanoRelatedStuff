@@ -6,7 +6,7 @@ Hereby you find my humble contributions to the [Cardano](https://www.cardano.org
 
 ```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
 
-**If you have followed guides other than ```NACG``` to set up your pool, all you need to add, to fully take advantange of these scripts, are the ```systemd``` and logging (```rsyslogd``` and ```logrotate```) integrations.**
+**If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` and logging (```rsyslogd``` and ```logrotate```) integrations from the [```NACG``` guide](NACG.md).**
 
 Head over to the [**scripts page**](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources.
 
