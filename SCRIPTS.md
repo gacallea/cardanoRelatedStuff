@@ -14,29 +14,34 @@
   - [node_helpers](#nodehelpers)
     - [blocks backup](#blocks-backup)
     - [cache sync](#cache-sync)
+    - [stuck restart](#stuck-restart)
   - [Useful Commands](#useful-commands)
     - [get jormungandr's pid](#get-jormungandrs-pid)
+    - [quick resources usage](#quick-resources-usage)
     - [keep an eye on storage](#keep-an-eye-on-storage)
+    - [node connections](#node-connections)
     - [more commands soon](#more-commands-soon)
   - [More Tools](#more-tools)
     - [tmux](#tmux)
     - [htop](#htop)
     - [cbm](#cbm)
     - [dotfiles](#dotfiles)
-    - [tools screenshots](#tools-screenshots)
-    - [colorizing commands](#colorizing-commands)
+    - [screenshots](#screenshots)
+    - [ccze](#ccze)
   - [Send Your Tip](#send-your-tip)
   - [Telegram](#telegram)
 
 ## About ##
 
-Here you find some *documentation* for ```jor_wrapper``` and ```node_helpers```; a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
+Here you find some *documentation* for ```jor_wrapper``` and ```node_helpers```; a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool.
 
-**If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` (including the *service user*) and logging (```rsyslogd``` and ```logrotate```) integrations from the [```NACG``` guide](NACG.md).**
+**If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` (including the *service user*) and logging (```rsyslogd``` and ```logrotate```) integrations from the [guide](NACG.md).**
+
+**TBD**: Some of the available ```jor_wrapper``` commands are in it for legacy and backwards compatibility. E.g: ```--blocked-ips``` and ```--blocked-count```, currently check against ```ufw```, which is used in Chris G. guide. They will be adapted to ```NACG``` soon (using ```firewalld```), and either removed or kept with an additional option flag. I'm still pondering the best approach to make everyone happy.
 
 ### Contribution ###
 
-If you have suggestions on how to improve these scripts, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github.
+If you have suggestions on how to improve these scripts, or would like to see more documentation about ```jor_wrapper```, or yet more example system administration commands, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github. Constructive feedback is always at home here.
 
 ### License ###
 
@@ -106,11 +111,13 @@ To get a bird-eye overview, the script offers ```--snapshot```; this will show t
 
 ### available commands ###
 
-The above are only the most relatable examples of what ```jor_wrapper``` offers and can help you with. For a full list of the available commands and their options, run:
+**The above-mentioned are only the most relatable examples** of what ```jor_wrapper``` offers and can help you with. For a full list of the available commands and their options, run:
 
 ```text
 ./jor_wrapper --help
 ```
+
+It will return the following. If you have suggestions on how to improve the ```usage``` output, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github.
 
 ```text
 Usage: 'jor_wrapper command [options]'
@@ -174,7 +181,7 @@ The ```node_helpers``` scripts take care of a number of *ancillary* aspects:
 
 ### blocks backup ###
 
-Having to restart your node is currently a nuisance, and it can take a long time to bootstrap, especially if your node was significantly out of sync before the restart. Backing up your ```blocks.sqlite``` with ```blocks_backup.sh``` at a regular interval, via cron, can offer a safety net from where to recover in such cases.
+Having to restart your node is a nuisance, and it often takes a significant amount of time to bootstrap, especially if your node was out of sync before the restart. Backing up your ```blocks.sqlite``` with ```blocks_backup.sh``` at a regular interval, via cron, can offer a safety net from where to recover in such cases.
 
 All you need to do to take advantage of ```blocks_backup.sh```, is to place it in a convenient location, say ```/root/node_helpers/blocks_backup.sh```, and setup a ```root``` crontab (**crontab -e**). The following would run a backup of ```blocks.sqlite``` every hour:
 
@@ -190,7 +197,9 @@ At the time of this writing, I noticed that keeping the system cache under contr
 
 To take advantage of ```syncdumpcache.sh```, all you need to do is to place it in a convenient location, say ```/root/node_helpers/syncdumpcache.sh```, and setup a ```root``` crontab (**crontab -e**). The following would run the checks every ten minutes. This does **not** mean that it will force the sync every ten minutes, that depends on the threshold set in the script:
 
-```*/10 * * * * /root/node_helpers/syncdumpcache.sh```
+```text
+*/10 * * * * /root/node_helpers/syncdumpcache.sh
+```
 
 The script will check the system cache usage and intervene with a forced sync after the threshold (**it defaults to 4096)**. If your server only runs ```jormungandr```, the system cache would 100% reflect ```jormungandr``` cache. Adjust the values to suit your system, if it runs anything else. Be mindful that **anything more aggressive than the default threshold value could break your node**.
 
@@ -202,7 +211,9 @@ At times, the node could lag behind by a significant margin. When this happens, 
 
 To take advantage of ```stuckrestart.sh```, all you need to do is to place it in a convenient location, say ```/root/node_helpers/stuckrestart.sh```, and setup a ```root``` crontab (**crontab -e**). The following would run the checks every fifteen minutes. This does **not** mean that it will force the restart every fifteen minutes, that depends on the thresholds set in the script:
 
-```*/15 * * * * /root/node_helpers/stuckrestart.sh```
+```text
+*/15 * * * * /root/node_helpers/stuckrestart.sh
+```
 
 ## Useful Commands ##
 
@@ -210,25 +221,33 @@ It's not a secret that my ```jor_wrapper``` scripts spun off [Chris G ```.bash_p
 
 ### get jormungandr's pid ###
 
-```pidof jormungandr```
+```text
+pidof jormungandr
+```
 
 ### quick resources usage ###
 
 This is also available in ```jor_wrapper```, but I wanted to make a point: how using the proper way to get the ```pid```, can help in other commands too.
 
-```top -b -n 4 -d 0.2 -p $(pidof jormungandr) | tail -2```
+```text
+top -b -n 4 -d 0.2 -p $(pidof jormungandr) | tail -2
+```
 
 ### keep an eye on storage ###
 
 If you want to keep an eye on when storage is being written and updated, you could run the following. This is totally subjective, and you are free to ignore it. I personally like to have that bit of info in front of me at all times. Change the path to your storage location:
 
-``` watch 'ls -l /home/poolrun/storage'```
+```text
+watch 'ls -l /home/poolrun/storage'
+```
 
 ### node connections ###
 
 The following will show live statistics (thanks to ```watch```) of the system network connections.
 
-```watch 'netstat -tn | tail -n +3 | awk "{ print \$6 }" | sort | uniq -c | sort -nr'```
+```text
+watch 'netstat -tn | tail -n +3 | awk "{ print \$6 }" | sort | uniq -c | sort -nr'
+```
 
 As an example you will see something like this:
 
@@ -248,25 +267,25 @@ The current list is quite short, because most features are implemented into ```j
 
 Most people, even seasoned system administrators, are more familiar with ```screen``` when it comes to convenience. ```tmux``` is a modern ```screen``` on steroids. It's more recent, it offers more in terms of malleability and it does a lot more than ```screen```.
 
-If you are not familiar with either, they are tools that allow you to run multiple terminal sessions in background. This is particularly useful in server administration, because it allows you to run sessions that won't terminate your processes when you logout of the server (unless rebooted). You can ```ssh``` into your server, and reconnect to your sessions, at any time, and have it readily available for your administration needs.
-
-Learn more about ```tmux``` on its [official GitHub](https://github.com/tmux/tmux/wiki), and how to use it on the precious [tmux cheatsheet website](https://tmuxcheatsheet.com/). If you need a guide, [this is a good one](https://linuxize.com/post/getting-started-with-tmux/).
+If you are not familiar with either, they are tools that allow you to run multiple terminal sessions in background. This is particularly useful in server administration, because it allows you to run sessions that won't terminate your processes when you logout of the server (unless rebooted). You can ```ssh``` into your server, and reconnect to your sessions, at any time, and have it readily available for your administration needs. **Learn more** about ```tmux``` on its [official GitHub](https://github.com/tmux/tmux/wiki), and how to use it on the precious [tmux cheatsheet website](https://tmuxcheatsheet.com/). If you need a guide, [this is a good one](https://linuxize.com/post/getting-started-with-tmux/).
 
 ### htop ###
 
- ```htop``` is a must have ```top``` on steroids. Run it with the ```-u``` flag to monitor your pool service user (if you have setup your node with [my guide](NACG.md)). Alternatively, run ```htop``` and filter by users by pressing ```u``` once it's open.
+. ```htop``` is a must have ```top``` on steroids. Run it with the ```-u``` flag to monitor your pool service user (if you have setup your node with [my guide](NACG.md)). Alternatively, run ```htop``` and filter by users by pressing ```u``` once it's open.
 
- ```htop -u pooluser```
+```text
+htop -u <YOUR_POOL_USER>
+```
 
 ### cbm ###
 
-```cbm``` is an old piece of software, but it still serves its purpose quite well. It is a simple real-time bandwidth monitor that runs in a terminal. Useful to quickly check if your node traffic, from which you can deduce its status. If you have followed ```NACG```, you get this too. Here's [a guide](https://www.tecmint.com/cbm-shows-network-bandwidth-traffic-in-ubuntu/) showing ```cbm``` usage.
+. ```cbm``` is an old piece of software, but it still serves its purpose quite well. It is a simple real-time bandwidth monitor that runs in a terminal. Useful to quickly check if your node traffic, from which you can deduce its status. If you have followed ```NACG```, you get this too. Here's [a guide](https://www.tecmint.com/cbm-shows-network-bandwidth-traffic-in-ubuntu/) showing ```cbm``` usage.
 
 ### dotfiles ###
 
 With my repo, you also get a number of [dotfiles](dotfiles/) that are useful if you do use the tools I suggest above. Feel free to use them to make the most of them. Or come up with your own. It's up to you.
 
-### tools screenshots ###
+### screenshots ###
 
 The following shows a ```tmux``` window with some ```jor_wrapper``` going on:
 
@@ -276,13 +295,15 @@ The following shows a ```tmux``` window with ```htop```, ```cbm```, and some com
 
 ![tmux example 2](images/tmux&#32;2.png)
 
-### colorizing commands ###
+### ccze ###
 
-You can notice that some of the commands have colors. ```htop``` and ```cbm``` offer colors by default. To colorize ```jor-wrapper``` and system commands, they are ```pipe```'d to ```ccze```. This is also something that I've changed from Chris's ```bash_profile``` aliases: lose the finicky variables, and rely on a solid existing software like ```ccze```.
+You may have noticed that some of the commands in the above images have colors. ```htop``` and ```cbm``` offer colors by default. To colorize ```jor-wrapper``` and system commands, they are ```pipe```'d to ```ccze```. This is also something that I've changed from Chris's ```bash_profile``` aliases, to rely on a solid existing software like ```ccze```.
 
 ## Send Your Tip ##
 
-There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool. Here's [INSL](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
+There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool.
+
+Here's [**INSL**](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
 
 ## Telegram ##
 
