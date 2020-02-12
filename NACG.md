@@ -210,10 +210,11 @@ A controversial note, first: believe it or not, if your server is only running `
 
 However, setting up a firewall is something this guide will help you do. This guide will help you configure ```nftables``` with ```firewalld```, because in the future it will come in handy for *extra features* I'll be adding to this guide *soon*. Stay tuned.
 
-First things first, let's make ```firewalld``` use the ```nftables``` backend, instead of ```iptables```. Edit ```/etc/firewalld/firewalld.conf```, and change the backend to:
+First things first, let's make ```firewalld``` use the ```nftables``` backend, instead of ```iptables```. Edit ```/etc/firewalld/firewalld.conf```, and change the backend to ```nftables``` and turn logging for drops on. Everything else must stay untouched.
 
 ```text
 FirewallBackend=nftables
+LogDenied=all
 ```
 
 It is now time to decide the ports for your public services, namely ```sshd``` and ```jormungandr```. These will be the ports that they will be listening on, and that you will need to open on ```firewalld```. To make things a little easier, you should choose ports that match existing ```firewalld``` services. Alternatively, you could add and enable your own services by following the [official documentation](https://firewalld.org/documentation/howto/add-a-service.html). To check which services are available in ```firewalld``` to choose from, run:
