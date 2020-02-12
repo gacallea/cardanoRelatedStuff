@@ -25,6 +25,63 @@ cp -af cardanoRelatedStuff/scripts/jor_script/* /root/
 
 ## jor_wrapper ##
 
+```jor_wrapper``` is a script with a number of useful commands for pool operators. It has all sort of checks, stats, and more commands, to help you manage your node. I will assume that you have placed ```jor_wrapper```, ```jor_config```, and ```jor_funcs```, in your ```/root``` directory; and that you have created a *service user* to run your pool, as explained in [my guide](NACG.md).
+
+**Before you go any further**, though, make sure you set your own variables in ```jor_config``` first:
+
+```text
+RECEIVER_ACCOUNT="<YOUR_POOL_PLEDGE_ADDRESS>"
+POOL_TICKER="<YOUR_POOL_TICKER>"
+JORMUNGANDR_USERNAME="<YOUR_POOL_USER>"
+JORMUNGANDR_FILES="/home/${JORMUNGANDR_USERNAME}"
+JORMUNGANDR_STORAGE_DIR="${JORMUNGANDR_FILES}/storage"
+JORMUNGANDR_STORAGE_FILE="${JORMUNGANDR_STORAGE_DIR}/blocks.sqlite"
+JORMUNGANDR_PUBLIC_IP_ADDR="<YOUR_NODE_PUBLIC_IP>"
+JORMUNGANDR_RESTAPI_PORT="<REST_API_PORT>"
+JORMUNGANDR_RESTAPI_URL="http://127.0.0.1:${JORMUNGANDR_RESTAPI_PORT}/api"
+```
+
+Once you have configured the above variables to match your system, run the following to set them into ```/root/.bashrc```
+
+```text
+./jor_wrapper --set-vars
+```
+
+### Quick Examples ###
+
+#### logs ####
+
+Some of the things ```jor_wrapper``` can help you with, are that you can check the pool logs in four different ways:
+
+- --live-logs: it will show live logs scrolling on your terminal
+- --last-logs: it will dump the last #N lines of logs on your terminal
+- --problems: it will search for serious problems (cannot|stuck|exit|unavailable) for the last #N lines of logs
+- --issues: it will search for issues (WARN|ERRO) for the last #N lines of logs
+
+#### stats ####
+
+Another quick example is about stats:
+
+- --node-stats: it will show the pool ```node stats get``` from the ```jcli``` REST API
+- --pool-stats: it will show the pool ```stake-pool get``` from the ```jcli``` REST API
+- --net-stats: it will show the pool ```network stats get``` from the ```jcli``` REST API
+- --date-stats: it will show the count of received block announcement from network for the last #N lines of logs
+- --sys-stats: it will show a quick ```top``` snapshot of system resources used by ```jormungandr```
+
+#### snapshot ####
+
+To get a bird-eye overview, the script offers ```--snapshot```; this will show the some stats. Let it be clear: this **is to help you have a quick glance** at your node, **it does not substitute proper monitoring** whatsoever.
+
+![snapshot overview](./images/snapshot.png)
+
+#### help and commands ####
+
+The above are only the most relatable examples of what ```jor_wrapper``` offers and can help you with. For a full list of the available commands and their options, run:
+
+```text
+./jor_wrapper --help
+```
+
 ## node_helpers ##
 
 The ```node_helpers``` scripts take care of a number of *ancillary* aspects:
