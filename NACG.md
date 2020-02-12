@@ -370,7 +370,7 @@ cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 Make sure you have these (everything else can be left alone) configurations:
 
 - "```ignorself = true```"
-- "```ignoreip = 127.0.0.1/8 ::1 <YOUR_SERVER_PUBLIC_IP>```"
+- "```ignoreip = 127.0.0.1/8 ::1 <YOUR_NODE_PUBLIC_IP>```"
 - "```enabled = true```" for the ```sshd``` jail
 - "```banaction = firewallcmd-multiport```"
 - "```banaction_allports = firewallcmd-allports```"
@@ -609,7 +609,7 @@ log:
     level: "info"
 p2p:
   listen_address: "/ip4/0.0.0.0/tcp/<LISTEN_PORT>"
-  public_address: "/ip4/<YOUR_SERVER_PUBLIC_IP>/tcp/<LISTEN_PORT>"
+  public_address: "/ip4/<YOUR_NODE_PUBLIC_IP>/tcp/<LISTEN_PORT>"
   topics_of_interest:
     blocks: high
     messages: high
