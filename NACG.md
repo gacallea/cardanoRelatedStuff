@@ -575,6 +575,20 @@ Place the following in ```/etc/logrotate.d/jormungandr```:
 }
 ```
 
+Place the following in ```/etc/logrotate.d/firewalld```:
+
+```text
+/var/log/firewalld {
+    daily
+    rotate 30
+    copytruncate
+    compress
+    delaycompress
+    notifempty
+    missingok
+}
+```
+
 Restart the logging services:
 
 ```text

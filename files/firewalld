@@ -1,0 +1,9 @@
+/var/log/firewalld {
+    daily
+    rotate 30
+    copytruncate
+    compress
+    delaycompress
+    notifempty
+    missingok
+}
