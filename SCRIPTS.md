@@ -1,18 +1,48 @@
 # Pool Operator Helper Scripts #
 
-```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
+- [Pool Operator Helper Scripts](#pool-operator-helper-scripts)
+  - [About](#about)
+    - [Contribution](#contribution)
+    - [License](#license)
+    - [Download](#download)
+  - [jor_wrapper](#jorwrapper)
+    - [Quick Examples](#quick-examples)
+      - [logs](#logs)
+      - [stats](#stats)
+      - [snapshot](#snapshot)
+    - [available commands](#available-commands)
+  - [node_helpers](#nodehelpers)
+    - [blocks backup](#blocks-backup)
+    - [cache sync](#cache-sync)
+  - [Useful Commands](#useful-commands)
+    - [get jormungandr's pid](#get-jormungandrs-pid)
+    - [keep an eye on storage](#keep-an-eye-on-storage)
+    - [more commands soon](#more-commands-soon)
+  - [More Tools](#more-tools)
+    - [tmux](#tmux)
+    - [htop](#htop)
+    - [cbm](#cbm)
+    - [dotfiles](#dotfiles)
+    - [tools screenshots](#tools-screenshots)
+    - [colorizing commands](#colorizing-commands)
+  - [Send Your Tip](#send-your-tip)
+  - [Telegram](#telegram)
 
-**If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` and logging (```rsyslogd``` and ```logrotate```) integrations from the [```NACG``` guide](NACG.md).**
+## About ##
 
-## Contribution ##
+Here you find some *documentation* for ```jor_wrapper``` and ```node_helpers```; a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool. However, they work best if you followed the ```NACG``` guide, as they are tailored to system configurations you would setup with it (e.g: ```systemctl``` and ```journalctl```).
+
+**If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` (including the *service user*) and logging (```rsyslogd``` and ```logrotate```) integrations from the [```NACG``` guide](NACG.md).**
+
+### Contribution ###
 
 If you have suggestions on how to improve these scripts, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github.
 
-## License ##
+### License ###
 
-```jor_wrapper``` and the ```node_helpers``` scripts are licensed under the terms of the [GPLv3](scripts/LICENSE) license.
+Both ```jor_wrapper``` and the ```node_helpers``` scripts are licensed under the terms of the [GPLv3](scripts/LICENSE) license.
 
-## Download ##
+### Download ###
 
 This page assumes that the system will be managed with ```root```. To use these scripts, simply clone this repository and place them in ```/root``` like so:
 
@@ -25,7 +55,7 @@ cp -af cardanoRelatedStuff/scripts/jor_script/* /root/
 
 ## jor_wrapper ##
 
-```jor_wrapper``` is a script with a number of useful commands for pool operators. It has all sort of checks, stats, and more commands, to help you manage your node. I will assume that you have placed ```jor_wrapper```, ```jor_config```, and ```jor_funcs```, in your ```/root``` directory; and that you have created a *service user* to run your pool, as explained in [my guide](NACG.md).
+. ```jor_wrapper``` is a script with a number of useful commands for pool operators. It has all sort of checks, stats, and more commands, to help you manage your node. I will assume that you have placed ```jor_wrapper```, ```jor_config```, and ```jor_funcs```, in your ```/root``` directory like explained earlier; and that you have setup your pool as explained in [my guide](NACG.md).
 
 **Before you go any further**, though, make sure you set your own variables in ```jor_config``` first:
 
@@ -51,22 +81,22 @@ Once you have configured the above variables to match your system, run the follo
 
 #### logs ####
 
-Some of the things ```jor_wrapper``` can help you with, are that you can check the pool logs in four different ways:
+As an example of what ```jor_wrapper``` can help you with, is that you can check the pool logs in four different ways:
 
-- --live-logs: it will show live logs scrolling on your terminal
-- --last-logs: it will dump the last #N lines of logs on your terminal
-- --problems: it will search for serious problems (cannot|stuck|exit|unavailable) for the last #N lines of logs
-- --issues: it will search for issues (WARN|ERRO) for the last #N lines of logs
+- ```--live-logs```: it will show live logs scrolling on your terminal
+- ```--last-logs```: it will dump the last #N lines of logs on your terminal
+- ```--problems```: it will search for serious problems (```cannot|stuck|exit|unavailable```) for the last #N lines of logs
+- ```--issues```: it will search for issues (```WARN|ERRO```) for the last #N lines of logs
 
 #### stats ####
 
 Another quick example is about stats:
 
-- --node-stats: it will show the pool ```node stats get``` from the ```jcli``` REST API
-- --pool-stats: it will show the pool ```stake-pool get``` from the ```jcli``` REST API
-- --net-stats: it will show the pool ```network stats get``` from the ```jcli``` REST API
-- --date-stats: it will show the count of received block announcement from network for the last #N lines of logs
-- --sys-stats: it will show a quick ```top``` snapshot of system resources used by ```jormungandr```
+- ```--node-stats```: it will show the pool ```node stats get``` from the ```jcli``` REST API
+- ```--pool-stats```: it will show the pool ```stake-pool get``` from the ```jcli``` REST API
+- ```--net-stats```: it will show the pool ```network stats get``` from the ```jcli``` REST API
+- ```--date-stats```: it will show the count of received block announcement from network for the last #N lines of logs
+- ```--sys-stats```: it will show a quick ```top``` snapshot of system resources used by ```jormungandr```
 
 #### snapshot ####
 
@@ -74,12 +104,64 @@ To get a bird-eye overview, the script offers ```--snapshot```; this will show t
 
 ![snapshot overview](./images/snapshot.png)
 
-#### help and commands ####
+### available commands ###
 
 The above are only the most relatable examples of what ```jor_wrapper``` offers and can help you with. For a full list of the available commands and their options, run:
 
 ```text
 ./jor_wrapper --help
+```
+
+```text
+Usage: 'jor_wrapper command [options]'
+
+        COMMANDS                                OPTIONS             DESCRIPTION
+
+        -h|--help                                                   show this help message and exit
+        --settings                                                  show node settings and exit
+        --set-vars                                                  set variables in ~/.bashrc (run only once) -- CHANGE your variables in jor_config first!
+
+        --live-logs                                                 show the pool live logs (scrolls on terminal)
+        --last-logs                             5000                show #N lines of logs
+        --problems                              5000                check for serious problems (e.g: stuck) in #N lines of logs
+        --issues                                5000                check for WARN|ERRO issues in #N lines of logs
+
+        --bstrap-time                                               calculate how long the bootstrap took (NOT WORKING PROPERLY ATM)
+        --node-stats                                                show the pool NODE stats
+        --pool-stats                                                show the pool POOL stats
+        --net-stats                                                 show the pool NETWORK stats
+        --date-stats                            5000 20             count received block announcement from network
+        --sys-stats                                                 show a TOP snapshot of jourmungandr
+
+        --snapshot                                                  show a brief overview of the pool
+        --current-tip                                               show the current tip for the pool
+        --public-ip                                                 show the pool public IP
+        --next-epoch                                                show a countdown to NEXT EPOCH
+        --block-now                                                 show SHELLEY current block
+        --block-delta                                               show the pool block delta (as in how far behind it is)
+        --block-valid                           blockid             check a block against the REST API to verify its validity
+        --acct-balance                                              check the the pool account balance
+
+        --connected-estab                                           show how many other nodes is the pool connected to
+        --connected-ips                         5                   count how many #N connections to a specific IP
+        --blocked-ips                                               show IPs that were blocked by UFW
+        --blocked-count                                             count IPs that were blocked by UFW
+        --check-peers                                               check ping to trusted peers with tcpping
+
+        --is-visible                                                check if the pool is visible on the explorer (useful during setup)
+        --is-quarantined                                            check if the pool is quarantined (or was quarantined recently)
+        --quarantined-ips                                           show quarantined IPs
+        --quarantined-ips-count                                     count of quarantined IPs
+
+        --is-scheduled                                              check if the pool is currently scheduled as leader
+        --scheduled-slots                                           check how many slots is the pool scheduled for
+        --scheduled-dates                                           show which DATE in this epoch for schedules
+        --scheduled-time                                            show which TIME in this epoch for schedules
+        --scheduled-next                                            show when in the NEXT scheduled block for the pool
+
+        --frags-count                                               show the fragmented_id count
+        --open-files                                                DON'T ABUSE THIS, IT CAN CRASH YOUR NODE -- lsof by jormunganr
+        --open-blocks                                               DON'T ABUSE THIS, IT CAN CRASH YOUR NODE -- lsof of blocks file
 ```
 
 ## node_helpers ##
@@ -96,7 +178,9 @@ Having to restart your node is currently a nuisance, and it can take a long time
 
 All you need to do to take advantage of ```blocks_backup.sh```, is to place it in a convenient location, say ```/root/node_helpers/blocks_backup.sh```, and setup a ```root``` crontab (**crontab -e**). The following would run a backup of ```blocks.sqlite``` every hour:
 
-```0 */1 * * * /root/node_helpers/blocks_backup.sh```
+```text
+0 */1 * * * /root/node_helpers/blocks_backup.sh
+```
 
 The script has a data retention of 24h, and it removes older backups automatically. You won't need anything older than a day. **Just be mindful of your disk space when setting this up**. At the time of this writing, bzipped ```blocks.sqlite``` files backup take around **100MB** each. So if you backup every hour, 100MB times the number of files (24), **constantly takes 2.4GB** of your disk space.
 
@@ -181,6 +265,20 @@ Learn more about ```tmux``` on its [official GitHub](https://github.com/tmux/tmu
 ### dotfiles ###
 
 With my repo, you also get a number of [dotfiles](dotfiles/) that are useful if you do use the tools I suggest above. Feel free to use them to make the most of them. Or come up with your own. It's up to you.
+
+### tools screenshots ###
+
+The following shows a ```tmux``` window with some ```jor_wrapper``` going on:
+
+![tmux example 1](images/tmux&#32;1.png)
+
+The following shows a ```tmux``` window with ```htop```, ```cbm```, and some commands:
+
+![tmux example 2](images/tmux&#32;2.png)
+
+### colorizing commands ###
+
+You can notice that some of the commands have colors. ```htop``` and ```cbm``` offer colors by default. To colorize ```jor-wrapper``` and system commands, they are ```pipe```'d to ```ccze```. This is also something that I've changed from Chris's ```bash_profile``` aliases: lose the finicky variables, and rely on a solid existing software like ```ccze```.
 
 ## Send Your Tip ##
 
