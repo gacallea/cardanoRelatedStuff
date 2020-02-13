@@ -150,11 +150,12 @@ Some of the installed tools are used in my scripts, some others serve system adm
 - ```jq``` if you want to send your stats to [PoolTool.io](https://pooltool.io/health)
 - ```ripgrep``` is used in my scripts
 - ```speedtest-cli``` in case you need a good speed test for your server
+- ```musl``` is a libc needed for the jormungandr version >= 0.8.10
 
 ```text
 apt-get update
 apt-get upgrade
-apt-get install bc cbm ccze chrony curl dateutils fail2ban htop jq net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
+apt-get install musl bc cbm ccze chrony curl dateutils fail2ban htop jq net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
 ```
 
 Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```, and install ```firewalld``` and ```nftbales```:
@@ -168,8 +169,8 @@ apt-get -t buster-backports install firewalld nftables
 You should stick [to the latest stable release](https://github.com/input-output-hk/jormungandr/releases), unless it introduces regressions. The following works for the current release for a ```x86_64``` architecture and ```GNU```.
 
 ```text
-curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.9/jormungandr-v0.8.9-x86_64-unknown-linux-gnu.tar.gz
-tar xzvf jormungandr-v0.8.9-x86_64-unknown-linux-gnu.tar.gz
+curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.10/jormungandr-v0.8.10-x86_64-unknown-linux-musl.tar.gz
+tar xzvf jormungandr-v0.8.10-x86_64-unknown-linux-musl.tar.gz
 mv jcli /usr/local/bin/
 mv jormungandr /usr/local/bin/
 chmod +x /usr/local/bin/jcli
