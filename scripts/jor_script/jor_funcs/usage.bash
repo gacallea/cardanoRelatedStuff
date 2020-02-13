@@ -20,7 +20,7 @@ Usage: '$SCRIPTNAME command [options]'
         --problems                              5000                check for serious problems (e.g: stuck) in #N lines of logs
         --issues                                5000                check for WARN|ERRO issues in #N lines of logs
 
-        --bstrap-time                                               calculate how long the bootstrap took (NOT WORKING PROPERLY ATM)
+        --bstrap-time                                               calculate how long the bootstrap took
         --node-stats                                                show $POOL_TICKER NODE stats
         --pool-stats                                                show $POOL_TICKER POOL stats
         --net-stats                                                 show $POOL_TICKER NETWORK stats
@@ -54,8 +54,6 @@ Usage: '$SCRIPTNAME command [options]'
         --scheduled-next                                            show when in the NEXT scheduled block for $POOL_TICKER
 
         --frags-count                                               show the fragmented_id count
-        --open-files                                                DON'T ABUSE THIS, IT CAN CRASH YOUR NODE -- lsof by jormunganr
-        --open-blocks                                               DON'T ABUSE THIS, IT CAN CRASH YOUR NODE -- lsof of blocks file
 
 USAGE
 }

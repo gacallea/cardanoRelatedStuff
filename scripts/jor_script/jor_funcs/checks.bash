@@ -76,20 +76,3 @@ function resourcesStat() {
     echo "Here's some quick system resources stats for Jormungandr: "
     top -b -n 4 -d 0.2 -p $(pidof jormungandr) | tail -2
 }
-
-### PROPER SYSTEM ADMINISTRATION IS BETTER THAN USING THE FOLLOWING COMMANDS:
-### PROPER SYSTEM ADMINISTRATION IS BETTER THAN USING THE FOLLOWING COMMANDS:
-### PROPER SYSTEM ADMINISTRATION IS BETTER THAN USING THE FOLLOWING COMMANDS:
-
-## check the list of open files by pool.
-## NOTE TO USER: DON'T USE THIS TOO MUCH, IT'S AN EXPENSIVE TASK...
-function lsofOpenFiles() {
-    echo "Calculating number of open files by Jormungandr..."
-    lsof -u $JORMUNGANDR_USERNAME | grep jormungandr | wc -l
-}
-
-## check the list of open files related to the block storage
-## NOTE TO USER: DON'T USE THIS TOO MUCH, IT'S AN EXPENSIVE TASK...
-function lsofBlocksOpen() {
-    lsof -f -- $JORMUNGANDR_STORAGE_FILE
-}

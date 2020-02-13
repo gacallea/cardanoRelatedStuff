@@ -34,13 +34,11 @@ function netStats() {
     $JCLI rest v0 network stats get -h $JORMUNGANDR_RESTAPI_URL
 }
 
-## TODO: FIX THIS -- at the minute always returns 2 minutes
+## check logs to calculate exact bootstrap time
 function bootstrapTime() {
-    JORMUNGANDR_PID=$(pidof jormungandr)
-    JORMUNGANDR_PSTIME=$(ps -o etimes= -p $JORMUNGANDR_PID | awk '{print $1}')
-    JORMUNGANDR_UPTIME=$($JCLI rest v0 node stats get -h $JORMUNGANDR_RESTAPI_URL | awk '/uptime/ {print $2}')
-    TIMECALC="$(echo "($JORMUNGANDR_PSTIME - $JORMUNGANDR_UPTIME)/60" | bc)"
-    echo "BOOTSTRAP TIME FOR THIS RUN WAS $TIMECALC MINUTES"
+    bTimeStart=$(journalctl --no-pager -u jormungandr.service | grep "Starting jormungandr" | tail -1 | awk '{print $8}')
+    bTimeEnd=$(journalctl --no-pager -u jormungandr.service | grep "bootstrap completed" | tail -1 | awk '{print $8}')
+    echo "$(dateutils.ddiff $bTimeStart $bTimeEnd -f "Bootstrap took exactly %M minutes and %S seconds")"
 }
 
 ## self-explanatory

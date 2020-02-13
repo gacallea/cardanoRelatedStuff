@@ -147,14 +147,6 @@ while true; do
         checkPeers
         exit 0
         ;;
-    --open-files)
-        lsofOpenFiles
-        exit 0
-        ;;
-    --open-blocks)
-        lsofBlocksOpen
-        exit 0
-        ;;
     --is-visible)
         isPoolVisible
         exit 0
