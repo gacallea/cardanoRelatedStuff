@@ -166,7 +166,7 @@ apt-get -t buster-backports install firewalld nftables
 
 #### install jormungandr and jcli ####
 
-You should stick [to the latest stable release](https://github.com/input-output-hk/jormungandr/releases), unless it introduces regressions. The following works for the current release for a ```x86_64``` architecture and ```GNU```.
+You should stick [to the latest stable release](https://github.com/input-output-hk/jormungandr/releases), unless it introduces regressions. The following works for the current release for a ```x86_64``` architecture (PC/Mac - Intel/AMD Server).
 
 ```text
 curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.10/jormungandr-v0.8.10-x86_64-unknown-linux-musl.tar.gz
