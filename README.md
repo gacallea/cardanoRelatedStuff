@@ -2,6 +2,8 @@
 
 Hereby you find my humble contributions to the [Cardano](https://www.cardano.org/en/home/) ecosystem. I hope that they can be helpful to you. Enjoy :)
 
+**IMPORTANT**: I was compelled to release early, and AS IS, because of [the Haskell announcement](https://iohk.io/en/blog/posts/2020/02/12/new-cardano-node-explorer-backend-and-web-api-released/). Hence, the scripts are tailored to the guide I wrote for now. I will be adding full compatibility with Chris G guide in the next couple of days, so that users that have followed his guide could also use them with no modifications.
+
 ## Pool Operator Helper Scripts ##
 
 ```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool.
