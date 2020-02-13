@@ -36,7 +36,7 @@
 
 ## The Guide ##
 
-This guide is written with experienced users in mind. Things like creating a GitHub account, creating and using a pair of ssh keys, are a given. If you think you need help with those - there's nothing wrong with it - you should refer to Chris's [guide](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md).
+This guide is written with experienced users in mind. Things like creating a GitHub account, creating and using a pair of ssh keys, are a given. If you think you need help with those - there's nothing wrong with it - you should refer to Chris's [guide for newbs](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md).
 
 This guide won't reinvent the wheel either. Its focus are the system and the node itself, and it will point you to [IOHK](https://iohk.io/)'s, when it's time to create, fund, and register your pool. IOHK [**guide**](https://github.com/input-output-hk/shelley-testnet/blob/master/docs/stake_pool_operator_how_to.md) and [**scripts**](https://github.com/input-output-hk/jormungandr-qa/tree/master/scripts) are all you need, and they are **official**.
 
@@ -50,13 +50,13 @@ This guide is licensed under the terms of a Creative Commons [**CC BY-NC-SA 4.0*
 
 ### System ###
 
-This guide will be focusing on the latest **Debian stable**, and assumes you already have your server installed with a vanilla Debian 10 (Buster), that you can ```ssh``` into on port ```22```. This guide will stick to official repositories, with the exception for ```jormungandr```, ```jcli```, and ```tcpping```. This guide will stick with best practices for stability (e.g: [backports](https://backports.debian.org/) vs [unstable](https://wiki.debian.org/DontBreakDebian)).
+This guide will be focusing on the latest **Debian stable**, and assumes you already have your server installed with a vanilla Debian 10 (Buster), **that you can already ```ssh``` into on port ```22```**. This guide will stick to official repositories, with the exception for ```jormungandr```, ```jcli```, and ```tcpping```. This guide will stick with best practices for stability (e.g: [backports](https://backports.debian.org/) vs [unstable](https://wiki.debian.org/DontBreakDebian)).
 
 Lastly, this guide assumes that you are familiar with Linux, its shell, its commands and have some experience in managing a server. This guide will promote system administration over shortcuts and aliases. For example, it will favor and configure ```systemd``` over aliases to manage the node. It will favor using ```pidof jormungandr``` instead of configuring an alias. In this guide you'll be also configuring system wide logging, and using ```journalctl``` over typing "*logs*". You get the idea.
 
 ### Updates ###
 
-This guide will help you setup your server to accomodate a pool, but you won't find remote monitoring in here (just yet). This is because I have not implemented it on [INSL](https://insalada.io/) yet. I don't write about things I haven't had direct experience with. Once I'll have done so, and tested it, I will add a monitoring section to the guide. The same goes for any useful feature that could help pool owners run and manage the server and the pool. Follow [insaladaPool](https://twitter.com/insaladaPool)  on Twitter for future updates.
+This guide will help you setup your server to accomodate a pool, but you won't find remote monitoring in here (just yet). This is because I have not implemented it on [INSL](https://insalada.io/) yet. I don't write about things I haven't had direct experience with. Once I'll have done so, and tested it, I will add a monitoring section to the guide. The same goes for any useful feature that could help pool owners run and manage the server and the pool. Follow [insaladaPool](https://twitter.com/insaladaPool) for future updates.
 
 ### Contributions ###
 
@@ -90,7 +90,7 @@ ssh-users:x:998
 
 ### non-root login user ###
 
-This is the regular user - **your main user** - that you will be using to ```ssh``` into the server and to ```sudo``` to ```root```, to manage your system. Make sure to replace ```<YOUR_SYSTEM_USER>``` with your user name of choice. If you already have such user that you actively ```ssh``` and ```sudo``` with, you can skip creating one, but make sure you add it to ```sudo``` and ```ssh-users``` groups.
+This is **your main user** that you will be using to ```ssh``` into the server and to ```sudo``` to ```root```, to manage your system. Make sure to replace ```<YOUR_SYSTEM_USER>``` with your user name of choice. **If you already have such user** that you actively ```ssh``` and ```sudo``` with, you can skip creating one, but make sure you add it to ```sudo``` and ```ssh-users``` groups.
 
 For a new user run:
 
@@ -104,7 +104,7 @@ For an existing user run:
 usermod -aG sudo,ssh-users <YOUR_EXISTING_USER>
 ```
 
-Double-check that your new user (either ```<YOUR_SYSTEM_USER>``` or ```<YOUR_EXISTING_USER>```) is in both the ```sudo``` and ```ssh-users``` groups. This step is important, don't skip it. Later will be setting up ```sshd``` to only allow ```ssh``` from this group only. **You risk of locking yourself out**.
+Double-check that your user (either ```<YOUR_SYSTEM_USER>``` or ```<YOUR_EXISTING_USER>```) is in both the ```sudo``` and ```ssh-users``` groups. **This step is important, don't skip it**. Later will be setting up ```sshd``` to only allow ```ssh``` from this group only. **You risk of locking yourself out**.
 
 ```text
 groups <YOUR_SYSTEM_USER>
@@ -122,9 +122,9 @@ It should show the following:
 
 ### non-root service user ###
 
-Running a service exposed to the Internet, with a user who has a shell it is not a wise choice, to use an euphemism. This is why we are creating a dedicated user to run the service. This is also standard practice for services in Linux. Think of ```nginx```, for example. It has both a user and a group, directories, configurations, and some permissions; but it doesn't need neither a shell nor password. Because exposing a shell to the outside world is a security risk. This reduces the attack surface on the server.
+Running a service exposed to the Internet, with a user who has a shell it is not a wise choice, to use an euphemism. This is why you are creating a dedicated user to run the service. This is also standard practice for services in Linux. Think of ```nginx```, for example. It has both a user and a group, directories, configurations, and some permissions; but it doesn't need neither a shell nor password. Because exposing a shell to the outside world is a security risk. This reduces the attack surface on the server.
 
-Make sure to replace ```<YOUR_POOL_USER>``` with your user name of choice, and take a note of it. You will be needing this username later in the guide when we configure ```systemd``` and the scripts.
+Make sure to replace ```<YOUR_POOL_USER>``` with your user name of choice, and take a note of it. You will be needing this username later in the guide when you will configure ```systemd``` and the scripts.
 
 ```text
 useradd -c "user to run the pool" -m -d /home/<YOUR_POOL_USER> -s /sbin/nologin <YOUR_POOL_USER>
@@ -133,7 +133,7 @@ passwd -d <YOUR_POOL_USER>
 
 ### install extra packages ###
 
-This guide assumes that you are familiar with compilation, and that you know why and when compilation is necessary or useful, and that you are capable of compiling. Therefore, during this guide you **won't** be compiling ```jormungandr``` or ```jcli```. If you reckon that compiling will give you more, knock yourself out. If you compile, is preferable to do it on a dedicated environment, or cross-compile, and transfer the binaries to the pool server.
+This guide assumes that you are familiar with compilation, and that you know why and when compilation is necessary or useful, and that you are capable of compiling. Therefore, during this guide you **won't** be compiling ```jormungandr``` or ```jcli```. If you reckon that compiling will give you more, knock yourself out. If you compile, is advisable to do it on a dedicated environment, or cross-compile, and transfer the binaries to the pool server.
 
 #### install from apt ####
 
@@ -187,7 +187,7 @@ chmod +x /usr/local/bin/tcpping
 
 ## Create & Register Your Pool ##
 
-Without a pool, there's no point in going any further. Before we can proceed with system configurations, now it is a good time to follow [IOHK](https://github.com/input-output-hk)'s [**guide**](https://github.com/input-output-hk/shelley-testnet/blob/master/docs/stake_pool_operator_how_to.md) and use their [QA Team](https://github.com/input-output-hk/jormungandr-qa) [**scripts**](https://github.com/input-output-hk/jormungandr-qa/tree/master/scripts) to create, register and start your leader candidate node.
+Without a pool, there's no point in going any further. Before you can proceed with system configurations, now it is a good time to follow [IOHK](https://github.com/input-output-hk)'s [**guide**](https://github.com/input-output-hk/shelley-testnet/blob/master/docs/stake_pool_operator_how_to.md) and use their [QA Team](https://github.com/input-output-hk/jormungandr-qa) [**scripts**](https://github.com/input-output-hk/jormungandr-qa/tree/master/scripts) to create, register and start your leader candidate node.
 
 Come back after you have successfully completed **all** the necessary steps, and once your pool will be started as a leader candidate and it will be available on Daedalus and Yoroi (testnet versions).
 
@@ -195,7 +195,7 @@ Should you need help at any stage of your pool operator journey, join the '[Card
 
 ## Configure Your System ##
 
-Now that you have a pool with a registered ticker (congrats!!!), it is time to configure your system. When it comes to the firewall, this guide focuses on ```nftables``` and ```firewalld``` instead of ```iptables``` and ```ufw```. For two simple reasons: ```nftables``` is the successor of ```iptables```, and it is the [default on Debian](https://wiki.debian.org/DebianFirewall). As far the firewall front-end goes, ```firewalld``` supports ```nftables```. This is why it is used in this guide. I don't hold anything against ```ufw```, it just doesn't support ```nftables``` yet.
+Now that you have a pool with a registered ticker (congrats!!!), it is time to configure your system. When it comes to the firewall, this guide focuses on ```nftables``` and ```firewalld``` instead of ```iptables``` and ```ufw```. For two simple reasons: ```nftables``` is the successor of ```iptables```, and it is the [default on Debian](https://wiki.debian.org/DebianFirewall). As far the firewall front-end goes, ```firewalld``` supports ```nftables```. This is why it is used in this guide, and ```ufw``` just doesn't support ```nftables``` yet.
 
 To configure your system, you'll be using configuration files and scripts that are either provided by me or linked to other great guides. Always remember to **adapt them to your system**,  where it's needed.
 
@@ -235,7 +235,7 @@ firewall-cmd --info-service=xmpp-server
 
 This guide will bind ```jormungandr``` to ```3690``` and ```sshd``` to ```5269```; respectively ```svn``` and ```xmpp-server```. Once you have chosen your services, you need to enable them.
 
-**IMPORTANT**: Since we haven't configured ```sshd``` yet, make sure to add it to the enabled services! You'll be configuring you custom ```ssh``` port of choice next (hereby ```5269```). Afterwards, you will remove ```ssh``` (port ```22```) from the ```firewalld``` rules.
+**IMPORTANT**: Since you haven't configured ```sshd``` yet, make sure to add it to the enabled services! You'll be configuring you custom ```ssh``` port of choice next (hereby ```5269```). Afterwards, you will remove ```ssh``` (port ```22```) from the ```firewalld``` rules.
 
 ```text
 firewall-cmd --permanent --zone=public --add-service=ssh
@@ -285,7 +285,7 @@ To confirm that you have switched from ```iptables``` to ```nftables``` complete
 iptables -nL
 ```
 
-The above should return and empty iptables:
+The above should return an empty ```iptables```:
 
 ```text
 Chain INPUT (policy ACCEPT)
@@ -308,7 +308,7 @@ nft list ruleset
 
 You'll be enabling some additional restrictions, and disabling some features that are enabled by default. Like tunneling and forwarding. [Read why](https://www.ssh.com/ssh/tunneling#ssh-tunneling-in-the-corporate-risk-portfolio) it is bad to leave SSH tunneling on. Some guides suggest to tunnel into your remote server for monitoring purposes. This is bad practice, and a security risk. Make sure you have the following configured in ```/etc/ssh/sshd_config```; everything else can be commented out.
 
-**IMPORTANT:** your new ```sshd``` port ```<YOUR_SSH_PORT>``` must match whatever service you have picked up in ```firewalld``` , in this guide we used ```5269``` for ```xmpp-server```.
+**IMPORTANT:** your new ```sshd``` port ```<YOUR_SSH_PORT>``` must match whatever service you have picked up in ```firewalld```, this guide uses ```5269``` for ```xmpp-server```.
 
 ```text
 Port <YOUR_SSH_PORT>
@@ -365,7 +365,7 @@ systemctl restart firewalld.service
 
 While ```fail2ban``` doesn't offer perfect security - [*security is a process, not a product*](https://www.schneier.com/essays/archives/2000/04/the_process_of_secur.html) - it serves its purpose. The default ```fail2ban``` configuration is generally good enough. Usually, one would copy the ```jail``` configuration file, add the server IP to ```ignoreip```, change the ban time-related parameters if he wants to, enable the ```sshd``` jail, restart the service, and be good to go.
 
-However, since we use ```firewalld```, we need to adjust a couple of settings. Copy the ```jail.conf``` file to one you will configure, and edit it:
+However, since this guide use ```firewalld```, you need to adjust a couple of settings. Copy the ```jail.conf``` file to one you will configure, and edit it:
 
 ```text
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
@@ -400,7 +400,7 @@ Status
 
 This is the first of three files configurations that are borrowed from other great guides. There's no need to reinvent the wheel here, so I'm pointing you to [LovelyPool](https://github.com/lovelypool/)'s [chronysettings](https://github.com/lovelypool/cardano_stuff/blob/master/chronysettings.md) guide instead, but still provide the configuration for your convenience.
 
-Make sure to **read** Lovelypool's **Chrony Settings** guide, to understand it fully, and to know why we use ```chrony```.
+Make sure to **read** Lovelypool's **Chrony Settings** guide, to understand it fully, and to know why to use ```chrony```.
 
 Place this in ```/etc/chrony/chrony.conf```:
 
@@ -497,7 +497,7 @@ sysctl -p /etc/sysctl.conf
 
 ### configure systemd ###
 
-It is time to manage ```jormungandr``` as you would manage any other service on your server: with ```root``` and ```systemd```. Place the following in ```/etc/systemd/system/jormungandr.service```:
+It is time to manage ```jormungandr``` as you would manage any other service on your server: with ```root``` and ```systemd```. Place the following in ```/etc/systemd/system/jormungandr.service```, and **make sure to change** ```<YOUR_POOL_USER>``` and ```<REST_API_PORT>``` to match your system:
 
 ```text
 [Unit]
@@ -599,7 +599,11 @@ systemctl restart rsyslog.service
 systemctl restart logrotate.service
 ```
 
-Now you can check your logs as for any other service with: ```journalctl -f -u jormungandr.service```
+Now you can check your logs as for any other service with:
+
+```text
+journalctl -f -u jormungandr.service
+```
 
 ### configure node ###
 
@@ -617,7 +621,7 @@ For reference only, my node has the following specs:
 | Network  | 100Mpbs                             |
 | Traffic  | Unlimited                           |
 
-Should you decide to use it, place the following in ```/home/<YOUR_POOL_USER>/node-config.yaml```. The only adjustment you should take care of, is to change the ```trusted_peers``` order to place the nearest to you at the top of the list.
+Should you decide to use it, place the following in ```/home/<YOUR_POOL_USER>/node-config.yaml```. The only adjustment you should take care of, **besides changing the variables to match your system**, is to change the ```trusted_peers``` order to place the nearest to you at the top of the list.
 
 ```text
 ---
@@ -634,7 +638,7 @@ p2p:
   max_connections: 1024
   max_connections_threshold: 256
   max_unreachable_nodes_to_connect_per_event: 32
-  gossip_interval: 4s
+  gossip_interval: 8s
   policy:
     quarantine_duration: 15m
   trusted_peers:
@@ -700,7 +704,7 @@ There a number of useful community created tools, and sites, that can be very he
 
 #### Stake Pool Bootstrap Channel ####
 
-A **must have community resource** for people just starting this journey, where to help each others grow, is [Kyle Solomon](https://twitter.com/adafrog_pool)'s [Stake Pool Bootstrap Channel](https://t.me/StakePoolBootstrapChannel). It is a Telegram channel, where it is possible to participate if you follow some simple rules, where to stake with each others in turn, to give small pools a chance.
+A **must have community resource** for people just starting their pool operator journey, where to help each others grow, is [Kyle Solomon](https://twitter.com/adafrog_pool)'s [Stake Pool Bootstrap Channel](https://t.me/StakePoolBootstrapChannel). It is a Telegram channel, where it is possible to participate if you follow some simple rules, where to stake with each others in turn, to give small pools a chance.
 
 #### Other Resources ####
 
