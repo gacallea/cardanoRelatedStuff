@@ -25,8 +25,8 @@ JORMUNGANDR_RESTAPI_URL="http://127.0.0.1:${JORMUNGANDR_RESTAPI_PORT}/api"
 ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
 ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
 
-JCLI="$(which jcli)"
+JCLI="$(command -v jcli)"
 [ -z "${JCLI}" ] && [ -f jcli ] && JCLI="./jcli"
 
-JORM="$(which jormungandr)"
+JORM="$(command -v jormungandr)"
 [ -z "${JORM}" ] && [ -f jormungandr ] && JORM="./jormungandr"

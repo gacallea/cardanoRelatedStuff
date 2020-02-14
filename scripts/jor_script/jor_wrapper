@@ -10,6 +10,7 @@ SCRIPTNAME="${0##*/}"
 ##### EDIT VARIABLES IN 'jor_config' #####
 
 ## SOURCE THE CUSTOM VARIABLES
+# shellcheck source=./jor_config
 . ./jor_config
 
 #######################################################################################################################################
@@ -20,20 +21,21 @@ SCRIPTNAME="${0##*/}"
 ## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
 
 ## SOURCE ALL FUNCTIONS FILES
+# shellcheck source=jor_funcs/*.bash
 for func in ./jor_funcs/*.bash; do . "$func"; done
 
 #### MAIN SCRIPT EXECUTION ###
 ## make sure the pool directory exist
 if [ ! -d "$JORMUNGANDR_STORAGE_DIR" ]; then
-    mkdir -p $JORMUNGANDR_STORAGE_DIR
-    chown -R $JORMUNGANDR_USERNAME:$JORMUNGANDR_USERNAME $JORMUNGANDR_STORAGE_DIR
+    mkdir -p "$JORMUNGANDR_STORAGE_DIR"
+    chown -R "$JORMUNGANDR_USERNAME":"$JORMUNGANDR_USERNAME" "$JORMUNGANDR_STORAGE_DIR"
 fi
 
 ## parse command line options and commands:
 while true; do
     case "$1" in
     '')
-        echo -e "\n$SCRIPTNAME: no arguments supplied"
+        echo -e "\\n$SCRIPTNAME: no arguments supplied"
         usage
         exit 0
         ;;
@@ -185,6 +187,11 @@ while true; do
         ;;
     --frags-count)
         fragmentIdCount
+        exit 0
+        ;;
+    --frag-status)
+        shift
+        fragmentStatus "$1"
         exit 0
         ;;
     *)

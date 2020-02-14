@@ -3,11 +3,12 @@
 ### DO NOT CHANGE THIS
 SCRIPTNAME="${0##*/}"
 
+## TODO: improve this to avoid repeating cycle
 ## check ping for trusted peers with tcpping
 function checkPeers() {
-    sed -e '/address/!d' -e '/#/d' -e 's@^.*/ip./\([^/]*\)/tcp/\([0-9]*\).*@\1 \2@' $JORMUNGANDR_FILES/node-config.yaml |
-        while read addr port; do
-            tcpping -x 1 $addr $port
+    sed -e '/address/!d' -e '/#/d' -e 's@^.*/ip./\([^/]*\)/tcp/\([0-9]*\).*@\1 \2@' "$JORMUNGANDR_FILES"/node-config.yaml |
+        while read -r addr port; do
+            tcpping -x 1 "$addr" "$port"
         done
 }
 
@@ -16,6 +17,7 @@ function getIpAddress() {
     echo "${JORMUNGANDR_PUBLIC_IP_ADDR}"
 }
 
+## TODO: make this work for firewalld
 ## blocked IPs in UFW logs
 function blockedIps() {
     echo "These IP addresses were recently blocked by UFW:"
@@ -30,8 +32,8 @@ function nOfblockedIps() {
 
 ## how many other nodes is my pool connected to?
 function showEstab() {
-    total="$(netstat -punt 2>/dev/null | grep jormungandr | grep ESTAB | wc -l)"
-    printf "\nCurrently ESTABLISHED to a Total of %s nodes\n\n" "${total}"
+    total="$(netstat -punt 2>/dev/null | grep jormungandr | grep -c ESTAB)"
+    printf "\\nCurrently ESTABLISHED to a Total of %s nodes\\n\\n" "${total}"
 }
 
 ## count connections to nodes and order them by highest number of connections
@@ -49,7 +51,9 @@ function connectedIps() {
         exit 1
     fi
 
-    echo -e "\nIP addresses that are connected more than $howManyConnections times:\n"
-    netstat -tn 2>/dev/null | tail -n +3 | awk '{print $5}' | egrep -v "127.0.0.1|$JORMUNGANDR_PUBLIC_IP_ADDR" | cut -d: -f1 | sort | uniq -c | sort -nr | awk "{if (\$1 >="$howManyConnections") print \$1,\$2}"
+    echo -e "\\nIP addresses that are connected more than $howManyConnections times:\\n"
+    netstat -tn 2>/dev/null | tail -n +3 | awk '{print $5}' | grep -E -v "127.0.0.1|$JORMUNGANDR_PUBLIC_IP_ADDR" | cut -d: -f1 | sort | uniq -c | sort -nr | awk "{if (\$1 >= $howManyConnections) print \$1,\$2}"
     echo
 }
+
+

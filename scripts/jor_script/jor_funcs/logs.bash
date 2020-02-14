@@ -22,7 +22,7 @@ function lastLogs() {
         exit 2
     fi
 
-    journalctl --no-pager -n $howManyLines -u jormungandr.service
+    journalctl --no-pager -n "$howManyLines" -u jormungandr.service
 }
 
 ## are there any serious problems in the last $howManyLines lines of the current logs?
@@ -39,7 +39,7 @@ function problemsInLogs() {
         exit 2
     fi
 
-    journalctl --no-pager -n $howManyLines -u jormungandr.service | egrep -i 'cannot|stuck|exit|unavailable'
+    journalctl --no-pager -n "$howManyLines" -u jormungandr.service | grep -i -E 'cannot|stuck|exit|unavailable'
 }
 
 ## are there any issues in the last $howManyLines lines of the current logs?
@@ -56,5 +56,6 @@ function issuesInLogs() {
         exit 2
     fi
 
-    journalctl --no-pager -n $howManyLines -u jormungandr.service | egrep "WARN|ERRO"
+    journalctl --no-pager -n "$howManyLines" -u jormungandr.service | grep -E "WARN|ERRO"
 }
+

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-### THIS SCRIPT IS EXPERIMENTAL AND NEEDS FINE TUNING AND TESTING, USE AT YOUR OWN RISK.
+### THIS SCRIPT IS EXPERIMENTAL, USE AT YOUR OWN RISK.
 
 ### https://github.com/gacallea/cardanoRelatedStuff
 ### this script checks against date delta and last received block time delta
@@ -11,26 +11,26 @@
 
 ## CHANGE TO WHAT SUITS YOU THE BEST
 maxBlockDelta=100 ## incremental
-maxDateDelta=300  ## seconds
+maxDateDelta=300 ## seconds
 
 ########### DO NOT EDIT PAST THIS POINT ####################
 ########### DO NOT EDIT PAST THIS POINT ####################
 ########### DO NOT EDIT PAST THIS POINT ####################
 
 ## jcli path
-JCLI="$(which jcli)"
+JCLI="$(command -v jcli)"
 [ -z "${JCLI}" ] && JCLI="/usr/local/bin/jcli"
 
 ## jormungandr path
-JORM="$(which jormungandr)"
+JORM="$(command -v jormungandr)"
 [ -z "${JORM}" ] && JORM="/usr/local/bin/jormungandr"
 
 ## time and date calculations, used internally by the script
 function intDateFunc() {
     chainstartdate=1576264417
-    elapsed=$((($(date +%s) - $chainstartdate)))
-    epoch=$((($elapsed / 86400)))
-    slot=$((($elapsed % 86400) / 2))
+    elapsed=$((($(date +%s) - chainstartdate)))
+    epoch=$(((elapsed / 86400)))
+    slot=$(((elapsed % 86400) / 2))
     nowBlockDate="$epoch.$slot"
     dateNow="$(date --iso-8601=s)"
 }
@@ -38,21 +38,21 @@ function intDateFunc() {
 ## what is the pool block delta?
 function blocksDelta() {
     intDateFunc
-    lastBlockDate="$($JCLI rest v0 node stats get -h $JORMUNGANDR_RESTAPI_URL | awk '/lastBlockDate/ {print $2}' | sed 's/\"//g')"
+    lastBlockDate="$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/lastBlockDate/ {print $2}' | sed 's/\"//g')"
     deltaBlockCount=$(echo "$nowBlockDate - $lastBlockDate" | bc | sed 's/0//g' | sed 's/\.//g')
-    return $deltaBlockCount
+    return "$deltaBlockCount"
 }
 
 ## what is the pool block delta?
 function lastDelta() {
     intDateFunc
-    lastReceivedTime="$($JCLI rest v0 node stats get -h $JORMUNGANDR_RESTAPI_URL | awk '/lastReceivedBlockTime/ {print $2}' | sed 's/\"//g')"
-    deltaReceivedCount=$(dateutils.ddiff $lastReceivedTime $dateNow -f '%S')
-    return $deltaReceivedCount
+    lastReceivedTime="$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/lastReceivedBlockTime/ {print $2}' | sed 's/\"//g')"
+    deltaReceivedCount=$(dateutils.ddiff "$lastReceivedTime" "$dateNow" -f '%S')
+    return "$deltaReceivedCount"
 }
 
 ## pool state?
-poolStatus=$($JCLI rest v0 node stats get -h $JORMUNGANDR_RESTAPI_URL | awk '/state/ {print $2}')
+poolStatus=$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/state/ {print $2}')
 
 ## if the pool is running, check against the blocks delta
 if [ "$poolStatus" == "Running" ]; then

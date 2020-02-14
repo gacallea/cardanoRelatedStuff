@@ -5,7 +5,7 @@ SCRIPTNAME="${0##*/}"
 
 # the --help command -- show the usage text
 function usage() {
-        cat <<USAGE
+cat<<USAGE
 
 Usage: '$SCRIPTNAME command [options]'
 
@@ -54,6 +54,8 @@ Usage: '$SCRIPTNAME command [options]'
         --scheduled-next                                            show when in the NEXT scheduled block for $POOL_TICKER
 
         --frags-count                                               show the fragmented_id count
+        --frag-status                           fragment_id         check a fragment_id/transaction status
 
 USAGE
 }
+

@@ -175,6 +175,7 @@ mv jcli /usr/local/bin/
 mv jormungandr /usr/local/bin/
 chmod +x /usr/local/bin/jcli
 chmod +x /usr/local/bin/jormungandr
+chown -R root\: /usr/local/bin/
 ```
 
 #### install tcpping ####

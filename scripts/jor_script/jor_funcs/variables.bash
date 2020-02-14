@@ -3,10 +3,13 @@
 ### DO NOT CHANGE THIS
 SCRIPTNAME="${0##*/}"
 
-### DON'T CHANGE VARIABLES IN HERE!!!!
-### this sets the variables in .bashrc
+### DO NOT CHANGE VARIABLES IN HERE #####
+### DO NOT CHANGE VARIABLES IN HERE #####
+### DO NOT CHANGE VARIABLES IN HERE #####
+
+# this sets the variables in .bashrc -- EXECUTE ONLY ONCE
 function setVariables() {
-    cat <<VARS >>~/.bashrc
+cat <<VARS >> ~/.bashrc
 
 ########################################
 ##### CUSTOM JORMUNGANDR VARIABLES #####
@@ -28,3 +31,4 @@ export JORMUNGANDR_RESTAPI_URL="$JORMUNGANDR_RESTAPI_URL"
 
 VARS
 }
+
