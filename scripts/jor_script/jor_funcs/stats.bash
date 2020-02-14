@@ -36,9 +36,12 @@ function netStats() {
 
 ## check logs to calculate exact bootstrap time
 function bootstrapTime() {
-    bTimeStart=$(journalctl --no-pager -u jormungandr.service | grep "Starting jormungandr" | tail -1 | awk '{print $8}')
-    bTimeEnd=$(journalctl --no-pager -u jormungandr.service | grep "bootstrap completed" | tail -1 | awk '{print $8}')
-    echo "$(dateutils.ddiff $bTimeStart $bTimeEnd -f "Bootstrap took exactly %M minutes and %S seconds")"
+    JORMUNGANDR_PID=$(pidof jormungandr)
+    JORMUNGANDR_PSTIME=$(ps -o etimes= -p $JORMUNGANDR_PID | awk '{print $1}')
+    JORMUNGANDR_UPTIME=$($JCLI rest v0 node stats get -h $JORMUNGANDR_RESTAPI_URL | awk '/uptime/ {print $2}')
+    toDatePSTIME=$(date --iso-8601=s -d@+$JORMUNGANDR_PSTIME)
+    todateUPTIME=$(date --iso-8601=s -d@+$JORMUNGANDR_UPTIME)
+    echo "$(dateutils.ddiff $todateUPTIME $toDatePSTIME -f "Bootstrap took exactly %M minutes and %S seconds")"
 }
 
 ## self-explanatory
