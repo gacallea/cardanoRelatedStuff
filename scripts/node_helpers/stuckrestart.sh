@@ -7,18 +7,18 @@
 ### if conditions are met (defaults to 100 slots and 5 minutes lag) it restarts the node
 ### put the script in '/root/stuckrestart.sh'
 ### put this in root's crontab (crontab -e):
-### */15 * * * * /root/stuckrestart.sh
+### */5 * * * * /root/stuckrestart.sh
 
 ## CHANGE TO WHAT SUITS YOU THE BEST
 maxBlockDelta=100 ## incremental
-maxDateDelta=300 ## seconds
+maxDateDelta=300  ## seconds
 
 #######################################################################################################################################
 
 ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
 ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
 
-JORMUNGANDR_RESTAPI_PORT="9300"
+JORMUNGANDR_RESTAPI_PORT="<REST_API_PORT>"
 JORMUNGANDR_RESTAPI_URL="http://127.0.0.1:${JORMUNGANDR_RESTAPI_PORT}/api"
 
 JCLI="$(command -v jcli)"
