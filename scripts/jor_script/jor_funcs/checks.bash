@@ -43,7 +43,7 @@ function isBlockValid() {
         blockId="$1"
     else
         echo "you must provide one paramenter, it must be a valid block id"
-        echo "e.g: $SCRIPTNAME blockId"
+        echo "e.g: $SCRIPTNAME --block-valid blockId"
         exit 1
     fi
 
@@ -90,4 +90,3 @@ function resourcesStat() {
     echo "Here's some quick system resources stats for Jormungandr: "
     top -b -n 4 -d 0.2 -p "$(pidof jormungandr)" | tail -2
 }
-
