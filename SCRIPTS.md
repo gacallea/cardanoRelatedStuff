@@ -10,6 +10,7 @@
       - [logs](#logs)
       - [stats](#stats)
       - [snapshot](#snapshot)
+      - [continuous output](#continuous-output)
     - [available commands](#available-commands)
   - [node_helpers](#nodehelpers)
     - [blocks backup](#blocks-backup)
@@ -108,6 +109,30 @@ Another quick example is about stats:
 To get a bird-eye overview, the script offers ```--snapshot```; this will show the some stats. Let it be clear: this **is to help you have a quick glance** at your node, **it does not substitute proper monitoring** whatsoever.
 
 ![snapshot overview](./images/snapshot.png)
+
+#### continuous output ####
+
+Some of the ```jor_wrapper``` commands are best experience when they run continuously. For example, ```--snapshot``` is best run in a ```tmux``` [panel](#screenshots) to keep you constantly informed about a number of statistics. To achieve that, prepend them with ```watch```:
+
+```text
+watch -c './jor_wrapper --snapshot | ccze -A'
+```
+
+watch ```-c``` option is to format the output for ANSI color. Pipe that to ```ccze``` to actually colorize the above command output.
+
+You can do this with **any** ```jor_wrapper``` command (or any system command for that matter). The most useful commands to use such methods are listed below. **WARNING**: do not abuse this functionality, as it could tax your REST API to the point of crashing your node.
+
+```text
+watch -c './jor_wrapper --snapshot | ccze -A'
+```
+
+```text
+watch -n5 './jor_wrapper --date-stats 5000 30'
+```
+
+```text
+watch -c 'ls -l /home/<YOUR_POOL_USER>/storage | ccze -A'
+```
 
 ### available commands ###
 
