@@ -167,6 +167,7 @@ Usage: 'jor_wrapper command [options]'
         --scheduled-next                                            show when in the NEXT scheduled block for the pool
 
         --frags-count                                               show the fragmented_id count
+        --frag-status                           fragment_id         check a fragment_id/transaction status
 ```
 
 ## node_helpers ##
