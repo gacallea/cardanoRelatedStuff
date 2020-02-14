@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 ### THIS SCRIPT IS EXPERIMENTAL, USE AT YOUR OWN RISK.
 
@@ -13,10 +13,19 @@
 maxBlockDelta=100 ## incremental
 maxDateDelta=300 ## seconds
 
-########### DO NOT EDIT PAST THIS POINT ####################
-########### DO NOT EDIT PAST THIS POINT ####################
-########### DO NOT EDIT PAST THIS POINT ####################
+#######################################################################################################################################
 
+### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
+### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE ### DO NOT EDIT PAST THIS POINT ### ## DO NOT CHANGE #### ## #
+
+JORMUNGANDR_RESTAPI_PORT="9300"
+JORMUNGANDR_RESTAPI_URL="http://127.0.0.1:${JORMUNGANDR_RESTAPI_PORT}/api"
+
+JCLI="$(command -v jcli)"
+[ -z "${JCLI}" ] && [ -f jcli ] && JCLI="./jcli"
+
+JORM="$(command -v jormungandr)"
+[ -z "${JORM}" ] && [ -f jormungandr ] && JORM="./jormungandr"
 ## jcli path
 JCLI="$(command -v jcli)"
 [ -z "${JCLI}" ] && JCLI="/usr/local/bin/jcli"
