@@ -28,11 +28,12 @@
     - [configure node](#configure-node)
   - [What's Next](#whats-next)
     - [Helping Hands](#helping-hands)
-    - [Pool Operator Tools](#pool-operator-tools)
+    - [Operator Resources](#operator-resources)
       - [Pool Tool](#pool-tool)
       - [Stake Pool Bootstrap](#stake-pool-bootstrap)
       - [Organic Design](#organic-design)
-      - [Other Resources](#other-resources)
+      - [Adapools](#adapools)
+      - [ADAtainement](#adatainement)
     - [Telegram](#telegram)
 
 ## The Guide ##
@@ -692,31 +693,37 @@ At the time of this writing, my pool *hasn't done much*, so I'm not the right gu
 
 Head over to the [**scripts page**](SCRIPTS.md) to learn about ```jor_wrapper``` and the ```node_helpers```. In there, you will also find suggested server management commands and tools, examples, teaser screenshots, and more resources. Follow [**insaladaPool**](https://twitter.com/insaladaPool)  on Twitter for future updates.
 
-### Pool Operator Tools ###
+### Operator Resources ###
+
+There a number of useful community created tools, guides, [scripts](SCRIPTS.md), and sites, that can be very helpful for a pool operator. Hereby you find a constantly updated collection of what can be useful to a pool operator. If you are aware of more useful pool operators tools, please be kind and suggest them in an [issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github, for inclusion.
 
 #### Pool Tool ####
 
-There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool. Here's [mine](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
+One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). It has all sort of network and pools statistics, and offers a number of useful tools for pool operators. One of them is about one's own pool health and status. Create an account and register your pool, to keep others informed about the state of your pool. Here's [mine](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
 
 #### Stake Pool Bootstrap ####
 
-A **must have community resource** for people just starting their pool operator journey, where to help each others grow, is [Kyle Solomon](https://twitter.com/adafrog_pool)'s [Stake Pool Bootstrap Channel](https://t.me/StakePoolBootstrapChannel). It is a Telegram channel, where it is possible to participate if you follow some simple rules, where to stake with each others in turn, to give small pools a chance.
+A **must have community resource** for who's just starting their pool operator journey, **where we all help each others grow**, is [The Cardano Stake Pool Bootstrap Initiative](https://t.me/StakePoolBootstrapChannel). It is a Telegram group, where it is possible to participate if you follow some simple rules, where to stake with each others in turn, **to give small pools a chance**.
+
+Anyone can join the party, as long as their pool meets these simple requirements to be eligible:
+
+1. Delegate to other pools in the list.
+2. Have a ticker (registered on CF GitHub).
+3. Have less than 5M ADA already delegated to the pool.
+
+Join us, and make sure to read the pinned message for all of the nitty gritty details.
 
 #### Organic Design ####
 
-Here's a great deal of useful information on [Cardano](https://organicdesign.nz/Cardano), [Staking Pool FAQ](https://organicdesign.nz/Cardano_staking_pool_FAQ), and [Cardano terminology](https://organicdesign.nz/Cardano#Staking_in_Cardano). Familiarize with these, and your pool operator journey will improve a lot.
+Organic Design has a great deal of useful information on [Cardano](https://organicdesign.nz/Cardano), [Staking Pool FAQ](https://organicdesign.nz/Cardano_staking_pool_FAQ), and [Cardano terminology](https://organicdesign.nz/Cardano#Staking_in_Cardano). Familiarize with these, and your pool operator journey will improve a lot.
 
-#### Other Resources ####
+#### Adapools ####
 
-Other great community created tools are:
+In the sane fashion to the above-mentioned Pool Tool, [**Adapools**](https://adapools.org/) offers a number of useful network statistics and pool operators' tools. You can find tools that check against the explorer to understand [if you are forked](https://adapools.org/amiforked); info on [what peers are currently best](https://adapools.org/peers) for your bootstrap, [blocks statistics](https://adapools.org/blocks), and a lot more. Adapools will also offer a feature to [send your pool tip](https://github.com/cardanians/adapools.org), soon enough.
 
-- [**Adapools**](https://adapools.org/)
-- [**Pegasus Pool**](https://pegasuspool.info/)
-- [**AdaTainement**](https://www.adatainment.com/)
+#### ADAtainement ####
 
-Be sure to check them out!
-
-If you are aware of more useful pool operators tools, please be kind and suggest them to me for inclusion.
+[**Adatainement**](https://www.adatainment.com/) is one of the oldest community driven, informative site about Cardano. It also offers graphs, and statistics. Moreover it offers mobile apps, a calculator and a number of other useful tools. Be sure to check them out.
 
 ### Telegram ###
 
