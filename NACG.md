@@ -30,7 +30,8 @@
     - [Helping Hands](#helping-hands)
     - [Pool Operator Tools](#pool-operator-tools)
       - [Pool Tool](#pool-tool)
-      - [Stake Pool Bootstrap Channel](#stake-pool-bootstrap-channel)
+      - [Stake Pool Bootstrap](#stake-pool-bootstrap)
+      - [Organic Design](#organic-design)
       - [Other Resources](#other-resources)
     - [Telegram](#telegram)
 
@@ -697,9 +698,13 @@ Head over to the [**scripts page**](SCRIPTS.md) to learn about ```jor_wrapper```
 
 There a number of useful community created tools, and sites, that can be very helpful for a pool operator. One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](https://twitter.com/mikefullman). Create an account and register your pool, to keep others informed about the state of your pool. Here's [mine](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) as an example.
 
-#### Stake Pool Bootstrap Channel ####
+#### Stake Pool Bootstrap ####
 
 A **must have community resource** for people just starting their pool operator journey, where to help each others grow, is [Kyle Solomon](https://twitter.com/adafrog_pool)'s [Stake Pool Bootstrap Channel](https://t.me/StakePoolBootstrapChannel). It is a Telegram channel, where it is possible to participate if you follow some simple rules, where to stake with each others in turn, to give small pools a chance.
+
+#### Organic Design ####
+
+Here's a great deal of useful information on [Cardano](https://organicdesign.nz/Cardano), [Staking Pool FAQ](https://organicdesign.nz/Cardano_staking_pool_FAQ), and [Cardano terminology](https://organicdesign.nz/Cardano#Staking_in_Cardano). Familiarize with these, and your pool operator journey will improve a lot.
 
 #### Other Resources ####
 
