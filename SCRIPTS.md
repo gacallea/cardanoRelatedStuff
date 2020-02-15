@@ -194,6 +194,8 @@ Usage: 'jor_wrapper command [options]'
         --issues                                5000                check for WARN|ERRO issues in #N lines of logs
 
         --bstrap-time                                               calculate how long the bootstrap took
+        --last                                  --full              show when was jormungandr last restarted (from the logs)
+
         --node-stats                                                show INSL NODE stats
         --pool-stats                                                show INSL POOL stats
         --net-stats                                                 show INSL NETWORK stats
@@ -206,7 +208,7 @@ Usage: 'jor_wrapper command [options]'
         --next-epoch                                                show a countdown to NEXT EPOCH
         --block-now                                                 show SHELLEY current block
         --block-delta                                               show INSL block delta (as in how far behind it is)
-        --block-valid                           blockid             check a block against the REST API to verify its validity
+        --block-valid                           <blockid>           check a block against the REST API to verify its validity
         --acct-balance                                              check the INSL account balance
 
         --connected-estab                                           show how many other nodes is INSL connected to
@@ -228,7 +230,7 @@ Usage: 'jor_wrapper command [options]'
 
         --fragments                                                 list all fragments_id
         --fragments-count                                           show the fragmented_id count
-        --fragment-status                       fragment_id         check a fragment_id/transaction status
+        --fragment-status                       <fragment_id>       check a fragment_id/transaction status
 
 ```
 
@@ -265,8 +267,6 @@ To take advantage of ```syncdumpcache.sh```, all you need to do is to place it i
 The script will check the system cache usage and intervene with a forced sync after the threshold (**it defaults to 4096)**. If your server only runs ```jormungandr```, the system cache would 100% reflect ```jormungandr``` cache. Adjust the values to suit your system, if it runs anything else. Be mindful that **anything more aggressive than the default threshold value could break your node**.
 
 ### stuck restart ###
-
-**THIS SCRIPT IS EXPERIMENTAL AND NEEDS FINE TUNING AND TESTING, USE AT YOUR OWN RISK.**
 
 At times, the node could lag behind by a significant margin. When this happens, the node sync goes bananas and it's time to restart it. ```stuckrestart.sh``` monitors the node sync against two conditions, and restarts the node if those are met. The first condition is a **blocks date delta** and, if this is met, it goes on to check the second one. The second condition is to check when **lastReceivedBlockTime** was last modified. If that lags behind for more than 5 minutes, the script restarts the node.
 
@@ -323,6 +323,14 @@ As an example you will see something like this:
 The current list is quite short, because most features are implemented into ```jor_wrapper```. Having said that, I will expand this list in the future. If you have more useful commands, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github.
 
 ## More Tools ##
+
+The following tools are optional and just a suggestion for you, and will help you in your system administration. Install them with:
+
+```text
+apt-get update
+apt-get upgrade
+apt-get install cbm ccze htop lshw manpages most telnet tmux tmux-plugin-manager tmuxinator vim vim-common vim-runtime vim-tiny vnstat
+```
 
 ### tmux ###
 
