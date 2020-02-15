@@ -2,6 +2,7 @@
 
 - [Pool Operator Helper Scripts](#pool-operator-helper-scripts)
   - [About](#about)
+    - [Dependencies](#dependencies)
     - [Contribution](#contribution)
     - [License](#license)
     - [Download](#download)
@@ -39,6 +40,21 @@ Here you find some *documentation* for ```jor_wrapper``` and ```node_helpers```;
 **If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` (including the *service user*) and logging (```rsyslogd``` and ```logrotate```) integrations from the [guide](NACG.md).**
 
 **TBD**: Some of the available ```jor_wrapper``` commands are in it for legacy and backwards compatibility. E.g: ```--blocked-ips``` and ```--blocked-count```, currently check against ```ufw```, which is used in Chris G. guide. They will be adapted to ```NACG``` soon (using ```firewalld```), and either removed or kept with an additional option flag. I'm still pondering the best approach to make everyone happy.
+
+### Dependencies ###
+
+The scripts have some dependencies for some of the commands. Install them with:
+
+```text
+apt-get update
+apt-get upgrade
+apt-get install bc ccze curl dateutils jq net-tools ripgrep sysstat tcptraceroute
+```
+
+```text
+curl http://www.vdberg.org/~richard/tcpping -o /usr/local/bin/tcpping
+chmod +x /usr/local/bin/tcpping
+```
 
 ### Contribution ###
 
