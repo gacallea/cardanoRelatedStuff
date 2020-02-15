@@ -171,46 +171,48 @@ Usage: 'jor_wrapper command [options]'
         --settings                                                  show node settings and exit
         --set-vars                                                  set variables in ~/.bashrc (run only once) -- CHANGE your variables in jor_config first!
 
-        --live-logs                                                 show the pool live logs (scrolls on terminal)
+        --live-logs                                                 show INSL live logs (scrolls on terminal)
         --last-logs                             5000                show #N lines of logs
         --problems                              5000                check for serious problems (e.g: stuck) in #N lines of logs
         --issues                                5000                check for WARN|ERRO issues in #N lines of logs
 
         --bstrap-time                                               calculate how long the bootstrap took
-        --node-stats                                                show the pool NODE stats
-        --pool-stats                                                show the pool POOL stats
-        --net-stats                                                 show the pool NETWORK stats
+        --node-stats                                                show INSL NODE stats
+        --pool-stats                                                show INSL POOL stats
+        --net-stats                                                 show INSL NETWORK stats
         --date-stats                            5000 20             count received block announcement from network
         --sys-stats                                                 show a TOP snapshot of jourmungandr
 
-        --snapshot                                                  show a brief overview of the pool
-        --current-tip                                               show the current tip for the pool
-        --public-ip                                                 show the pool public IP
+        --snapshot                                                  show a brief overview of INSL
+        --current-tip                                               show the current tip for INSL
+        --public-ip                                                 show INSL public IP
         --next-epoch                                                show a countdown to NEXT EPOCH
         --block-now                                                 show SHELLEY current block
-        --block-delta                                               show the pool block delta (as in how far behind it is)
+        --block-delta                                               show INSL block delta (as in how far behind it is)
         --block-valid                           blockid             check a block against the REST API to verify its validity
-        --acct-balance                                              check the the pool account balance
+        --acct-balance                                              check the INSL account balance
 
-        --connected-estab                                           show how many other nodes is the pool connected to
+        --connected-estab                                           show how many other nodes is INSL connected to
         --connected-ips                         5                   count how many #N connections to a specific IP
         --blocked-ips                                               show IPs that were blocked by UFW
         --blocked-count                                             count IPs that were blocked by UFW
         --check-peers                                               check ping to trusted peers with tcpping
 
-        --is-visible                                                check if the pool is visible on the explorer (useful during setup)
-        --is-quarantined                                            check if the pool is quarantined (or was quarantined recently)
+        --is-visible                                                check if INSL is visible on the explorer (useful during setup)
+        --is-quarantined                                            check if INSL is quarantined (or was quarantined recently)
         --quarantined-ips                                           show quarantined IPs
         --quarantined-ips-count                                     count of quarantined IPs
 
-        --is-scheduled                                              check if the pool is currently scheduled as leader
-        --scheduled-slots                                           check how many slots is the pool scheduled for
+        --is-scheduled                                              check if INSL is currently scheduled as leader
+        --scheduled-slots                                           check how many slots is INSL scheduled for
         --scheduled-dates                                           show which DATE in this epoch for schedules
         --scheduled-time                                            show which TIME in this epoch for schedules
-        --scheduled-next                                            show when in the NEXT scheduled block for the pool
+        --scheduled-next                                            show when in the NEXT scheduled block for INSL
 
-        --frags-count                                               show the fragmented_id count
-        --frag-status                           fragment_id         check a fragment_id/transaction status
+        --fragments                                                 list all fragments_id
+        --fragments-count                                           show the fragmented_id count
+        --fragment-status                       fragment_id         check a fragment_id/transaction status
+
 ```
 
 ## node_helpers ##
