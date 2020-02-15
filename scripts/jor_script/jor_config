@@ -30,3 +30,9 @@ JCLI="$(command -v jcli)"
 
 JORM="$(command -v jormungandr)"
 [ -z "${JORM}" ] && [ -f jormungandr ] && JORM="./jormungandr"
+
+## make sure the pool directory exist
+if [ ! -d "$JORMUNGANDR_STORAGE_DIR" ]; then
+    mkdir -p "$JORMUNGANDR_STORAGE_DIR"
+    chown -R "$JORMUNGANDR_USERNAME":"$JORMUNGANDR_USERNAME" "$JORMUNGANDR_STORAGE_DIR"
+fi
