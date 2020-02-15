@@ -10,6 +10,7 @@
     - [Quick Examples](#quick-examples)
       - [logs](#logs)
       - [stats](#stats)
+      - [more stats](#more-stats)
       - [snapshot](#snapshot)
       - [continuous output](#continuous-output)
     - [available commands](#available-commands)
@@ -119,6 +120,22 @@ Another quick example is about stats:
 - ```--net-stats```: it will show the pool ```network stats get``` from the ```jcli``` REST API
 - ```--date-stats```: it will show the count of received block announcement from network for the last #N lines of logs
 - ```--sys-stats```: it will show a quick ```top``` snapshot of system resources used by ```jormungandr```
+
+#### more stats ####
+
+The following two commands can return some more quick stats about ```jor_wrapper```: when was ```jormungandr``` last started? How long did the bootstrap take?
+
+```text
+./jor_wrapper --bstrap-time
+```
+
+```text
+./jor_wrapper --last
+````
+
+Example output:
+
+![more stats](images/bstrap.png)
 
 #### snapshot ####
 
