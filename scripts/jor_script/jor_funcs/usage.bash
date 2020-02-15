@@ -53,8 +53,9 @@ Usage: '$SCRIPTNAME command [options]'
         --scheduled-time                                            show which TIME in this epoch for schedules
         --scheduled-next                                            show when in the NEXT scheduled block for $POOL_TICKER
 
-        --frags-count                                               show the fragmented_id count
-        --frag-status                           fragment_id         check a fragment_id/transaction status
+        --fragments                                                 list all fragments_id
+        --fragments-count                                           show the fragmented_id count
+        --fragment-status                       fragment_id         check a fragment_id/transaction status
 
 USAGE
 }

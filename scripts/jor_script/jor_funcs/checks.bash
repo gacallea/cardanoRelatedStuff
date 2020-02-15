@@ -61,9 +61,16 @@ function getCurrentTip() {
     LASTPOOLID="$($JCLI rest v0 block "$CURRENTTIPHASH" get -h "$JORMUNGANDR_RESTAPI_URL" | cut -c169-232)"
 
     echo "POOL TIP  : $LASTBLOCKHEIGHT"
-    echo "LASTHASH  : $CURRENTTIPHASH"
+    echo "TIP HASH  : $CURRENTTIPHASH"
     echo "LASTPOOL  : $LASTPOOLID"
 }
+
+## get a list of fragment_id
+function fragmentsIds() {
+    echo "This is a list of the current fragment_id:"
+    $JCLI rest v0 message logs -h "$JORMUNGANDR_RESTAPI_URL" | grep "fragment_id"
+}
+
 
 ## returns count for frament_id
 function fragmentIdCount() {
@@ -71,7 +78,6 @@ function fragmentIdCount() {
     $JCLI rest v0 message logs -h "$JORMUNGANDR_RESTAPI_URL" | grep -c "fragment_id"
 }
 
-## TODO: make this func better with json output and jq query
 ## check the status of a transaction/frament
 function fragmentStatus() {
     if [ -n "$1" ]; then
@@ -82,7 +88,7 @@ function fragmentStatus() {
         exit 1
     fi
 
-    $JCLI rest v0 message logs -h "$JORMUNGANDR_RESTAPI_URL" | grep -A 4 "$fragment"
+    $JCLI rest v0 message logs -h "$JORMUNGANDR_RESTAPI_URL" --output-format json | jq ".[] | select(.fragment_id==\"$fragment\")"
 }
 
 ## top snapshot of jourmungandr
@@ -90,3 +96,4 @@ function resourcesStat() {
     echo "Here's some quick system resources stats for Jormungandr: "
     top -b -n 4 -d 0.2 -p "$(pidof jormungandr)" | tail -2
 }
+
