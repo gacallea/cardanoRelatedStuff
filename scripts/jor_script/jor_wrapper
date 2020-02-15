@@ -3,33 +3,15 @@
 ### DO NOT CHANGE THIS
 SCRIPTNAME="${0##*/}"
 
-#######################################################################################################################################
-
-##### EDIT VARIABLES IN 'jor_config' #####
-##### EDIT VARIABLES IN 'jor_config' #####
 ##### EDIT VARIABLES IN 'jor_config' #####
 
 ## SOURCE THE CUSTOM VARIABLES
 # shellcheck source=./jor_config
 . ./jor_config
 
-#######################################################################################################################################
-
-## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
-## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
-## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
-## ### DO NOT EDIT PAST THIS POINT ### ## #### ## #
-
 ## SOURCE ALL FUNCTIONS FILES
-# shellcheck source=jor_funcs/*.bash
+# shellcheck source=./jor_funcs/
 for func in ./jor_funcs/*.bash; do . "$func"; done
-
-#### MAIN SCRIPT EXECUTION ###
-## make sure the pool directory exist
-if [ ! -d "$JORMUNGANDR_STORAGE_DIR" ]; then
-    mkdir -p "$JORMUNGANDR_STORAGE_DIR"
-    chown -R "$JORMUNGANDR_USERNAME":"$JORMUNGANDR_USERNAME" "$JORMUNGANDR_STORAGE_DIR"
-fi
 
 ## parse command line options and commands:
 while true; do
@@ -185,19 +167,21 @@ while true; do
         nextScheduledBlock
         exit 0
         ;;
-    --frags-count)
+    --fragments)
+        fragmentsIds
+        exit 0
+        ;;
+    --fragments-count)
         fragmentIdCount
         exit 0
         ;;
-    --frag-status)
+    --fragment-status)
         shift
         fragmentStatus "$1"
         exit 0
         ;;
     *)
-        echo
-        echo "$SCRIPTNAME: unknown command '$1'"
-        echo
+        echo -e "\\n$SCRIPTNAME: unknown command '$1'\\n"
         exit 127
         ;;
     esac
