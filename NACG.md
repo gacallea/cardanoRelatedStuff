@@ -152,11 +152,12 @@ Some of the installed tools are used in my scripts, some others serve system adm
 - ```jq``` if you want to send your stats to [PoolTool.io](https://pooltool.io/health)
 - ```ripgrep``` is used in my scripts
 - ```speedtest-cli``` in case you need a good speed test for your server
+- ```musl``` is a [C library](https://wiki.musl-libc.org/functional-differences-from-glibc.html), in case you want to run the [musl](https://musl.libc.org/) version of ```jormungandr```
 
 ```text
 apt-get update
 apt-get upgrade
-apt-get install bc cbm ccze chrony curl dateutils fail2ban htop jq net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
+apt-get install bc cbm ccze chrony curl dateutils fail2ban htop jq musl net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
 ```
 
 Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```, and install ```firewalld``` and ```nftbales```:
