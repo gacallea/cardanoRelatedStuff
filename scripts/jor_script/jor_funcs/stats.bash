@@ -41,7 +41,22 @@ function bootstrapTime() {
     JORMUNGANDR_PSTIME=$(ps -o etimes= -p "$JORMUNGANDR_PID" | awk '{print $1}')
     todateUPTIME=$(date --iso-8601=s -d@+"$JORMUNGANDR_UPTIME")
     toDatePSTIME=$(date --iso-8601=s -d@+"$JORMUNGANDR_PSTIME")
-    dateutils.ddiff "$todateUPTIME" "$toDatePSTIME" -f "Bootstrap took exactly %M minutes and %S seconds"
+    echo -e "\\n$(dateutils.ddiff "$todateUPTIME" "$toDatePSTIME" -f "Bootstrap took exactly %M minutes and %S seconds")\\n"
+}
+
+## when was jormungandr last restarted
+function lastStart() {
+    if [ -n "$1" ]; then
+        if [ "$1"  == "--full" ]; then
+            echo -e "\\n$(awk '/Starting jormungandr/ {print $0}' /var/log/jormungandr.log | tail -1)\\n"
+            exit 0
+        else
+            echo -e "\\nrun this command with either no arguments or, if you provide one, it has to be '--full' only\\n"
+            exit 1
+        fi
+    fi
+
+    echo -e "\\nJormungandr was last started $(awk '/Starting jormungandr/ {print $6,$7,$8}' /var/log/jormungandr.log | tail -1)\\n"
 }
 
 ## self-explanatory

@@ -56,6 +56,11 @@ while true; do
         bootstrapTime
         exit 0
         ;;
+    --last)
+        shift
+        lastStart "$1"
+        exit 0
+        ;;
     --node-stats)
         nodeStats
         exit 0

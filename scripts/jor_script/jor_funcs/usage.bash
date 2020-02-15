@@ -21,6 +21,8 @@ Usage: '$SCRIPTNAME command [options]'
         --issues                                5000                check for WARN|ERRO issues in #N lines of logs
 
         --bstrap-time                                               calculate how long the bootstrap took
+        --last                                  --full              show when was jormungandr last restarted (from the logs)
+
         --node-stats                                                show $POOL_TICKER NODE stats
         --pool-stats                                                show $POOL_TICKER POOL stats
         --net-stats                                                 show $POOL_TICKER NETWORK stats
@@ -33,7 +35,7 @@ Usage: '$SCRIPTNAME command [options]'
         --next-epoch                                                show a countdown to NEXT EPOCH
         --block-now                                                 show SHELLEY current block
         --block-delta                                               show $POOL_TICKER block delta (as in how far behind it is)
-        --block-valid                           blockid             check a block against the REST API to verify its validity
+        --block-valid                           <blockid>           check a block against the REST API to verify its validity
         --acct-balance                                              check the $POOL_TICKER account balance
 
         --connected-estab                                           show how many other nodes is $POOL_TICKER connected to
@@ -55,7 +57,7 @@ Usage: '$SCRIPTNAME command [options]'
 
         --fragments                                                 list all fragments_id
         --fragments-count                                           show the fragmented_id count
-        --fragment-status                       fragment_id         check a fragment_id/transaction status
+        --fragment-status                       <fragment_id>       check a fragment_id/transaction status
 
 USAGE
 }
