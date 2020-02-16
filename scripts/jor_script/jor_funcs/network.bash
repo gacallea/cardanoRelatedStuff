@@ -24,6 +24,7 @@ function blockedIps() {
     grep "UFW BLOCK" /var/log/syslog | awk '{print $12}' | sed -r '/\n/!s/[0-9.]+/\n&\n/;/^([0-9]{1,3}\.){3}[0-9]{1,3}\n/P;D' | sort -u
 }
 
+## TODO: make this work for firewalld
 ## how many blocked IPs in UFW logs
 function nOfblockedIps() {
     echo "How many IP addresses were blocked by UFW recently?"

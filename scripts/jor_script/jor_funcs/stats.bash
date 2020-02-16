@@ -36,12 +36,18 @@ function netStats() {
 
 ## check logs to calculate exact bootstrap time
 function bootstrapTime() {
-    JORMUNGANDR_PID=$(pidof jormungandr)
-    JORMUNGANDR_UPTIME=$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/uptime/ {print $2}')
-    JORMUNGANDR_PSTIME=$(ps -o etimes= -p "$JORMUNGANDR_PID" | awk '{print $1}')
-    todateUPTIME=$(date --iso-8601=s -d@+"$JORMUNGANDR_UPTIME")
-    toDatePSTIME=$(date --iso-8601=s -d@+"$JORMUNGANDR_PSTIME")
-    echo -e "\\n$(dateutils.ddiff "$todateUPTIME" "$toDatePSTIME" -f "Bootstrap took exactly %M minutes and %S seconds")\\n"
+    JORMUNGANDR_STATE=$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/state/ {print $2}')
+    if [ "$JORMUNGANDR_STATE" == "Bootstrapping" ]; then
+        echo -e "\\nJormungandr is still bootstrapping, check back soon\\n"
+        exit 1
+    else
+        JORMUNGANDR_PID=$(pidof jormungandr)
+        JORMUNGANDR_UPTIME=$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/uptime/ {print $2}')
+        JORMUNGANDR_PSTIME=$(ps -o etimes= -p "$JORMUNGANDR_PID" | awk '{print $1}')
+        todateUPTIME=$(date --iso-8601=s -d@+"$JORMUNGANDR_UPTIME")
+        toDatePSTIME=$(date --iso-8601=s -d@+"$JORMUNGANDR_PSTIME")
+        echo -e "\\n$(dateutils.ddiff "$todateUPTIME" "$toDatePSTIME" -f "Bootstrap took exactly %M minutes and %S seconds")\\n"
+    fi
 }
 
 ## when was jormungandr last restarted
