@@ -2,7 +2,9 @@
 
 Hereby you find my humble contributions to the [Cardano](https://www.cardano.org/en/home/) ecosystem. I hope that they can be helpful to you. Enjoy :)
 
-**IMPORTANT**: I was compelled to release early, and AS IS, because of [the Haskell announcement](https://iohk.io/en/blog/posts/2020/02/12/new-cardano-node-explorer-backend-and-web-api-released/). Hence, the scripts are tailored to the guide I wrote for now. I will be adding full compatibility with Chris G guide in the next couple of days, so that users that have followed his guide could also use them with no modifications. The guide and the scripts are written for the current Cardano node architecture, and will be updated and adapted to the newly announced Haskell version, as soon as our pool will have migrated to it and tested.
+**IMPORTANT**: the guide and the scripts are written for the current Cardano node architecture, and will be updated and adapted to the newly announced [Haskell version](https://iohk.io/en/blog/posts/2020/02/12/new-cardano-node-explorer-backend-and-web-api-released/), as soon as our pool will have migrated to it and tested.
+
+**IMPORTANT**: check back **often** for updates for both the scripts and the guide, as they are constantly improved and updated. I will implement proper versioning and tags at some point, so it would be easier to follow releases.
 
 ## Pool Operator Helper Scripts ##
 
