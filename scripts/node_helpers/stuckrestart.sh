@@ -21,11 +21,6 @@ maxDateDelta=300  ## seconds
 JORMUNGANDR_RESTAPI_PORT="<REST_API_PORT>"
 JORMUNGANDR_RESTAPI_URL="http://127.0.0.1:${JORMUNGANDR_RESTAPI_PORT}/api"
 
-JCLI="$(command -v jcli)"
-[ -z "${JCLI}" ] && [ -f jcli ] && JCLI="./jcli"
-
-JORM="$(command -v jormungandr)"
-[ -z "${JORM}" ] && [ -f jormungandr ] && JORM="./jormungandr"
 ## jcli path
 JCLI="$(command -v jcli)"
 [ -z "${JCLI}" ] && JCLI="/usr/local/bin/jcli"
