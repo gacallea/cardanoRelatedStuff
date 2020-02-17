@@ -185,8 +185,9 @@ chown -R root\: /usr/local/bin/
 This is going to be the only alien piece of software, besides pool software, that you will be installing from a source that is not from official Debian repositories. It is used in my scripts.
 
 ```text
-curl http://www.vdberg.org/~richard/tcpping -o /usr/local/bin/tcpping
+curl -s http://www.vdberg.org/~richard/tcpping -o /usr/local/bin/tcpping
 chmod +x /usr/local/bin/tcpping
+chown -R root\: /usr/local/bin/
 ```
 
 ## Create & Register Your Pool ##
