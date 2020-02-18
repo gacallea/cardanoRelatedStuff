@@ -705,7 +705,7 @@ One very useful site, is [**PoolTool**](https://pooltool.io/) by [papacarp](http
 
 #### Stake Pool Bootstrap ####
 
-A **must have community resource** for who's just starting their pool operator journey, **where we all help each others grow**, is [The Cardano Stake Pool Bootstrap Initiative](https://t.me/StakePoolBootstrapChannel). It is a Telegram group, where it is possible to participate if you follow some simple rules, where to stake with each others in turn, **to give small pools a chance**.
+A **must have community resource** for who's just starting their pool operator journey, **where we all help each others grow**, is [The Cardano Stake Pool Bootstrap Initiative](https://www.adafrog.io/bootstrap.php). It is a [Telegram group](https://t.me/StakePoolBootstrapChannel), where it is possible to participate if you follow some simple rules, where to stake with each others in turn, **to give small pools a chance**.
 
 Anyone can join the party, as long as their pool meets these simple requirements to be eligible:
 
