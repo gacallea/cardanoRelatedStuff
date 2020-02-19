@@ -1,8 +1,5 @@
 #!/bin/bash
 
-### DO NOT CHANGE THIS
-SCRIPTNAME="${0##*/}"
-
 ## live scrolling current logs
 function liveLogs() {
     journalctl -f -u jormungandr.service

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-### DO NOT CHANGE THIS
-SCRIPTNAME="${0##*/}"
-
 ## gives a bird-view of node health and stats
 ## don't run this too often. a watch -n5 is more than enough
 ## NOTE: you could have multiple panels open with fewer checks in each one

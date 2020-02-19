@@ -1,8 +1,5 @@
 #!/bin/bash
 
-### DO NOT CHANGE THIS
-SCRIPTNAME="${0##*/}"
-
 ## TODO: improve this to avoid repeating cycle
 ## check ping for trusted peers with tcpping
 function checkPeers() {

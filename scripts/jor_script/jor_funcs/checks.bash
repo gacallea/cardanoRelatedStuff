@@ -1,8 +1,5 @@
 #!/bin/bash
 
-### DO NOT CHANGE THIS
-SCRIPTNAME="${0##*/}"
-
 ## check if your pool is on the explorer
 function isPoolVisible() {
     stake_pool_id="$(awk '/node_id/ {print $2}' "$JORMUNGANDR_FILES"/node-secret.yaml)"
