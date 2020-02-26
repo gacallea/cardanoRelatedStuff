@@ -641,7 +641,6 @@ p2p:
     blocks: high
     messages: high
   max_connections: 512
-  max_connections_threshold: 256
   max_unreachable_nodes_to_connect_per_event: 32
   max_bootstrap_attempts: 3
   gossip_interval: 4s
