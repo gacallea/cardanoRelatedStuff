@@ -171,8 +171,8 @@ apt-get -t buster-backports install firewalld nftables
 You should stick [to the latest stable release](https://github.com/input-output-hk/jormungandr/releases), unless it introduces regressions. The following works for the current release for a ```x86_64``` architecture (PC/Mac - Intel/AMD Server) and [GNU](https://www.gnu.org/) ```glibc```.
 
 ```text
-curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.10-2/jormungandr-v0.8.10-2-x86_64-unknown-linux-gnu.tar.gz
-tar xzvf jormungandr-v0.8.10-2-x86_64-unknown-linux-gnu.tar.gz
+curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.13/jormungandr-v0.8.13-x86_64-unknown-linux-gnu.tar.gz
+tar xzvf jormungandr-v0.8.13-x86_64-unknown-linux-gnu.tar.gz
 mv jcli /usr/local/bin/
 mv jormungandr /usr/local/bin/
 chmod +x /usr/local/bin/jcli
@@ -640,10 +640,11 @@ p2p:
   topics_of_interest:
     blocks: high
     messages: high
-  max_connections: 1024
+  max_connections: 512
   max_connections_threshold: 256
   max_unreachable_nodes_to_connect_per_event: 32
-  gossip_interval: 8s
+  max_bootstrap_attempts: 3
+  gossip_interval: 4s
   policy:
     quarantine_duration: 15m
   trusted_peers:
@@ -669,12 +670,14 @@ rest:
   listen: 127.0.0.1:<REST_API_PORT>
 storage: "/home/<YOUR_POOL_USER>/"
 mempool:
-  fragment_ttl: 5m
-  log_ttl: 1h
-  garbage_collection_interval: 15m
+    pool_max_entries: 10000
+    log_max_entries: 100000
 leadership:
-  log_ttl: 48h
-  garbage_collection_interval: 30m
+    logs_capacity: 4096
+http_fetch_block0_service:
+- "https://github.com/input-output-hk/jormungandr-block0/raw/master/data/"
+skip_bootstrap: false
+bootstrap_from_trusted_peers: false
 ```
 
 Restart ```jormungandr``` to use the new configuration:
