@@ -11,10 +11,8 @@ function currentStatus() {
     nextEpoch
     blocksDelta
     echo -e "$POOL_TICKER CONNECTS: $(netstat -punt 2>/dev/null | grep jormungandr | grep -c ESTAB)\\n"
-    isPoolScheduled
     howManySlots
-#    scheduleDates
-#    scheduleTime
+    nextScheduledBlock
     echo -e "\\n%CPU %MEM CACHE LOAD AVERAGE"
     echo -e "$(top -b -n 2 -d 0.1 -p "$(pidof jormungandr)" | tail -1 | awk '{print $9,$10}') $(free --mega -w | awk '/Mem:/ {print $7}')M  $(awk '{print $1,$2,$3}' /proc/loadavg)\\n"
     nodeStats

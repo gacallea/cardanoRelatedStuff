@@ -1,15 +1,14 @@
 #!/bin/bash
 
-### DO NOT CHANGE THIS
-SCRIPTNAME="${0##*/}"
-
-##### EDIT VARIABLES IN 'jor_config' #####
-
-## SOURCE THE CUSTOM VARIABLES
+## EDIT VARIABLES IN 'jor_config' #####
+## source the custom variables
 # shellcheck source=./jor_config
 . ./jor_config
 
-## SOURCE ALL FUNCTIONS FILES
+## script name to be used in commands examples
+SCRIPTNAME="${0##*/}"
+
+## source all functions files
 # shellcheck source=./jor_funcs/
 for func in ./jor_funcs/*.bash; do . "$func"; done
 
@@ -111,6 +110,10 @@ while true; do
         blocksDelta
         exit 0
         ;;
+    --get-stakes)
+        stakesStats
+        exit 0
+        ;;
     --acct-balance)
         accountBalance
         exit 0
@@ -152,8 +155,8 @@ while true; do
         nOfQuarantinedIps
         exit 0
         ;;
-    --is-scheduled)
-        isPoolScheduled
+    --leader-logs)
+        leaderLogs
         exit 0
         ;;
     --scheduled-slots)

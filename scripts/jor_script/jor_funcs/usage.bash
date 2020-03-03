@@ -33,7 +33,9 @@ Usage: '$SCRIPTNAME command [options]'
         --block-now                                                             show SHELLEY current block
         --block-delta                                                           show $POOL_TICKER block delta (as in how far behind it is)
         --block-valid                           <blockid>                       check a block against the REST API to verify its validity
+
         --acct-balance                                                          check the $POOL_TICKER account balance
+        --get-stakes                                                            check the $POOL_TICKER stakes total
 
         --connected-estab                                                       show how many other nodes is $POOL_TICKER connected to
         --connected-ips                         5                               count how many #N connections to a specific IP
@@ -46,7 +48,7 @@ Usage: '$SCRIPTNAME command [options]'
         --quarantined-ips                                                       show quarantined IPs
         --quarantined-ips-count                                                 count of quarantined IPs
 
-        --is-scheduled                                                          check if $POOL_TICKER is currently scheduled as leader
+        --leader-logs                                                           check if $POOL_TICKER is currently scheduled as leader
         --scheduled-slots                                                       check how many slots is $POOL_TICKER scheduled for
         --scheduled-dates                                                       show which DATE in this epoch for schedules
         --scheduled-time                                                        show which TIME in this epoch for schedules

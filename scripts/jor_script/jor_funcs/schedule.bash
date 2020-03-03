@@ -1,50 +1,35 @@
 #!/bin/bash
 
-##### SOMEONE PLEASE TEST THE SCHEDULE FUNCTIONS, AS MY POOL HAS NEVER BEEN SCHEDULE YET, HENCE I CANNOT MAKE SURE OF THESE FUNCTIONS -- OPEN ISSUE ON GITHUB FOR ANYTHING RELATED TO THESE PLEASE #####
-##### SOMEONE PLEASE TEST THE SCHEDULE FUNCTIONS, AS MY POOL HAS NEVER BEEN SCHEDULE YET, HENCE I CANNOT MAKE SURE OF THESE FUNCTIONS -- OPEN ISSUE ON GITHUB FOR ANYTHING RELATED TO THESE PLEASE #####
-##### SOMEONE PLEASE TEST THE SCHEDULE FUNCTIONS, AS MY POOL HAS NEVER BEEN SCHEDULE YET, HENCE I CANNOT MAKE SURE OF THESE FUNCTIONS -- OPEN ISSUE ON GITHUB FOR ANYTHING RELATED TO THESE PLEASE #####
-
 ## self-explanatory
-function isPoolScheduled() {
-    echo -n "Has this node been scheduled to be leader?  ==>   "
-    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | grep -v "\\-\\-"
+function leaderLogs() {
+    echo "Leader Logs for $POOL_TICKER:"
+    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL"
 }
 
 ## self-explanatory
 function howManySlots() {
-    echo -n "HOW MANY slots has this leader been scheduled for? "
+    echo -n "HOW MANY slots has $POOL_TICKER been scheduled for? "
     $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | grep -c created_at_time
 }
 
 ## self-explanatory
 function scheduleDates() {
     echo "Which DATES have been scheduled during this epoch?"
-    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | grep scheduled_at_date | cut -d'"' -f2 | cut -d'.' -f2 | sort -g
+    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_date/ {print $2}' | sed 's/"//g' | sort -g
 }
 
 ## self-explanatory
 function scheduleTime() {
     echo "Which TIMES have been scheduled during this epoch?"
-    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | grep scheduled_at_time | sort
+    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_time/ {print $2}' | sed 's/"//g' | sort -g
 }
 
 ## self-explanatory
 function nextScheduledBlock() {
-    intDateFunc
-    NEWEPOCH=$epoch
-    maxSlots=$($JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | grep -P 'scheduled_at_date: "'"$NEWEPOCH"'.' | grep -c -P '[0-9]+')
-    leaderSlots=$($JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | grep -P 'scheduled_at_date: "'"$NEWEPOCH"'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -V)
-
-    for ((rowIndex = 1; rowIndex <= maxSlots; rowIndex++)); do
-        currentSlotTime=$((slot / 2))
-        blockCreatedSlotTime=$(awk -v i="$rowIndex" 'NR==i {print $1}' <<< "$leaderSlots")
-
-        if [[ $blockCreatedSlotTime -ge $currentSlotTime ]]; then
-            timeToNextSlotLead=$((blockCreatedSlotTime - currentSlotTime))
-            currentTime=$(date +%s)
-            nextBlockDate=$((chainstartdate + blockCreatedSlotTime * 2 + (epoch) * 86400))
-            echo "TimeToNextSlotLead: $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<<$((timeToNextSlotLead * 2))) ($(awk '{print strftime("%c",$1)}' <<<$nextBlockDate)) - $((blockCreatedSlotTime))"
-            break
+    mapfile -t scheduleDateToTest < <($JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_time/ {print $2}' | sed 's/"//g' | sort -g)
+    for i in "${scheduleDateToTest[@]}"; do
+        if ! [[ $(dateutils.ddiff now "$i") =~ "-" ]]; then
+            dateutils.ddiff now "$i" -f "NEXT BLOCK IN %H hours %M minutes and %S seconds"
         fi
     done
 }

@@ -31,6 +31,11 @@ function netStats() {
     $JCLI rest v0 network stats get -h "$JORMUNGANDR_RESTAPI_URL"
 }
 
+## get stakes distribution for pool
+function stakesStats() {
+    $JCLI rest v0 stake get -h "$JORMUNGANDR_RESTAPI_URL" | grep -A1 "$(awk '/node_id/ {print $2}' "$NODE_DIR"/"$NODE_SECRET")"
+}
+
 ## check logs to calculate exact bootstrap time
 function bootstrapTime() {
     JORMUNGANDR_STATE=$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/state/ {print $2}')
@@ -91,30 +96,6 @@ function blocksDelta() {
     echo "CURRENT  DATE: $nowBlockDate"
     echo "$POOL_TICKER     DATE: $lastBlockDate"
     echo "DATE    DELTA: $deltaBlockCount"
-
-#### DO NOT ENABLE THIS, NOT IMPLEMENTED YET
-## UNDERSTAND THIS
-#    nextScheduledBlock
-#
-#    now=$(date +"%r")
-#
-#    isNumberRegex='^[0-9]+$'
-#    if [[ -z $lastBlockDate || ! $lastBlockDate =~ $isNumberRegex ]]; then
-#        echo -e "$now: Your node appears to be starting or not running at all. Execute 'stats' to get more info."
-#        return
-#    fi
-#    if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
-#        echo -e "$now: WARNING: Your node is starting to drift. It could end up on an invalid fork soon."
-#        return
-#    fi
-#    if [[ $deltaBlockCount -gt $deltaMax ]]; then
-#        echo -e "$now: WARNING: Your node might be forked."
-#        return
-#    fi
-#    if [[ $deltaBlockCount -le 0 ]]; then
-#        echo -e "$now: Your node is running well."
-#        return
-#    fi
 }
 
 ## check the count for last received dates in logs
