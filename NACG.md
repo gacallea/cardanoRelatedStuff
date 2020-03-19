@@ -171,8 +171,8 @@ apt-get -t buster-backports install firewalld nftables
 You should stick [to the latest stable release](https://github.com/input-output-hk/jormungandr/releases), unless it introduces regressions. The following works for the current release for a ```x86_64``` architecture (PC/Mac - Intel/AMD Server) and [GNU](https://www.gnu.org/) ```glibc```.
 
 ```text
-curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.14/jormungandr-v0.8.14-x86_64-unknown-linux-gnu.tar.gz
-tar xzvf jormungandr-v0.8.14-x86_64-unknown-linux-gnu.tar.gz
+curl -sLOJ https://github.com/input-output-hk/jormungandr/releases/download/v0.8.15/jormungandr-v0.8.15-x86_64-unknown-linux-gnu.tar.gz
+tar xzvf jormungandr-v0.8.15-x86_64-unknown-linux-gnu.tar.gz
 mv jcli /usr/local/bin/
 mv jormungandr /usr/local/bin/
 chmod +x /usr/local/bin/jcli
@@ -640,8 +640,8 @@ p2p:
   topics_of_interest:
     blocks: high
     messages: high
-  max_connections: 512
-  max_client_connections: 16
+  max_connections: 256
+  max_client_connections: 128
   max_unreachable_nodes_to_connect_per_event: 32
   max_bootstrap_attempts: 3
   gossip_interval: 4s
