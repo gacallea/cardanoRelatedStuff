@@ -36,6 +36,12 @@ function stakesStats() {
     $JCLI rest v0 stake get -h "$JORMUNGANDR_RESTAPI_URL" | grep -A1 "$(awk '/node_id/ {print $2}' "$NODE_DIR"/"$NODE_SECRET")"
 }
 
+## top snapshot of jourmungandr
+function resourcesStat() {
+    echo "Here's some quick system resources stats for Jormungandr: "
+    top -b -n 4 -d 0.2 -p "$(pidof jormungandr)" | tail -2
+}
+
 ## check logs to calculate exact bootstrap time
 function bootstrapTime() {
     JORMUNGANDR_STATE=$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/state/ {print $2}')
@@ -86,6 +92,17 @@ function nextEpoch() {
 ##     echo "$POOL_TICKER      TIP: $lastBlockHeight"
 ##     echo "TIP     DELTA: $deltaHeightCount"
 ## }
+
+## check the current tip of your pool
+function getCurrentTip() {
+    CURRENTTIPHASH=$($JCLI rest v0 tip get -h "$JORMUNGANDR_RESTAPI_URL")
+    LASTBLOCKHEIGHT="$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/lastBlockHeight/ {print $2}' | sed 's/"//g')"
+    LASTPOOLID="$($JCLI rest v0 block "$CURRENTTIPHASH" get -h "$JORMUNGANDR_RESTAPI_URL" | cut -c169-232)"
+
+    echo "POOL TIP  : $LASTBLOCKHEIGHT"
+    echo "TIP HASH  : $CURRENTTIPHASH"
+    echo "LASTPOOL  : $LASTPOOLID"
+}
 
 ## what is the pool date delta?
 function blocksDelta() {

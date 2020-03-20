@@ -15,7 +15,7 @@ function howManySlots() {
 ## self-explanatory
 function scheduleDates() {
     echo "Which DATES have been scheduled during this epoch?"
-    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_date/ {print $2}' | sed 's/"//g' | sort -g
+    $JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_date/ {print $2}' | sed 's/"//g' | sort -V
 }
 
 ## self-explanatory
@@ -26,11 +26,10 @@ function scheduleTime() {
 
 ## self-explanatory
 function nextScheduledBlock() {
-    mapfile -t scheduleDateToTest < <($JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_time/ {print $2}' | sed 's/"//g' | sort -g)
+    mapfile -t scheduleDateToTest < <($JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_time/ {print $2}' | sed 's/"//g' | sort -V)
     for i in "${scheduleDateToTest[@]}"; do
         if ! [[ $(dateutils.ddiff now "$i") =~ "-" ]]; then
             dateutils.ddiff now "$i" -f "NEXT BLOCK IN %H hours %M minutes and %S seconds"
         fi
     done
 }
-

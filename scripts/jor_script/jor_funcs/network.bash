@@ -14,18 +14,28 @@ function getIpAddress() {
     echo "${JORMUNGANDR_PUBLIC_IP_ADDR}"
 }
 
-## TODO: make this work for firewalld
-## blocked IPs in UFW logs
-function blockedIps() {
-    echo "These IP addresses were recently blocked by UFW:"
-    grep "UFW BLOCK" /var/log/syslog | awk '{print $12}' | sed -r '/\n/!s/[0-9.]+/\n&\n/;/^([0-9]{1,3}\.){3}[0-9]{1,3}\n/P;D' | sort -u
+## check which IPs your pool has quarantined
+function quarantinedIps() {
+    echo "List of IP addresses that were quarantined somewhat recently:"
+    curl -s "$JORMUNGANDR_RESTAPI_URL"/v0/network/p2p/quarantined | rg -o "/ip4/.{0,16}" | sed -r '/\n/!s/[0-9.]+/\n&\n/;/^([0-9]{1,3}\.){3}[0-9]{1,3}\n/P;D' | sort -u
+    echo "End of somewhat recently quarantined IP addresses."
 }
 
-## TODO: make this work for firewalld
-## how many blocked IPs in UFW logs
-function nOfblockedIps() {
-    echo "How many IP addresses were blocked by UFW recently?"
-    blockedIps | wc -l
+## check how many quaratined IPs are in the above list?
+function nOfQuarantinedIps() {
+    echo "How many IP addresses were quarantined?"
+    quarantinedIps | wc -l
+}
+
+## check if your pool was recently quarantined
+function isPoolQuarantined() {
+    this_node=$(quarantinedIps | rg "${JORMUNGANDR_PUBLIC_IP_ADDR}")
+    if [ -n "${this_node}" ]; then
+        echo "ERROR! You were quarantined at some point in the recent past!"
+        echo "Execute '$SCRIPTNAME --connected-estab' to confirm that you are connecting to other nodes."
+    else
+        echo "You are clean as a whistle."
+    fi
 }
 
 ## how many other nodes is my pool connected to?
