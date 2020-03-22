@@ -32,8 +32,10 @@
       - [Pool Tool](#pool-tool)
       - [Stake Pool Bootstrap](#stake-pool-bootstrap)
       - [Organic Design](#organic-design)
-      - [Adapools](#adapools)
+      - [ADA Stat](#ada-stat)
       - [ADAtainement](#adatainement)
+      - [Adapools](#adapools)
+      - [Pegasus App](#pegasus-app)
     - [Telegram](#telegram)
 
 ## The Guide ##
@@ -58,7 +60,7 @@ Lastly, this guide assumes that you are familiar with Linux, its shell, its comm
 
 ### Updates ###
 
-This guide will help you setup your server to accomodate a pool, but you won't find remote monitoring in here (just yet). This is because I have not implemented it on [INSL](https://insalada.io/) yet. I don't write about things I haven't had direct experience with. Once I'll have done so, and tested it, I will add a monitoring section to the guide. The same goes for any useful feature that could help pool owners run and manage the server and the pool. Follow [insaladaPool](https://twitter.com/insaladaPool) for future updates.
+Updates are implemented only after I'll have done so on my pool, and tested it. I will add more sections to the guide as needed. The same goes for any useful feature that could help pool owners run and manage the server and the pool. Follow [insaladaPool](https://twitter.com/insaladaPool) for future updates.
 
 ### Contributions ###
 
@@ -155,15 +157,14 @@ Some of the installed tools are used in my scripts, some others serve system adm
 - ```musl``` is a [C library](https://wiki.musl-libc.org/functional-differences-from-glibc.html), in case you want to run the [musl](https://musl.libc.org/) version of ```jormungandr```
 
 ```text
-apt-get update
-apt-get upgrade
-apt-get install bc cbm ccze chrony curl dateutils fail2ban htop jq musl net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
+apt update
+apt install bc cbm ccze chrony curl dateutils fail2ban htop jq musl net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
 ```
 
 Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```, and install ```firewalld``` and ```nftbales```:
 
 ```text
-apt-get -t buster-backports install firewalld nftables
+apt -t buster-backports install firewalld nftables
 ```
 
 #### install jormungandr and jcli ####
@@ -538,10 +539,11 @@ Let's unpack the ```unit``` file:
 5. it logs to ```journal```.
 6. it sets the limits accordingly.
 
-Reload ```systemd``` to read the new ```unit``` file.
+Reload ```systemd``` to read the new ```unit``` file, and enable it.
 
 ```text
 systemctl daemon-reload
+systemctl enable jormungandr.service
 ```
 
 Whenever you need to ```start```, ```stop```, and ```restart``` your node, do it with:
@@ -722,13 +724,21 @@ Join us, and make sure to read the pinned message for all of the nitty gritty de
 
 Organic Design has a great deal of useful information on [Cardano](https://organicdesign.nz/Cardano), [Staking Pool FAQ](https://organicdesign.nz/Cardano_staking_pool_FAQ), and [Cardano terminology](https://organicdesign.nz/Cardano#Staking_in_Cardano). Familiarize with these, and your pool operator journey will improve a lot.
 
-#### Adapools ####
+#### ADA Stat ####
 
-In the sane fashion to the above-mentioned Pool Tool, [**Adapools**](https://adapools.org/) offers a number of useful network statistics and pool operators' tools. You can find tools that check against the explorer to understand [if you are forked](https://adapools.org/amiforked); info on [what peers are currently best](https://adapools.org/peers) for your bootstrap, [blocks statistics](https://adapools.org/blocks), and a lot more. Adapools will also offer a feature to [send your pool tip](https://github.com/cardanians/adapools.org), soon enough.
+[ADA Stat](https://adastat.net/en) offers a minimalistic and elegant approach to stats for the explorer and pools. It is accurate and a pleasure to use and look at. Here's INSL as an example: [Insalada Stake Pool](https://adastat.net/en/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) statistics.
 
 #### ADAtainement ####
 
 [**Adatainement**](https://www.adatainment.com/) is one of the oldest community driven, informative site about Cardano. It also offers graphs, and statistics. Moreover it offers mobile apps, a calculator and a number of other useful tools. Be sure to check them out.
+
+#### Adapools ####
+
+In the same fashion to the above-mentioned Pool Tool, [**Adapools**](https://adapools.org/) offers a number of useful network statistics and pool operators' tools. You can find tools that check against the explorer to understand [if you are forked](https://adapools.org/amiforked); info on [what peers are currently best](https://adapools.org/peers) for your bootstrap, [blocks statistics](https://adapools.org/blocks), and more.
+
+#### Pegasus App ####
+
+[Pegasus App](https://pegasuspool.info/mobile) is a mobile application that provides statistics like the above sites, for pools and the explorer, and it can be with you at all times.
 
 ### Telegram ###
 
