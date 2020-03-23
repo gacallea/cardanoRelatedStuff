@@ -3,15 +3,10 @@
 ## TODO: improve this to avoid repeating cycle
 ## check ping for trusted peers with tcpping
 function checkPeers() {
-    sed -e '/address/!d' -e '/#/d' -e 's@^.*/ip./\([^/]*\)/tcp/\([0-9]*\).*@\1 \2@' "$JORMUNGANDR_FILES"/node-config.yaml |
+    sed -e '/address/!d' -e '/#/d' -e 's@^.*/ip./\([^/]*\)/tcp/\([0-9]*\).*@\1 \2@' "$JORMUNGANDR_CONFIG" |
         while read -r addr port; do
             tcpping -x 1 "$addr" "$port"
         done
-}
-
-## what is my pool public ip? kind of useless, here for legacy
-function getIpAddress() {
-    echo "${JORMUNGANDR_PUBLIC_IP_ADDR}"
 }
 
 ## check which IPs your pool has quarantined

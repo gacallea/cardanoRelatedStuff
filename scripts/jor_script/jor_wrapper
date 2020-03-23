@@ -68,13 +68,13 @@ while true; do
         poolStats
         exit 0
         ;;
+    --net-stats)
+        netStats
+        exit 0
+        ;;
     --date-stats)
         shift
         lastDates "$1" "$2"
-        exit 0
-        ;;
-    --net-stats)
-        netStats
         exit 0
         ;;
     --sys-stats)
@@ -89,10 +89,6 @@ while true; do
         getCurrentTip
         exit 0
         ;;
-    --public-ip)
-        getIpAddress
-        exit 0
-        ;;
     --next-epoch)
         nextEpoch
         exit 0
@@ -101,21 +97,29 @@ while true; do
         currentBlockDate
         exit 0
         ;;
+    --block-delta)
+        blocksDelta
+        exit 0
+        ;;
     --block-valid)
         shift
         isBlockValid "$1"
         exit 0
         ;;
-    --block-delta)
-        blocksDelta
+    --current-stakes)
+        currentStakes
         exit 0
         ;;
-    --get-stakes)
-        stakesStats
+    --live-stakes)
+        liveStakes
         exit 0
         ;;
-    --acct-balance)
+    --account-balance)
         accountBalance
+        exit 0
+        ;;
+    --rewards-balance)
+        rewardsBalance
         exit 0
         ;;
     --connected-estab)
@@ -125,14 +129,6 @@ while true; do
     --connected-ips)
         shift
         connectedIps "$1"
-        exit 0
-        ;;
-    --blocked-ips)
-        blockedIps
-        exit 0
-        ;;
-    --blocked-count)
-        nOfblockedIps
         exit 0
         ;;
     --check-peers)

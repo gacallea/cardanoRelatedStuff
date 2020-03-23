@@ -29,7 +29,8 @@ function nextScheduledBlock() {
     mapfile -t scheduleDateToTest < <($JCLI rest v0 leaders logs get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/scheduled_at_time/ {print $2}' | sed 's/"//g' | sort -V)
     for i in "${scheduleDateToTest[@]}"; do
         if ! [[ $(dateutils.ddiff now "$i") =~ "-" ]]; then
-            dateutils.ddiff now "$i" -f "NEXT BLOCK IN %H hours %M minutes and %S seconds"
+            dateutils.ddiff now "$i" -f "BLOCK SCHEDULED IN %H hours %M minutes and %S seconds"
         fi
     done
 }
+

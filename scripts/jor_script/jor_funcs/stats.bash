@@ -13,7 +13,7 @@ function intDateFunc() {
     nextepoch="$((($(date +%s) + (86400 - (elapsed % 86400)))))"
     nextepochToDate="$(date --iso-8601=s -d@+$nextepoch)"
     dateNow="$(date --iso-8601=s)"
-    ### currently not possible to calculate nowBlockHeight=""
+    ### not possible to calculate nowBlockHeight=""
 }
 
 ## self-explanatory
@@ -23,7 +23,7 @@ function nodeStats() {
 
 ## self-explanatory
 function poolStats() {
-    $JCLI rest v0 stake-pool get "$(awk '/node_id/ {print $2}' "$JORMUNGANDR_FILES"/node-secret.yaml)" -h "$JORMUNGANDR_RESTAPI_URL"
+    $JCLI rest v0 stake-pool get "$(awk '/node_id/ {print $2}' "$JORMUNGANDR_SECRET")" -h "$JORMUNGANDR_RESTAPI_URL"
 }
 
 ## self-explanatory
@@ -32,8 +32,27 @@ function netStats() {
 }
 
 ## get stakes distribution for pool
-function stakesStats() {
-    $JCLI rest v0 stake get -h "$JORMUNGANDR_RESTAPI_URL" | grep -A1 "$(awk '/node_id/ {print $2}' "$NODE_DIR"/"$NODE_SECRET")"
+function currentStakes() {
+    blah="$(awk '/node_id/ {print $2}' "$JORMUNGANDR_SECRET")"
+    totalStake="$($JCLI rest v0 stake get -h "$JORMUNGANDR_RESTAPI_URL" | sed -n "/$blah/{n;p;}" | awk '{print $2}')"
+    echo "CURRENT Staking amounts to $((totalStake / 1000000)) ADA"
+}
+
+## self-explanatory
+function liveStakes() {
+    totalStake="$($JCLI rest v0 stake-pool get "$(awk '/node_id/ {print $2}' "$JORMUNGANDR_SECRET")" -h "$JORMUNGANDR_RESTAPI_URL" | awk '/total_stake/ {print $2}')"
+    echo "LIVE Staking amounts to $((totalStake / 1000000)) ADA"
+}
+
+## self-explanatory
+function accountBalance() {
+    $JCLI rest v0 account get "$RECEIVER_ACCOUNT" -h "$JORMUNGANDR_RESTAPI_URL"
+}
+
+## self-explanatory
+function rewardsBalance() {
+    rewardsTotal="$($JCLI rest v0 account get "$RECEIVER_ACCOUNT" -h "$JORMUNGANDR_RESTAPI_URL" | awk '/value/ {print $2}')"
+    echo "Current Rewards Total to $((rewardsTotal / 1000000)) ADA"
 }
 
 ## top snapshot of jourmungandr
@@ -63,11 +82,6 @@ function lastStart() {
     JORMUNGANDR_PID=$(pidof jormungandr)
     JORMUNGANDR_PSTIME=$(ps -o etimes= -p "$JORMUNGANDR_PID" | awk '{print $1}')
     echo -e "\\nJormungandr was last started @: $(date --date "-$JORMUNGANDR_PSTIME seconds")\\n"
-}
-
-## self-explanatory
-function accountBalance() {
-    $JCLI rest v0 account get "$RECEIVER_ACCOUNT" -h "$JORMUNGANDR_RESTAPI_URL"
 }
 
 ## self-explanatory
@@ -108,7 +122,10 @@ function getCurrentTip() {
 function blocksDelta() {
     intDateFunc
     lastBlockDate="$($JCLI rest v0 node stats get -h "$JORMUNGANDR_RESTAPI_URL" | awk '/lastBlockDate/ {print $2}' | sed 's/\"//g')"
-    deltaBlockCount=$(echo "$nowBlockDate - $lastBlockDate" | bc | sed 's/\./0\./g')
+    deltaBlockCount=$(echo "$nowBlockDate - $lastBlockDate" | bc)
+    if ! [[ "$deltaBlockCount" =~ ^[0-9]+$ ]]; then
+        deltaBlockCount="${deltaBlockCount//\./0\.}"
+    fi
 
     echo "CURRENT  DATE: $nowBlockDate"
     echo "$POOL_TICKER     DATE: $lastBlockDate"

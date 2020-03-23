@@ -1,15 +1,5 @@
 #!/bin/bash
 
-## check if your pool is on the explorer
-function isPoolVisible() {
-    stake_pool_id="$(awk '/node_id/ {print $2}' "$JORMUNGANDR_FILES"/node-secret.yaml)"
-    if $JCLI rest v0 stake-pools get -h "$JORMUNGANDR_RESTAPI_URL" | grep "$stake_pool_id" >/dev/null 2>&1; then
-        echo -e "\\nYour Pool is available here: https://shelleyexplorer.cardano.org/en/stake-pool/$stake_pool_id/\\n"
-    else
-        echo -e "\\nThe search for your pool returned nothing.\\n"
-    fi
-}
-
 ## check if a block is valid. if NOT, your pool may be forking
 function isBlockValid() {
     if [ -n "$1" ]; then
