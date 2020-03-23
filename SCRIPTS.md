@@ -40,16 +40,14 @@ Here you find some *documentation* for ```jor_wrapper``` and ```node_helpers```;
 
 **If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` (including the *service user*) and logging (```rsyslogd``` and ```logrotate```) integrations from the [guide](NACG.md).**
 
-**TBD**: Some of the available ```jor_wrapper``` commands are in it for legacy and backwards compatibility. E.g: ```--blocked-ips``` and ```--blocked-count```, currently check against ```ufw```, which is used in Chris G. guide. They will be adapted to ```NACG``` soon (using ```firewalld```), and either removed or kept with an additional option flag. I'm still pondering the best approach to make everyone happy.
-
 ### Dependencies ###
 
 The scripts have some dependencies for some of the commands. Install them with:
 
 ```text
-apt-get update
-apt-get upgrade
-apt-get install bc ccze curl dateutils jq net-tools ripgrep sysstat tcptraceroute
+apt update
+apt upgrade
+apt install bc ccze curl dateutils jq net-tools ripgrep sysstat tcptraceroute
 ```
 
 ```text
@@ -87,6 +85,8 @@ RECEIVER_ACCOUNT="<YOUR_POOL_PLEDGE_ADDRESS>"
 POOL_TICKER="<YOUR_POOL_TICKER>"
 JORMUNGANDR_USERNAME="<YOUR_POOL_USER>"
 JORMUNGANDR_FILES="/home/${JORMUNGANDR_USERNAME}"
+JORMUNGANDR_CONFIG="${JORMUNGANDR_FILES}/node-config.yaml"
+JORMUNGANDR_SECRET="${JORMUNGANDR_FILES}/node-secret.yaml"
 JORMUNGANDR_STORAGE_DIR="${JORMUNGANDR_FILES}/storage"
 JORMUNGANDR_STORAGE_FILE="${JORMUNGANDR_STORAGE_DIR}/blocks.sqlite"
 JORMUNGANDR_PUBLIC_IP_ADDR="<YOUR_NODE_PUBLIC_IP>"
@@ -182,56 +182,54 @@ It will return the following. If you have suggestions on how to improve the ```u
 ```text
 Usage: 'jor_wrapper command [options]'
 
-        COMMANDS                                OPTIONS             DESCRIPTION
+        COMMANDS                                OPTIONS                         DESCRIPTION
 
-        -h|--help                                                   show this help message and exit
-        --settings                                                  show node settings and exit
-        --set-vars                                                  set variables in ~/.bashrc (run only once) -- CHANGE your variables in jor_config first!
+        -h|--help                                                               show this help message and exit
+        --settings                                                              show node settings and exit
+        --set-vars                                                              set variables in ~/.bashrc (run only once) -- CHANGE your variables in jor_config first!
 
-        --live-logs                                                 show INSL live logs (scrolls on terminal)
-        --last-logs                             5000                show #N lines of logs
-        --problems                              5000                check for serious problems (e.g: stuck) in #N lines of logs
-        --issues                                5000                check for WARN|ERRO issues in #N lines of logs
+        --current-stakes                                                        check <YOUR_POOL_TICKER> current stakes balance
+        --live-stakes                                                           check <YOUR_POOL_TICKER> live stakes balance
+        --account-balance                                                       check <YOUR_POOL_TICKER> account balance
+        --rewards-balance                                                       check <YOUR_POOL_TICKER> rewards balance
 
-        --bstrap-time                                               calculate how long the bootstrap took
-        --last                                  --full              show when was jormungandr last restarted (from the logs)
+        --leader-logs                                                           check if <YOUR_POOL_TICKER> is currently scheduled as leader
+        --scheduled-slots                                                       check how many slots is <YOUR_POOL_TICKER> scheduled for
+        --scheduled-dates                                                       show which DATE in this epoch for schedules
+        --scheduled-time                                                        show which TIME in this epoch for schedules
+        --scheduled-next                                                        show when in the NEXT scheduled block for <YOUR_POOL_TICKER>
 
-        --node-stats                                                show INSL NODE stats
-        --pool-stats                                                show INSL POOL stats
-        --net-stats                                                 show INSL NETWORK stats
-        --date-stats                            5000 20             count received block announcement from network
-        --sys-stats                                                 show a TOP snapshot of jourmungandr
+        --live-logs                                                             show <YOUR_POOL_TICKER> live logs (scrolls on terminal)
+        --last-logs                             5000                            show #N lines of logs
+        --problems                              5000                            check for serious problems (e.g: stuck) in #N lines of logs
+        --issues                                5000                            check for WARN|ERRO issues in #N lines of logs
 
-        --snapshot                                                  show a brief overview of INSL
-        --current-tip                                               show the current tip for INSL
-        --public-ip                                                 show INSL public IP
-        --next-epoch                                                show a countdown to NEXT EPOCH
-        --block-now                                                 show SHELLEY current block
-        --block-delta                                               show INSL block delta (as in how far behind it is)
-        --block-valid                           <blockid>           check a block against the REST API to verify its validity
-        --acct-balance                                              check the INSL account balance
+        --snapshot                                                              show a brief overview of <YOUR_POOL_TICKER>
+        --bstrap-time                                                           calculate how long the bootstrap took
+        --last                                  --full                          show when was jormungandr last restarted (from the logs)
 
-        --connected-estab                                           show how many other nodes is INSL connected to
-        --connected-ips                         5                   count how many #N connections to a specific IP
-        --blocked-ips                                               show IPs that were blocked by UFW
-        --blocked-count                                             count IPs that were blocked by UFW
-        --check-peers                                               check ping to trusted peers with tcpping
+        --node-stats                                                            show <YOUR_POOL_TICKER> NODE stats
+        --pool-stats                                                            show <YOUR_POOL_TICKER> POOL stats
+        --net-stats                                                             show <YOUR_POOL_TICKER> NETWORK stats
+        --sys-stats                                                             show a TOP snapshot of jourmungandr
+        --date-stats                            5000 20                         count received block announcement from network
 
-        --is-visible                                                check if INSL is visible on the explorer (useful during setup)
-        --is-quarantined                                            check if INSL is quarantined (or was quarantined recently)
-        --quarantined-ips                                           show quarantined IPs
-        --quarantined-ips-count                                     count of quarantined IPs
+        --current-tip                                                           show the current tip for <YOUR_POOL_TICKER>
+        --next-epoch                                                            show a countdown to NEXT EPOCH
+        --block-now                                                             show SHELLEY current block
+        --block-delta                                                           show <YOUR_POOL_TICKER> block delta (as in how far behind it is)
+        --block-valid                           <blockid>                       check a block against the REST API to verify its validity
 
-        --is-scheduled                                              check if INSL is currently scheduled as leader
-        --scheduled-slots                                           check how many slots is INSL scheduled for
-        --scheduled-dates                                           show which DATE in this epoch for schedules
-        --scheduled-time                                            show which TIME in this epoch for schedules
-        --scheduled-next                                            show when in the NEXT scheduled block for INSL
+        --check-peers                                                           check ping to trusted peers with tcpping
+        --connected-estab                                                       show how many other nodes is <YOUR_POOL_TICKER> connected to
+        --connected-ips                         5                               count how many #N connections to a specific IP
+        --is-quarantined                                                        check if <YOUR_POOL_TICKER> is quarantined (or was quarantined recently)
+        --quarantined-ips                                                       show quarantined IPs
+        --quarantined-ips-count                                                 count of quarantined IPs
 
-        --fragments                                                 list all fragments_id
-        --fragments-count                                           show the fragmented_id count
-        --fragment-status                       <fragment_id>       check a fragment_id/transaction status
-
+        --fragments                                                             list all fragments_id
+        --fragments-count                                                       show the fragmented_id count
+        --fragment-status                       <fragment_id>                   check a fragment_id/transaction status
 ```
 
 ## node_helpers ##
@@ -327,9 +325,9 @@ The current list is quite short, because most features are implemented into ```j
 The following tools are optional and just a suggestion for you, and will help you in your system administration. Install them with:
 
 ```text
-apt-get update
-apt-get upgrade
-apt-get install cbm ccze htop lshw manpages most telnet tmux tmux-plugin-manager tmuxinator vim vim-common vim-runtime vim-tiny vnstat
+apt update
+apt upgrade
+apt install cbm ccze htop lshw manpages most telnet tmux tmux-plugin-manager tmuxinator vim vim-common vim-runtime vim-tiny vnstat
 ```
 
 ### tmux ###
