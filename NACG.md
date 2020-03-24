@@ -177,7 +177,22 @@ apt update
 apt install bc cbm ccze chrony curl dateutils fail2ban htop jq musl net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
 ```
 
-Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```, and install ```firewalld``` and ```nftbales```:
+Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```:
+
+```text
+deb http://deb.debian.org/debian buster main
+deb-src http://deb.debian.org/debian buster main
+
+deb http://security.debian.org/ buster/updates main
+deb-src http://security.debian.org/ buster/updates main
+deb http://deb.debian.org/debian buster-updates main
+deb-src http://deb.debian.org/debian buster-updates main
+
+deb http://deb.debian.org/debian buster-backports main
+deb-src http://deb.debian.org/debian buster-backports main
+```
+
+And install ```firewalld``` and ```nftbales```:
 
 ```text
 apt -t buster-backports install firewalld nftables
