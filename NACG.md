@@ -26,6 +26,22 @@
     - [configure systemd](#configure-systemd)
     - [configure logging](#configure-logging)
     - [configure node](#configure-node)
+  - [Monitor Your System](#monitor-your-system)
+    - [Install Monitoring](#install-monitoring)
+    - [Prometheus](#prometheus)
+      - [Jormungandr Exporter](#jormungandr-exporter)
+      - [Prometheus Configuration](#prometheus-configuration)
+      - [Prometheus Alerting](#prometheus-alerting)
+    - [Grafana](#grafana)
+      - [Grafana Configuration](#grafana-configuration)
+        - [[server]](#server)
+        - [[users]](#users)
+        - [[auth.anonymous]](#authanonymous)
+      - [DNS Configuration](#dns-configuration)
+      - [Firewalld Configuration](#firewalld-configuration)
+      - [Nginx Reverse Proxy](#nginx-reverse-proxy)
+      - [Let's Encrypt](#lets-encrypt)
+      - [Installing Dashboards](#installing-dashboards)
   - [What's Next](#whats-next)
     - [Helping Hands](#helping-hands)
     - [Operator Resources](#operator-resources)
@@ -688,13 +704,262 @@ Restart ```jormungandr``` to use the new configuration:
 systemctl restart jormungandr.service
 ```
 
+## Monitor Your System ##
+
+Monitoring is indispensable for any given service. Monitoring, in layman's terms, *provides and automates real-time services health history*, and alerts you whenever something goes wrong. So that you don't have to be constantly connected to your server. Mind that monitoring doesn't substitute server administration. It is only a tool that informs the administrator about the health of the server and its services, and that lets one know it's time to connect and act upon alerts. It is still the administrator responsibility to fix any issue, and to keep the server healthy. Moreover, the history aspect that monitoring provides, can help you look into the big picture to understand what went wrong, even when you were not connected or sound asleep.
+
+In this section you will configure and automate Prometheus and Grafana *to be there for you*. In a future revision of this guide, you will configure alerting to send you messages or emails, to let you know about issues when they happen. With alerting, if you don't receive any alerts, "*no news is good news*". If you do receive them, it's time connect and troubleshoot the issues.
+
+**IMPORTANT:** this guide assumes a remote server with a working domain. [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) needs to be configured to access you monitoring, remotely.
+
+### Install Monitoring ###
+
+You need to install [Prometheus](https://prometheus.io/) from the official Debian repository, and [Grafana](https://grafana.com/) from the [repository they provide](https://grafana.com/docs/grafana/latest/installation/debian/). You'll also install and configure [Nginx](https://www.nginx.com/) and [EFF](https://eff.org/)'s [Certbot](https://certbot.eff.org/) to automate the process of creating and managing [Let's Encrypt](https://letsencrypt.org/) certificates. Nginx is used to [reverse-proxy](https://en.wikipedia.org/wiki/Reverse_proxy) to Grafana, and the [SSL encryption](https://www.ssl.com/faqs/faq-what-is-ssl/) is necessary to securely connect to and peruse your remote monitoring, [while keeping safe from prying eyes](https://www.youtube.com/watch?v=-enHfpHMBo4). To install the needed software, use the following commands:
+
+```text
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+echo "deb https://packages.grafana.com/oss/deb stable main" > /etc/apt/sources.list.d/grafana.list
+```
+
+```text
+apt update
+apt install prometheus prometheus-alertmanager prometheus-node-exporter nginx certbot python3-pip python3-certbot-nginx grafana
+```
+
+### Prometheus ###
+
+At the fundamental level, Prometheus collects data and generates metrics. The resulting metrics can be fed into a tool, like Grafana, to depict the big picture for you. Learn more about Prometheus [here](https://prometheus.io/docs/introduction/overview/). Prometheus works with [exporters](https://prometheus.io/docs/instrumenting/exporters/) to collect data from several services. You'll be using two: the official [Node Exporter](https://github.com/prometheus/node_exporter) (installed above), and the Jormungandr Exporter.
+
+#### Jormungandr Exporter ####
+
+This Python script, based on [the official IOHK one](https://github.com/input-output-hk/jormungandr-nix/blob/master/nixos/jormungandr-monitor/monitor.py), improves to use the latest ```peerConnectedCnt```, and will collect a number of Jormungandr metrics using ```jcli``` and the REST API. Let's install the necessary Python dependencies:
+
+```text
+pip3 install prometheus_client python-dateutil systemd-python ipython
+```
+
+To get the script in place, use the the following ```curl```, and **remember to change** ```<REST_API_PORT>``` to your REST API port in the ```jormungandr-monitor.py``` **or it will not work correctly**.
+
+```text
+curl -sLJ https://raw.githubusercontent.com/gacallea/cardanoRelatedStuff/master/monitoring/jormungandr-monitor.py -o /etc/prometheus/jormungandr-monitor.py
+```
+
+. ```jormungandr-monitor.py``` will be managed with ```systemd``` as well. Let's create the necessary unit file called ```/etc/systemd/system/jormungandr-monitor.service```
+
+```text
+[Unit]
+Description="Jormungandr Monitoring Script"
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /etc/prometheus/jormungandr-monitor.py
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=jormungandr-monitor
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Reload ```systemd``` to read the new ```unit```:
+
+```text
+systemctl daemon-reload
+```
+
+#### Prometheus Configuration ####
+
+Prometheus configuration is pretty straight-forward. Edit ```/etc/prometheus/prometheus.yml``` and use the following settings:
+
+```text
+# NACG Config for Prometheus.
+
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'Jormungandr Monitor'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+
+  - job_name: 'jormungandr'
+    static_configs:
+      - targets: ['localhost:9101']
+```
+
+That's all its needed for Prometheus to be collecting data from the Node and Jormungandr exporters, and to generate metrics that will be later fed to Grafana. Make sure to enable the services and start them as well:
+
+```text
+systemctl enable prometheus.service
+systemctl enable prometheus-node-exporter.service
+systemctl enable jormungandr-monitor.service
+systemctl restart prometheus.service
+systemctl restart prometheus-node-exporter.service
+systemctl restart jormungandr-monitor.service
+```
+
+#### Prometheus Alerting ####
+
+Alerting with Prometheus will be implemented in a future revision of this guide. Follow [insaladaPool](https://twitter.com/insaladaPool) for future updates.
+
+### Grafana ###
+
+Grafana is a graphing software that provides dashboards that give you a complete view of what's going on with your server and with your pool. It can show backward history, as long there is data to graph on. This is you main point of entry to monitoring. Grafana can talk to a number of data sources that *feed data to it*. You are using and have configured Prometheus to be our source of data, now it's time to bring it all together.
+
+#### Grafana Configuration ####
+
+Grafana by default runs on port ```3000```. If ```jormungandr``` is running on port ```3000``` as well, you need to change either one. I suggest you use port ```3000``` for Grafana, and set ```jormungandr``` port to ```3001``` and its ```<REST_API_PORT>``` set to ```3101```. This way it can be easy to mnemonically associate ```jormungandr``` and its ```<REST_API_PORT>``` instance.
+
+The Grafana configuration has pretty solid default values. You only need to change a handful to successfully configure it. Here, ```grafana.example.com``` is used as an example, you can use whatever suits you to replace the ```grafana.``` bit (for instance ```monitoring.```). However, **the domain has to match your actual domain**. Here's what needs changing (in which blocks):
+
+##### [server] #####
+
+```text
+domain = grafana.example.com
+root_url = https://grafana.example.com
+```
+
+##### [users] #####
+
+```text
+allow_sign_up = false
+```
+
+##### [auth.anonymous] #####
+
+```text
+enabled = false
+```
+
+Restart Grafana to reload the new configuration:
+
+```text
+systemctl restart grafana-server.service
+```
+
+#### DNS Configuration #####
+
+Now that you have chosen your preferred monitoring [URL](https://en.wikipedia.org/wiki/URL), you need to configure it on your [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) with an [A record](https://en.wikipedia.org/wiki/List_of_DNS_record_types) that points to your server. Follow your DNS provider's guide to do so. For example, if your server [IP address](https://en.wikipedia.org/wiki/IP_address) is ```1.2.3.4```, and your URL is ```grafana.example.com```, you will need an A record similar to the following:
+
+```text
+Type: A, Host: grafana, Value: 1.2.3.4
+```
+
+Here's Namecheap guide as a pointer: [How do I set up host records for a domain?](https://www.namecheap.com/support/knowledgebase/article.aspx/434/2237/how-do-i-set-up-host-records-for-a-domain)
+
+**Make sure that your A record is working correctly and that is has propagated**, before proceeding with the rest of the guide. The following should return your server IP address, if it doesn't your record hasn't propagated yet.
+
+```text
+dig grafana.example.com +short a
+```
+
+#### Firewalld Configuration ####
+
+In order for the next steps to work, and to be able to remotely connect to your monitoring, the firewall need to be open for port ```443```. Issue these commands to do so:
+
+```text
+firewall-cmd --permanent --zone=public --add-port=443/tcp
+firewall-cmd --complete-reload
+```
+
+To verify that everything has worked, issue the following and check for ```ports: 443/tcp```
+
+```text
+firewall-cmd --list-all
+```
+
+#### Nginx Reverse Proxy ####
+
+[Nginx](https://www.nginx.com/) is a modern and reliable web server, in this case you'll be using it to [reverse-proxy](https://en.wikipedia.org/wiki/Reverse_proxy) to Grafana. The main reason to be using a web server, rather than the Grafana built-in, is to take advantage of the [SSL encryption](https://www.ssl.com/faqs/faq-what-is-ssl/) to securely connect to and peruse your remote monitoring, [while keeping safe from prying eyes](https://www.youtube.com/watch?v=-enHfpHMBo4).
+
+Configuring it is very easy, and it involves three simple steps:
+
+1. disabling the default server.
+2. configuring the reverse proxy.
+3. implementing SSL.
+
+To disable the default Nginx server, simply remove it from ```sites-enabled```:
+
+```text
+rm -f /etc/nginx/sites-enabled/default
+```
+
+To configure the reverse-proxy, add this configuration to ```/etc/nginx/sites-available/grafana```
+
+```text
+server {
+  listen 443 ssl http2;
+  server_name grafana.example.com;
+
+  location / {
+    rewrite /(.*) /$1 break;
+    proxy_pass http://localhost:3000/;
+    proxy_redirect off;
+    proxy_set_header Host $host;
+  }
+}
+```
+
+Enable it:
+
+```text
+cd /etc/nginx/sites-enabled/
+ln -sf ../sites-available/grafana
+systemctl restart nginx.service
+```
+
+#### Let's Encrypt ####
+
+[Let's Encrypt is](https://letsencrypt.org/about/) an amazing initiative that aims to bring SSL to everyone, for free. Bigger companies and institutions may still need an higher grade of SSL, but Let's Encrypt is perfect for small time sites, like blogs, small indie websites, and your pool. It is also very smart and easy to configure, with [EFF](https://eff.org/)'s [Certbot](https://certbot.eff.org/). Certbot automates the process of creating, managing, and keeping [Let's Encrypt](https://letsencrypt.org/) certificates up to date for you. All it takes is this simple command:
+
+```text
+certbot --nginx -d grafana.example.com
+```
+
+If you need a more detailed guide to help you with ```certbot```, Digital Ocean has [a great guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-debian-10) that can help.
+
+Upon the successful Certbot run, your Nginx configuration will be changed to use SSL. Do not touch it, as it is used and managed by Certbot at this point. Certbot will also set and run a ```systemd-timer``` to renew the SSL certificate when necessary.
+
+Restart Nginx with:
+
+```text
+systemctl restart nginx.service
+```
+
+#### Installing Dashboards ####
+
+It is now time to connect to Grafana by browsing to ```https://grafana.example.com```. Login with the default credentials (user: ```admin```, password: ```admin```). Upon a successful login, you will be asked to create a new password for the admin user.
+
+It is time to install two dashboards. No need to reinvent the wheel here, please follow the official documentation if you need guidance: [Grafana Export/Import](https://grafana.com/docs/grafana/latest/reference/export_import/). Install the following dashboards to make use of Node Exporter and Jormungandr Exporter:
+
+- Node Exporter Dashboard: [https://grafana.com/grafana/dashboards/1860](https://grafana.com/grafana/dashboards/1860)
+- Jormungandr Dashboard: [gacallea/cardanoRelatedStuff/master/monitoring/jormungandr-monitor.json](https://raw.githubusercontent.com/gacallea/cardanoRelatedStuff/master/monitoring/jormungandr-monitor.json)
+
 ## What's Next ##
 
-Congratulations!!! If you made it this far, you are running a leader candidate node for your pool. This is only the beginning, though. Running a successful pool takes more than having a good uptime. The pool needs to participate in the network, and crunch blocks. To do so, it needs delegations, **a lot of them**, and to be scheduled to participate into the blocks generation, and win them too.
+Congratulations!!! If you made it this far, you are running a leader candidate node for your pool, and you know its state and have an history thanks to monitoring. This is only the beginning, though. Running a successful pool takes more than having a good uptime. The pool needs to participate in the network, and crunch blocks. To do so, it needs delegations, **a lot of them**, and to be scheduled to participate into the blocks generation, and win them too.
 
 ### Helping Hands ###
 
-At the time of this writing, my pool *hasn't done much*, so I'm not the right guy to advise you on all of this, for the time being. One thing I can help you with, though, is to provide you with tools that will help you manage your server and your node.
+One thing I can help you with, is to provide you with tools that will help you manage your server and your node.
 
 ```jor_wrapper``` and ```node_helpers``` are a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features and scripts.
 
