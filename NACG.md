@@ -62,7 +62,7 @@ This guide won't reinvent the wheel either. Its focus are the system and the nod
 
 The only note worth adding, before you venture into configuring a server and creating a pool, is that **you need to have enough tADA** - meaning ADA coins that were **in your wallet before the November 2019** snapshot - to register your pool. Otherwise, you won't be able to proceed with the pool registration.
 
-**IMPORTANT**: this guide helps you configure and run a single pool with a single leader candidate node. If you are planning to run passive nodes, this guide assumes that you know what you are doing (and it won't be explained here).
+**IMPORTANT**: this guide helps you configure and run a single pool with a single leader candidate node. If you are planning to run a multi-nodes cluster, this guide assumes that you know what you are doing. Having said that, a guide to satisfy a cluster configuration, complete with scripts to manage it, is coming soon. Stay tuned.
 
 ### License ###
 
@@ -80,11 +80,17 @@ Updates are implemented only after I'll have done so on my pool, and tested it. 
 
 ### Contributions ###
 
-**If you have comments, changes, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github**. Any insight is valuable and will be considered for integration and improvements. If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZGcgwWYE3wKGcpn9cfPmADjwegQqBnTrcBfsexUkbxnT4sciw).
+**If you have comments, issues, changes, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github**. Any insight is valuable and will be considered for integration and improvements. If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZGcgwWYE3wKGcpn9cfPmADjwegQqBnTrcBfsexUkbxnT4sciw).
 
 ## Prepare Your System ##
 
 The guides assumes that the system will be managed with ```root```. Don't worry, to ```ssh``` and ```sudo```, there will be a dedicated **non-root user**. To run the pool, yet another *service user*, with neither a shell nor privileges. So, if you are wondering if the pool will run as ```root```, the answer is **no way.** Systemd will take care of running the pool as the *service user*. A *service user* without a shell or a password, means less surface attack for an hacker trying to exploit *testing quality* software.
+
+**IMPORTANT: every command and action in this guide assumes you are ```root```.** ```sudo``` is fine too, but you **must prepend it** to commands where it's needed. If your Debian doesn't come with ```sudo``` preinstalled, install it now (**with the root user**):
+
+```text
+apt install sudo
+```
 
 **Let's get started.**
 
@@ -177,7 +183,7 @@ apt update
 apt install bc cbm ccze chrony curl dateutils fail2ban htop jq musl net-tools ripgrep speedtest-cli sysstat tcptraceroute wget
 ```
 
-Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```:
+Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```. Here's a complete ```sources.list``` file:
 
 ```text
 deb http://deb.debian.org/debian buster main
@@ -229,6 +235,8 @@ Without a pool, there's no point in going any further. Before you can proceed wi
 Come back after you have successfully completed **all** the necessary steps, and once your pool will be started as a leader candidate and it will be available on Daedalus and Yoroi (testnet versions).
 
 Should you need help at any stage of your pool operator journey, join the '[Cardano Shelley Testnet & StakePool Best Practice Workgroup](https://t.me/CardanoStakePoolWorkgroup)' group on Telegram; it is packed with knowledge, and great and helpful people.
+
+**IMPORTANT:** if you happen to have already successfully created and registered your pool, you don't need to do it all over again. Just have the ```node-config.yaml``` and ```node-secret.yaml``` handy for later.
 
 ## Configure Your System ##
 
@@ -658,6 +666,13 @@ For reference only, my node has the following specs:
 | SSD      | SoftRaid 2x2TB                      |
 | Network  | 100Mpbs                             |
 | Traffic  | Unlimited                           |
+
+**IMPORTANT: place  the ```node-config.yaml``` and ```node-secret.yaml``` in your ```/home/<YOUR_POOL_USER>/``` directory:**
+
+```text
+/home/<YOUR_POOL_USER>/node-config.yaml
+/home/<YOUR_POOL_USER>/node-secret.yaml
+```
 
 Should you decide to use it, place the following in ```/home/<YOUR_POOL_USER>/node-config.yaml```. The only adjustment you should take care of, **besides changing the variables to match your system**, is to change the ```trusted_peers``` order to place the nearest to you at the top of the list.
 
