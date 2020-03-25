@@ -298,7 +298,7 @@ Once you log back in, Make sure everything is fine for your ```public``` zone, b
 firewall-cmd --list-all
 ```
 
-It should show the folowing:
+It should show the following:
 
 ```text
 public
