@@ -32,6 +32,57 @@ while true; do
         setVariables
         exit 0
         ;;
+    --account-balance)
+        accountBalance
+        exit 0
+        ;;
+    --current-stakes)
+        currentStakes
+        exit 0
+        ;;
+    --live-stakes)
+        liveStakes
+        exit 0
+        ;;
+    --epoch-stakes)
+        shift
+        epochStakes "$1"
+        exit 0
+        ;;
+    --epoch-rewards)
+        shift
+        oneEpochRewards "$1"
+        exit 0
+        ;;
+    --rewards-balance)
+        rewardsBalance
+        exit 0
+        ;;
+    --rewards-history)
+        shift
+        rewardsBalance "$1"
+        exit 0
+        ;;
+    --leader-logs)
+        leaderLogs
+        exit 0
+        ;;
+    --scheduled-slots)
+        howManySlots
+        exit 0
+        ;;
+    --scheduled-dates)
+        scheduleDates
+        exit 0
+        ;;
+    --scheduled-time)
+        scheduleTime
+        exit 0
+        ;;
+    --scheduled-next)
+        nextScheduledBlock
+        exit 0
+        ;;
     --live-logs)
         liveLogs
         exit 0
@@ -49,6 +100,10 @@ while true; do
     --issues)
         shift
         issuesInLogs "$1"
+        exit 0
+        ;;
+    --snapshot)
+        currentStatus
         exit 0
         ;;
     --bstrap-time)
@@ -72,17 +127,13 @@ while true; do
         netStats
         exit 0
         ;;
-    --date-stats)
-        shift
-        lastDates "$1" "$2"
-        exit 0
-        ;;
     --sys-stats)
         resourcesStat
         exit 0
         ;;
-    --snapshot)
-        currentStatus
+    --date-stats)
+        shift
+        lastDates "$1" "$2"
         exit 0
         ;;
     --current-tip)
@@ -106,20 +157,8 @@ while true; do
         isBlockValid "$1"
         exit 0
         ;;
-    --current-stakes)
-        currentStakes
-        exit 0
-        ;;
-    --live-stakes)
-        liveStakes
-        exit 0
-        ;;
-    --account-balance)
-        accountBalance
-        exit 0
-        ;;
-    --rewards-balance)
-        rewardsBalance
+    --check-peers)
+        checkPeers
         exit 0
         ;;
     --connected-estab)
@@ -129,14 +168,6 @@ while true; do
     --connected-ips)
         shift
         connectedIps "$1"
-        exit 0
-        ;;
-    --check-peers)
-        checkPeers
-        exit 0
-        ;;
-    --is-visible)
-        isPoolVisible
         exit 0
         ;;
     --is-quarantined)
@@ -149,26 +180,6 @@ while true; do
         ;;
     --quarantined-ips-count)
         nOfQuarantinedIps
-        exit 0
-        ;;
-    --leader-logs)
-        leaderLogs
-        exit 0
-        ;;
-    --scheduled-slots)
-        howManySlots
-        exit 0
-        ;;
-    --scheduled-dates)
-        scheduleDates
-        exit 0
-        ;;
-    --scheduled-time)
-        scheduleTime
-        exit 0
-        ;;
-    --scheduled-next)
-        nextScheduledBlock
         exit 0
         ;;
     --fragments)

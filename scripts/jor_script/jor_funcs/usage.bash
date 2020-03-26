@@ -12,10 +12,13 @@ Usage: '$SCRIPTNAME command [options]'
         --settings                                                              show node settings and exit
         --set-vars                                                              set variables in ~/.bashrc (run only once) -- CHANGE your variables in jor_config first!
 
+        --account-balance                                                       check $POOL_TICKER account balance
         --current-stakes                                                        check $POOL_TICKER current stakes balance
         --live-stakes                                                           check $POOL_TICKER live stakes balance
-        --account-balance                                                       check $POOL_TICKER account balance
+        --epoch-stakes                          <epoch>                         check $POOL_TICKER specific epoch stakes balance
+        --epoch-rewards                         <epoch>                         check $POOL_TICKER specific epoch rewards balance
         --rewards-balance                                                       check $POOL_TICKER rewards balance
+        --rewards-history                       <length>                        check $POOL_TICKER rewards history of the <length> from last epoch(s) from tip
 
         --leader-logs                                                           check if $POOL_TICKER is currently scheduled as leader
         --scheduled-slots                                                       check how many slots is $POOL_TICKER scheduled for
