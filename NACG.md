@@ -86,7 +86,7 @@ Updates are implemented only after I'll have done so on my pool, and tested it. 
 
 The guides assumes that the system will be managed with ```root```. Don't worry, to ```ssh``` and ```sudo```, there will be a dedicated **non-root user**. To run the pool, yet another *service user*, with neither a shell nor privileges. So, if you are wondering if the pool will run as ```root```, the answer is **no way.** Systemd will take care of running the pool as the *service user*. A *service user* without a shell or a password, means less surface attack for an hacker trying to exploit *testing quality* software.
 
-**IMPORTANT: every command and action in this guide assumes you are ```root```.** ```sudo``` is fine too, but you **must prepend it** to commands where it's needed. If your Debian doesn't come with ```sudo``` preinstalled, install it now (**with the root user**):
+**IMPORTANT: any command and action in this guide needs to run as ```root```.** ```sudo``` is fine too, but you **must prepend it** to commands where it's needed. If your Debian doesn't come with ```sudo``` preinstalled, install it now (**with the root user**):
 
 ```text
 apt install sudo
