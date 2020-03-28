@@ -180,7 +180,7 @@ Some of the installed tools are used in my scripts, some others serve system adm
 
 ```text
 apt update
-apt install bc cbm ccze chrony curl dateutils fail2ban firewalld git git-man htop jq lshw manpages most net-tools ripgrep speedtest-cli sysstat tcptraceroute vnstat wget musl
+apt install bc cbm ccze chrony curl dateutils fail2ban git git-man htop jq lshw manpages most net-tools ripgrep speedtest-cli sysstat tcptraceroute vnstat wget musl
 ```
 
 Make sure that the ```backports``` repository is enabled in ```/etc/apt/sources.list```. Here's a complete ```sources.list``` file:
