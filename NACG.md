@@ -56,6 +56,14 @@
 
 ## The Guide ##
 
+**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
+
+**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
+
+**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
+
+----------------
+
 This guide is written with experienced users in mind. Things like creating a GitHub account, creating and using a pair of ssh keys, are a given. If you think you need help with those - there's nothing wrong with it - you should refer to Chris's [guide for newbs](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md).
 
 This guide won't reinvent the wheel either. Its focus are the system and the node itself, and it will point you to [IOHK](https://iohk.io/)'s, when it's time to create, fund, and register your pool. IOHK [**guide**](https://github.com/input-output-hk/shelley-testnet/blob/master/docs/stake_pool_operator_how_to.md) and [**scripts**](https://github.com/input-output-hk/jormungandr-qa/tree/master/scripts) are all you need, and they are **official**.

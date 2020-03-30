@@ -1,5 +1,13 @@
 # Cardano Related Stuff #
 
+**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
+
+**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
+
+**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
+
+----------------
+
 Hereby you find my humble contributions to the [Cardano](https://www.cardano.org/en/home/) ecosystem. I hope that they can be helpful to you. Enjoy :)
 
 **IMPORTANT**: the guide and the scripts are written for the current Cardano node architecture, and will be updated and adapted to the newly announced [Haskell version](https://iohk.io/en/blog/posts/2020/02/12/new-cardano-node-explorer-backend-and-web-api-released/), as soon as our pool will have migrated to it and tested.
