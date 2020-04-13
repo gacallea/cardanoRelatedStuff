@@ -88,7 +88,7 @@ Updates are implemented only after I'll have done so on my pool, and tested it. 
 
 ### Contributions ###
 
-**If you have comments, issues, changes, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github**. Any insight is valuable and will be considered for integration and improvements. If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZ5dQJi1LU2Df2tN8Qhxa5fxRL27uPPjWdLfkGXHniCLBcdzAH).
+**If you have comments, issues, changes, and suggestions, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github**. Any insight is valuable and will be considered for integration and improvements. If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZ65aHRG92UQDyMqNoACXLc7ykRhET4sszVWqZdNobN87E1tTQ).
 
 ## Prepare Your System ##
 

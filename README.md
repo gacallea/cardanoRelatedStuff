@@ -60,4 +60,4 @@ I also run the [**Insalada Stake Pool**](https://insalada.io/), and this is what
 
 If you have comments, changes, suggestions for the guide and/or the scripts, please [file an issue](https://github.com/gacallea/cardanoRelatedStuff/issues) on Github. Any insight is valuable and will be considered for integration and improvements.
 
-If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZGcgwWYE3wKGcpn9cfPmADjwegQqBnTrcBfsexUkbxnT4sciw). Delegating [to my pool](https://insalada.io/) would also be nice. It'd be awesome if [INSL](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) started crunching numbers besides server bills.
+If these resources help you in any way, consider [buying me a beer](https://seiza.com/blockchain/address/Ae2tdPwUPEZ65aHRG92UQDyMqNoACXLc7ykRhET4sszVWqZdNobN87E1tTQ). Delegating [to my pool](https://insalada.io/) would also be nice. It'd be awesome if [INSL](https://pooltool.io/pool/93756c507946c4d33d582a2182e6776918233fd622193d4875e96dd5795a348c) started crunching numbers besides server bills.
