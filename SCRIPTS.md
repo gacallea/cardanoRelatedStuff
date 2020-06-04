@@ -1,67 +1,8 @@
 # Pool Operator Helper Scripts #
 
-- [Pool Operator Helper Scripts](#pool-operator-helper-scripts)
-  - [About](#about)
-    - [Dependencies](#dependencies)
-    - [Contribution](#contribution)
-    - [License](#license)
-    - [Download](#download)
-  - [jor_wrapper](#jorwrapper)
-    - [Quick Examples](#quick-examples)
-      - [logs](#logs)
-      - [stats](#stats)
-      - [more stats](#more-stats)
-      - [snapshot](#snapshot)
-      - [continuous output](#continuous-output)
-    - [available commands](#available-commands)
-  - [node_helpers](#nodehelpers)
-    - [blocks backup](#blocks-backup)
-    - [cache sync](#cache-sync)
-    - [stuck restart](#stuck-restart)
-  - [Useful Commands](#useful-commands)
-    - [get jormungandr's pid](#get-jormungandrs-pid)
-    - [quick resources usage](#quick-resources-usage)
-    - [keep an eye on storage](#keep-an-eye-on-storage)
-    - [node connections](#node-connections)
-    - [more commands soon](#more-commands-soon)
-  - [More Tools](#more-tools)
-    - [tmux](#tmux)
-    - [htop](#htop)
-    - [cbm](#cbm)
-    - [dotfiles](#dotfiles)
-    - [screenshots](#screenshots)
-    - [ccze](#ccze)
-  - [Send Your Tip](#send-your-tip)
-  - [Telegram](#telegram)
-
 ## About ##
 
-**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
-
-**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
-
-**THIS GUIDE AND SCRIPTS HAVE BEEN SUPERSEDED BY ```ITN1 CLUSTER```, PLEASE VISIT: [https://github.com/gacallea/itn1_cluster](https://github.com/gacallea/itn1_cluster)**
-
-----------------
-
-Here you find some *documentation* for ```jor_wrapper``` and ```node_helpers```; a set of ```bash``` scripts to help pool operators manage their nodes. These spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features. You will still be able to use ```jor_wrapper``` and the ```node_helpers``` scripts, regardless of the guide you used to set up your pool.
-
-**If you have followed guides other than ```NACG``` to set up your pool, to fully take advantange of these scripts, all you need to add are the ```systemd``` (including the *service user*) and logging (```rsyslogd``` and ```logrotate```) integrations from the [guide](NACG.md).**
-
-### Dependencies ###
-
-The scripts have some dependencies for some of the commands. Install them with:
-
-```text
-apt update
-apt upgrade
-apt install bc ccze curl dateutils jq net-tools ripgrep sysstat tcptraceroute
-```
-
-```text
-curl http://www.vdberg.org/~richard/tcpping -o /usr/local/bin/tcpping
-chmod +x /usr/local/bin/tcpping
-```
+Here you find some notes for ```jor_wrapper``` and ```node_helpers```; a set of ```bash``` scripts to help pool operators manage their nodes. These spun scripts are to be used with the ```NACG``` guide setup. You can [**find it here**](https://guides.insalada.io/#/NACG).
 
 ### Contribution ###
 
@@ -71,20 +12,9 @@ If you have suggestions on how to improve these scripts, or would like to see mo
 
 Both ```jor_wrapper``` and the ```node_helpers``` scripts are licensed under the terms of the [GPLv3](scripts/LICENSE) license.
 
-### Download ###
-
-This page assumes that the system will be managed with ```root```. To use these scripts, simply clone this repository and place them in ```/root``` like so:
-
-```text
-cd /root
-git clone https://github.com/gacallea/cardanoRelatedStuff.git
-cp -af cardanoRelatedStuff/scripts/node_helpers /root/
-cp -af cardanoRelatedStuff/scripts/jor_script/* /root/
-```
-
 ## jor_wrapper ##
 
-. ```jor_wrapper``` is a script with a number of useful commands for pool operators. It has all sort of checks, stats, and more commands, to help you manage your node. I will assume that you have placed ```jor_wrapper```, ```jor_config```, and ```jor_funcs```, in your ```/root``` directory like explained earlier; and that you have setup your pool as explained in [my guide](NACG.md).
+. ```jor_wrapper``` is a script with a number of useful commands for pool operators. It has all sort of checks, stats, and more commands, to help you manage your node. I will assume that you have placed ```jor_wrapper```, ```jor_config```, and ```jor_funcs```, in your ```/root``` directory like explained earlier; and that you have setup your pool as explained in [my guide](https://guides.insalada.io/#/NACG).
 
 **Before you go any further**, though, make sure you set your own variables in ```jor_config``` first:
 
