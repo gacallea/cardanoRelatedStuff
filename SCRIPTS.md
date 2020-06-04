@@ -2,7 +2,33 @@
 
 ## About ##
 
-Here you find some notes for ```jor_wrapper``` and ```node_helpers```; a set of ```bash``` scripts to help pool operators manage their nodes. These spun scripts are to be used with the ```NACG``` guide setup. You can [**find it here**](https://guides.insalada.io/#/NACG).
+Here you find some notes for ```jor_wrapper``` and ```node_helpers```; a set of ```bash``` scripts to help pool operators manage their nodes. These spun scripts are to be used with the ```NACG``` guide setup. You can [**find it here**](https://guides.insalada.io/#/NACG). These scripts spun off [Chris G ```.bash_profile```](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/config/.bash_profile). I have *ported them to bash (scripts)*, improved some of the commands, adapted others to the ```NACG``` guide setup, and implemented brand new features.
+
+### Dependencies ###
+
+The scripts have some dependencies for some of the commands. Install them with:
+
+```text
+apt update
+apt upgrade
+apt install bc ccze curl dateutils jq net-tools ripgrep sysstat tcptraceroute
+```
+
+```text
+curl http://www.vdberg.org/~richard/tcpping -o /usr/local/bin/tcpping
+chmod +x /usr/local/bin/tcpping
+```
+
+### Download ###
+
+This page assumes that the system will be managed with ```root```. To use these scripts, simply clone this repository and place them in ```/root``` like so:
+
+```text
+cd /root
+git clone https://github.com/gacallea/cardanoRelatedStuff.git
+cp -af cardanoRelatedStuff/scripts/node_helpers /root/
+cp -af cardanoRelatedStuff/scripts/jor_script/* /root/
+```
 
 ### Contribution ###
 
